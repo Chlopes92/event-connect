@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/event-connect-backend/event-connect-backend.iml" filepath="$PROJECT_DIR$/event-connect-backend/event-connect-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/event-connect-backend.iml" filepath="$PROJECT_DIR$/event-connect-backend.iml" />
     </modules>
   </component>
 </project>
