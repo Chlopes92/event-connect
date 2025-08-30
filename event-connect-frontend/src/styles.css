@@ -10,6 +10,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* color: var(--color-violet); */
 }
 
 h1, h2, h3, h4 {
@@ -30,13 +31,19 @@ h3 {
     font-size: 25px;
 }
 
+h4 {
+    font-size: 20px;
+}
+
 p {
     font-family: "Roboto", sans-serif;
     font-size: 20px;
 }
 
-a {
+a, button {
     font-family: "Roboto", sans-serif;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

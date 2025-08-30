@@ -1,0 +1,95 @@
+.carousel-bg {
+    position: relative;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+  
+  .carousel-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(40, 0, 60, 0.55); /* overlay sombre */
+    z-index: 1;
+  }
+  
+  .carousel-root {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    height: 85vh;
+    z-index: 2; /* au-dessus du background */
+  }
+  
+  .carousel-text {
+    flex: 1.2;
+    color: #fff;
+    z-index: 2;
+    padding-left: 48px;
+    padding-right: 24px;
+  }
+  
+  .carousel-cards {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    height: 90%;
+    justify-content: center;
+  }
+  
+  .carousel-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: 
+      transform 0.5s cubic-bezier(.4,2,.6,1), 
+      box-shadow 0.3s, 
+      opacity 0.3s;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+    cursor: pointer;
+    overflow: hidden;
+    background: #222;
+  }
+  
+  .carousel-card img {
+    display: block;
+    width: 350px;
+    height: 466px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .carousel-arrows[_ngcontent-ng-c2392952697] {
+      position: absolute;
+      bottom: 6px;
+      display: flex;
+      width: 50%;
+      gap: 16px;
+      z-index: 3;
+  }
+  
+  .carousel-arrows button {
+    background: rgb(251 251 251 / 34%);
+    border: 1px solid #ffff;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  
+  .carousel-arrows button:hover {
+    background: #fff;
+    color: #222;
+  }

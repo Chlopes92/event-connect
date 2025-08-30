@@ -1,10 +1,11 @@
+// TODO => category ?
 export interface EventCard {
   id: number;
   title: string;
-  subtitle?: string;
   price: string;
   date: string;
   address: string;
+  image: string;
   seats: number | string;
   description: string;
   program: string[];
@@ -20,10 +21,11 @@ export interface EventCard {
 export const EVENTS_MOCK: EventCard[] = [
   {
     id: 1,
-    title: "Comédie musicale – L’Odyssée des Couleurs",
+    title: "L’Odyssée des Couleurs",
     price: "20,00 €",
     date: "12/04",
     address: "Théâtre Lumière, 12 rue des Arts, Paris 3e",
+    image: "assets/events/comedy.png",
     seats: 500,
     description: `L’Odyssée des Couleurs est une comédie musicale originale et flamboyante,
       mêlant chant, danse, théâtre et mise en scène immersive. Ce spectacle tout public raconte
@@ -48,10 +50,11 @@ export const EVENTS_MOCK: EventCard[] = [
   },
   {
     id: 2,
-    title: "Immersion Numérique – Lumières en Mouvement",
+    title: "Lumières en Mouvement",
     price: "Gratuit",
     date: "15/04",
     address: "Atelier des Lumières, 38 rue Saint-Maur, 75011 Paris",
+    image: "assets/events/digital-immersion.png",
     seats: 800,
     description: `Lumières en Mouvement est une exposition immersive qui transforme l’espace
       en un univers sensoriel total avec projections 360°, mapping et spatialisation sonore.`,
@@ -71,10 +74,11 @@ export const EVENTS_MOCK: EventCard[] = [
   },
   {
     id: 3,
-    title: "Fête Foraine Nocturne – La Nuit des Manèges",
-    price: "Entrée libre / Attractions payantes",
+    title: "Fête Foraine Nocturne",
+    price: "25,00 €",
     date: "18/04",
     address: "Esplanade de La Défense, Paris",
+    image: "assets/events/funfair.png",
     seats: "env. 10 000 personnes attendues",
     description: `Quand tombe la nuit, La Défense se transforme en un immense parc féérique
       avec plus de 50 stands et manèges, une grande roue panoramique et spectacles.`,
@@ -94,10 +98,11 @@ export const EVENTS_MOCK: EventCard[] = [
   },
   {
     id: 4,
-    title: "Festival Latino – Colores del Sur",
+    title: "Colores del Sur",
     price: "10,00 €",
     date: "18/04",
     address: "Parc André Citroën, Paris 15e",
+    image: "assets/events/latin-festival.png",
     seats: 2000,
     description: `Colores del Sur est un festival festif et musical aux couleurs de l’Amérique latine
       avec musiques, danses, gastronomie et performances.`,
@@ -117,10 +122,11 @@ export const EVENTS_MOCK: EventCard[] = [
   },
   {
     id: 5,
-    title: "Hanami – Fête des Cerisiers",
+    title: "Hanami",
     price: "5,00 €",
     date: "24/04",
     address: "Parc Floral de Paris, Bois de Vincennes",
+    image: "assets/events/hanami.png",
     seats: 1500,
     description: `Inspirée de la tradition japonaise du Hanami, cette journée propose une expérience zen,
       poétique et culturelle avec cérémonie du thé, ateliers et concerts acoustiques.`,
