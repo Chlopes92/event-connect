@@ -1,9 +1,11 @@
 .events-container {
-  max-width: 800px;
+  max-width: 950px;
   margin: 0 auto;
   padding: 24px;
   background: #F9FAFB;
   min-height: calc(100vh - 160px); /* Ajuster pour le header fixe et le footer */
+  margin-top: 3.5rem;
+  border-radius: 12px;
 }
 
 .organizer-header {
@@ -13,30 +15,22 @@
   margin-bottom: 32px;
 }
 
-.page-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
-
 .create-button {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #374151;
+  background: var(--color-pink);
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 12px 10px;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .create-button:hover {
-  background: #1F2937;
+  background: var(--color-violet)
 }
 
 .events-list {
@@ -60,9 +54,9 @@
 }
 
 .event-image {
-  flex-shrink: 0;
-  width: 120px;
-  height: 90px;
+  /* flex-shrink: 0; */
+  width:200px;
+  height: 130px;
   border-radius: 8px;
   overflow: hidden;
   background: #9CA3AF;
@@ -79,7 +73,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.5rem;
 }
 
 .event-header {
@@ -88,16 +82,7 @@
   align-items: flex-start;
 }
 
-.event-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
-
 .event-price {
-  font-size: 14px;
-  font-weight: 500;
   color: #6B7280;
   background: #F3F4F6;
   padding: 4px 8px;
