@@ -19,6 +19,12 @@ h1, h2, h3, h4 {
     padding-bottom: 15px;
 }
 
+h5 {
+    font-family: "Comfortaa", sans-serif;
+    font-weight: bold;
+    padding-bottom: 6px;
+}
+
 h1 {
     font-size: 36px;
 }

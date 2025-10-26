@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EVENT_URL } from '../../shared/constants/urls';
+import { Event } from '../../shared/models/Event';
 
 @Injectable({
   providedIn: 'root'

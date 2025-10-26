@@ -10,7 +10,7 @@ export interface Event {
     contact: string;
     price?: number;              
     numberPlace?: number;
-    adress: string;
+    address: string;
     categories: Category[];          
     // profile?: Profile;        
     // registeredProfiles?: Profile[];
