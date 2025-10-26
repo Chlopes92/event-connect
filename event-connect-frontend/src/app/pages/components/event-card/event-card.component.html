@@ -41,9 +41,10 @@
           </div>
 
           <div class="event-footer">
-            <div class="event-category" [attr.data-category]="event.category.toLowerCase()">
-              {{ event.category }}
+            <div class="event-category" [attr.data-category]="getCategoryName(event.categoryId)">
+              {{ getCategoryName(event.categoryId) }}
             </div>
+            
             
             <div class="event-date">
               <svg class="date-icon" viewBox="0 0 24 24" fill="currentColor">

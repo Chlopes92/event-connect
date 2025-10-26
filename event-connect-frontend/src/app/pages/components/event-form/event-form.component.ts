@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { EVENTS_MOCK } from '../../../mocks/events.mock';
+import { CategoryService } from '../../../services/category/category.service';
+import { ActivatedRoute } from '@angular/router';
+import { Category } from '../../../shared/models/Category';
 
 interface Toast {
   id: number;
@@ -14,14 +18,17 @@ interface Toast {
   templateUrl: './event-form.component.html',
   styleUrl: './event-form.component.css'
 })
-export class EventFormComponent {
+export class EventFormComponent implements OnInit {
   eventForm: FormGroup;
   toasts: Toast[] = [];
   imagePreview: string | null = null;
+  isEditMode: boolean = false;
   isDragOver: boolean = false;
-  categories: string[] = ['Conférence', 'Formation', 'Atelier', 'Séminaire', 'Webinaire'];
+  categories: Category[] = [];
 
-  constructor(private fb: FormBuilder) {
+  private categoryService = inject(CategoryService);
+
+  constructor(private fb: FormBuilder, private route: ActivatedRoute) {
     this.eventForm = this.fb.group({
       title: ['', Validators.required],
       date: ['', Validators.required],
@@ -29,21 +36,50 @@ export class EventFormComponent {
       location: ['', Validators.required],
       category: ['', Validators.required],
       description: ['', Validators.required],
-      contact: ['', Validators.required]
+      contact: ['', Validators.required],
+      price: [''],
+      programs: ['']
     });
   }
 
-  removeToast(id: number) {
-    this.toasts = this.toasts.filter(toast => toast.id !== id);
+  ngOnInit(): void {
+    const eventId = this.route.snapshot.paramMap.get('id');
+    if (eventId) {
+      this.isEditMode = true;
+      const eventToEdit = EVENTS_MOCK.find(e => e.id === +eventId);
+      if (eventToEdit) {
+        this.eventForm.patchValue({
+          title: eventToEdit.title,
+          date: eventToEdit.date,
+          // participants: eventToEdit.participants,
+          // location: eventToEdit.location,
+          category: eventToEdit.id,
+          description: eventToEdit.description,
+          contact: eventToEdit.contact,
+          price: eventToEdit.price,
+          // programs: eventToEdit.programs
+        });
+        this.imagePreview = eventToEdit.image;
+      }
+    }
   }
 
   onSubmit() {
     if (this.eventForm.valid) {
-      console.log('Formulaire soumis:', this.eventForm.value);
-      this.addToast('success', 'Événement créé avec succès !');
+      if (this.isEditMode) {
+        console.log('Mise à jour de l’événement :', this.eventForm.value);
+        this.addToast('success', 'Événement mis à jour avec succès ✅');
+      } else {
+        console.log('Création d’un nouvel événement :', this.eventForm.value);
+        this.addToast('success', 'Événement créé avec succès 🎉');
+      }
     } else {
-      this.addToast('error', 'Veuillez corriger les erreurs dans le formulaire.');
+      this.addToast('error', 'Veuillez corriger les erreurs dans le formulaire ❌');
     }
+  }
+
+  removeToast(id: number) {
+    this.toasts = this.toasts.filter(toast => toast.id !== id);
   }
 
   onFileSelected(event: any) {
@@ -92,8 +128,7 @@ export class EventFormComponent {
   }
 
   goBack() {
-    // Navigation vers la page précédente
-    window.history.back();
+    window.history.back(); // Navigation vers la page précédente
   }
 
   removeImage() {

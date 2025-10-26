@@ -30,7 +30,7 @@
 }
 
 .create-button:hover {
-  background: var(--color-violet)
+  background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
 }
 
 .events-list {
@@ -54,8 +54,7 @@
 }
 
 .event-image {
-  /* flex-shrink: 0; */
-  width:200px;
+  width: 200px;
   height: 130px;
   border-radius: 8px;
   overflow: hidden;

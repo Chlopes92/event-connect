@@ -1,4 +1,3 @@
-// TODO => category ?
 export interface EventCard {
   id: number;
   title: string;
@@ -30,7 +29,7 @@ export const EVENTS_MOCK: EventCard[] = [
     description: `L’Odyssée des Couleurs est une comédie musicale originale et flamboyante,
       mêlant chant, danse, théâtre et mise en scène immersive. Ce spectacle tout public raconte
       l’histoire de Nova, une jeune fille née dans un monde sans couleurs, qui décide de partir
-      en quête des émotions perdues pour rendre sa vie plus vibrante. ...`,
+      en quête des émotions perdues pour rendre sa vie plus vibrante.`,
     program: [
       "19h00 : Ouverture des portes – accueil musical dans le hall",
       "20h00 : Début du spectacle - Acte I – Le Monde Gris",
@@ -144,5 +143,29 @@ export const EVENTS_MOCK: EventCard[] = [
       phone: "07 51 23 90 48"
     }
   },
-  // Tu peux ajouter ici les autres événements (6 à 9) de la même manière
+  {
+    id: 6,
+    title: "Tournoi Esport",
+    price: "15,00 €",
+    date: "20/04",
+    address: "Halle Digitale, 22 rue Voltaire, Saint-Ouen",
+    image: "assets/events/esports-tournament.png",
+    seats: 200,
+    description: `*Clash of Gamers* est un tournoi Esport régional ouvert à tous les passionnés de jeux vidéo compétitifs. Plusieurs disciplines sont représentées avec des phases qualificatives, des animations gaming, des démos VR et une grande finale sur écran géant.
+    Ambiance survoltée garantie, avec casters en live, interviews de joueurs, goodies à gagner et un espace chill pour les non-joueurs (freeplay, bornes rétro, chill zone...).`,
+    program: [
+      "10h00 : Accueil & échauffement libre",
+      "11h00 – 13h00 : Tournois Rocket League / Mario Kart / Smash Bros",
+      "14h00 – 16h00 : Phases finales sur scène + stream en direct",
+      "16h30 – 17h00 :  Remise des prix (bons d’achat & goodies)",
+      "Toute la journée : Zone freeplay / borne rétro / simulateur VR"
+    ],
+    publicInfo: "12 ans et plus – Accès libre pour les spectateurs, inscriptions joueurs via clashofgamers.fr (places limitées)",
+    contact: {
+      organizer: "Association Pixel Pulse",
+      email: "tournoi@pixelpulse.fr",
+      phone: "07 65 44 22 91",
+      website: "www.pixelpulse.fr"
+    }
+  },
 ];

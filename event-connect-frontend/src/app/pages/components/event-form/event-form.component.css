@@ -19,7 +19,7 @@
   .event-form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 15px;
   }
   
   .form-group {
@@ -155,7 +155,7 @@
   .image-preview {
     position: relative;
     width: 100%;
-    height: 200px;
+    height: 22rem;
     border-radius: 8px;
     overflow: hidden;
   }

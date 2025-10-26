@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "t_events")
@@ -50,13 +52,17 @@ public class Event {
     private Integer numberPlace;
 
     @NotBlank(message = "L'adresse est obligatoire")
-    @Column(name = "adress", columnDefinition = "TEXT")
-    private String adress;
+    @Column(name = "address", columnDefinition = "TEXT")
+    private String address;
 
     @NotNull(message = "La catégorie est obligatoire")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @ManyToMany
+    @JoinTable(
+            name = "t_belong",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories = new ArrayList<>();
 
     /* @ManyToOne
     @JoinColumn(name = "profile_id", nullable = false)
@@ -134,12 +140,12 @@ public class Event {
         this.price = price;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getNumberPlace() {
@@ -150,12 +156,12 @@ public class Event {
         this.numberPlace = numberPlace;
     }
 
-    public Category getCategory() {
-        return category;
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
    /* public Profile getProfile() {

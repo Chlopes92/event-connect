@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CategoryService } from '../../../services/category/category.service';
+import { Category } from '../../../shared/models/Category';
+
 
 interface Event {
   id: number;
@@ -7,7 +10,7 @@ interface Event {
   address: string;
   date: string;
   price: string;
-  category: string;
+  categoryId: string;
   image: string;
   isFree: boolean;
 }
@@ -25,18 +28,32 @@ interface Filter {
   styleUrl: './event-card.component.css'
 })
 export class EventCardComponent {
-  filters: Filter[] = [
-    { id: 'tous', label: 'Tout', active: true },
-    { id: 'art', label: 'Art', active: false },
-    { id: 'culture', label: 'Culture', active: false },
-    { id: 'festival', label: 'Festival', active: false },
-    { id: 'loisirs', label: 'Loisirs', active: false },
-    { id: 'bien-etre', label: 'Bien-être', active: false },
-    { id: 'plein-air', label: 'Plein Air', active: false },
-    { id: 'gaming', label: 'Gaming', active: false },
-    { id: 'autres', label: 'Autres', active: false }
-  ];
 
+  categories: Category[] = []; 
+  filters: Filter[] = [];
+
+  private categoryService = inject(CategoryService);
+
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  private loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe((data: Category[]) => {
+      this.categories = data;
+
+      this.filters = [
+        { id: 'tous', label: 'Tout', active: true },
+        ...this.categories.map(category => ({
+          id: String(category.id), // Converti en string
+          label: category.nameCategory, // Correction ici
+          active: false
+        }))
+      ];
+    });
+  }
+  
+  
   events: Event[] = [
     {
       id: 1,
@@ -44,7 +61,7 @@ export class EventCardComponent {
       address: 'Adresse Event',
       date: '12/04',
       price: '20,00 €',
-      category: 'Culturel',
+      categoryId: '2',
       image: 'https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=400',
       isFree: false
     },
@@ -54,7 +71,7 @@ export class EventCardComponent {
       address: 'Adresse Event',
       date: '15/04',
       price: 'Gratuit',
-      category: 'Art',
+      categoryId: '1',
       image: 'https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=400',
       isFree: true
     },
@@ -64,7 +81,7 @@ export class EventCardComponent {
       address: 'Adresse Event',
       date: '18/04',
       price: 'Gratuit',
-      category: 'Plein Air',
+      categoryId: '6',
       image: 'https://images.pexels.com/photos/2581922/pexels-photo-2581922.jpeg?auto=compress&cs=tinysrgb&w=400',
       isFree: true
     },
@@ -74,7 +91,7 @@ export class EventCardComponent {
       address: 'Adresse Event',
       date: '18/04',
       price: '10,00 €',
-      category: 'Culturel',
+      categoryId: '2',
       image: 'https://images.pexels.com/photos/1190303/pexels-photo-1190303.jpeg?auto=compress&cs=tinysrgb&w=400',
       isFree: false
     },
@@ -84,7 +101,7 @@ export class EventCardComponent {
       address: 'Adresse Event',
       date: '24/04',
       price: '5,00 €',
-      category: 'Culturel',
+      categoryId: '2',
       image: 'https://images.pexels.com/photos/2070033/pexels-photo-2070033.jpeg?auto=compress&cs=tinysrgb&w=400',
       isFree: false
     },
@@ -94,7 +111,7 @@ export class EventCardComponent {
       address: 'Adresse Event',
       date: '30/04',
       price: '15,00 €',
-      category: 'Gaming',
+      categoryId: '7',
       image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=400',
       isFree: false
     }
@@ -105,21 +122,12 @@ export class EventCardComponent {
     if (!activeFilter || activeFilter.id === 'tous') {
       return this.events;
     }
-    
-    const categoryMap: { [key: string]: string[] } = {
-      'art': ['Art'],
-      'culture': ['Culturel'],
-      'festival': ['Festival'],
-      'loisirs': ['Loisirs'],
-      'bien-etre': ['Bien-être'],
-      'plein-air': ['Plein Air'],
-      'gaming': ['Gaming'],
-      'autres': ['Autres']
-    };
-    
-    const categories = categoryMap[activeFilter.id] || [];
-    return this.events.filter(event => categories.includes(event.category));
+    return this.events.filter(event => event.categoryId === activeFilter.id);
   }
+  
+ getCategoryName(categoryId: string): string {
+  return this.categories.find(category => String(category.id) === categoryId)?.nameCategory || '';
+}
 
   toggleFilter(filterId: string): void {
     this.filters.forEach(filter => {

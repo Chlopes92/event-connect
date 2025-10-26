@@ -152,8 +152,11 @@
           formControlName="category"
           class="form-select"
           [class.error]="isFieldInvalid('category')">
-          <option *ngFor="let category of categories; let i = index" [value]="i === 0 ? '' : category">
-            {{ category }}
+          <!-- Option vide par défaut -->
+          <option value="">Sélectionnez une catégorie</option>
+          <!-- Boucle sur ton mock -->
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.nameCategory }}
           </option>
         </select>
         <div *ngIf="isFieldInvalid('category')" class="error-message">
@@ -205,7 +208,7 @@
           type="submit" 
           class="submit-button"
           [disabled]="eventForm.invalid">
-          Créer l'événement
+          {{ isEditMode ? 'Mettre à jour l\'événement' : 'Créer l\'événement' }}
         </button>
       </div>
   

@@ -17,7 +17,7 @@ public class Category {
     @Column(name = "name_category")
     private String nameCategory;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "categories")
     private List<Event> events = new ArrayList<>();
 
     public Integer getId() {

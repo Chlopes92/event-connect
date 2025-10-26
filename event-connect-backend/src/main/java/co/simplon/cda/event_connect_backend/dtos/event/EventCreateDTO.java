@@ -1,12 +1,13 @@
-package co.simplon.cda.event_connect_backend.dtos;
+package co.simplon.cda.event_connect_backend.dtos.event;
 
+import co.simplon.cda.event_connect_backend.dtos.category.CategoryDTO;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
-public record EventDTO(
-        Integer id,
+public record EventCreateDTO(
 
         @NotBlank(message = "Le nom de l'événement est requis")
         @Size(max = 50)
@@ -36,16 +37,15 @@ public record EventDTO(
         Integer numberPlace,
 
         @NotBlank(message = "L'adresse est requise")
-        String adress,
+        String address,
 
-        @NotNull(message = "La catégorie est requise")
-        Integer categoryId,
-
-        CategoryDTO category
+        @NotEmpty(message = "Au moins une catégorie est requise")
+        List<Integer> categoryIds, // IDs des catégories
+        List<CategoryDTO> categories // DTO complet pour retour front
 ) {
     @Override
     public String toString() {
         return "Event [nameEvent= " + nameEvent + ", imgUrl= " + imgUrl + ", description= " + description + ", dateEvent= " + dateEvent + ", program= " + program +
-                ", contact= " + contact + ", price= " + price + ", numberPlace= " + numberPlace + ", adress= " + adress + "]";
+                ", contact= " + contact + ", price= " + price + ", numberPlace= " + numberPlace + ", address= " + address + "]";
     }
 }

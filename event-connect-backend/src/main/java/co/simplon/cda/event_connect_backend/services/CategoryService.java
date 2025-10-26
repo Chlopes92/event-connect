@@ -1,6 +1,6 @@
 package co.simplon.cda.event_connect_backend.services;
 
-import co.simplon.cda.event_connect_backend.dtos.CategoryDTO;
+import co.simplon.cda.event_connect_backend.dtos.category.CategoryDTO;
 import co.simplon.cda.event_connect_backend.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 

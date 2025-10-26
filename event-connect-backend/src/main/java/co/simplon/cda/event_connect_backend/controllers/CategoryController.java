@@ -1,6 +1,6 @@
 package co.simplon.cda.event_connect_backend.controllers;
 
-import co.simplon.cda.event_connect_backend.dtos.CategoryDTO;
+import co.simplon.cda.event_connect_backend.dtos.category.CategoryDTO;
 import co.simplon.cda.event_connect_backend.services.CategoryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -30,15 +30,15 @@
   }
   
   .filter-btn:hover {
-    border-color: #ffa500;
-    color: #ffa500;
+    border-color: var(--color-yellow);
+    color: var(--color-yellow);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(255, 165, 0, 0.15);
   }
   
   .filter-btn.active {
-    background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
-    border-color: #ffa500;
+    background: linear-gradient(135deg, var(--color-yellow) 0%, var(--color-yellow) 100%);
+    border-color: var(--color-yellow);;
     color: white;
     box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
   }
@@ -155,28 +155,9 @@
     font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 8px;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
-  }
-  
-  .event-category[data-category="culturel"] {
-    background: rgba(255, 193, 7, 0.9);
-    color: #333;
-  }
-  
-  .event-category[data-category="art"] {
-    background: rgba(156, 39, 176, 0.9);
     color: white;
-  }
-  
-  .event-category[data-category="plein air"] {
-    background: rgba(76, 175, 80, 0.9);
-    color: white;
-  }
-  
-  .event-category[data-category="gaming"] {
-    background: rgba(233, 30, 99, 0.9);
-    color: white;
+    background-color: var(--color-yellow);
   }
   
   .event-date {
@@ -226,7 +207,7 @@
   }
   
   .load-more-btn {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background: var(--color-pink);
     color: white;
     border: none;
     padding: 12px 32px;

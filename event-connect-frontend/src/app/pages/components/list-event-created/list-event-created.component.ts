@@ -14,10 +14,8 @@ export class ListEventCreatedComponent {
   constructor(private router: Router) {}
 
 
-
   editEvent(eventId: number) {
-    console.log('Éditer l\'événement:', eventId);
-    // Navigation vers le formulaire d'édition
+    this.router.navigate(['/edit-event', eventId]); // Navigation vers le formulaire d'édition
   }
 
   deleteEvent(eventId: number) {
@@ -26,7 +24,6 @@ export class ListEventCreatedComponent {
   }
 
   createNewEvent() {
-    // Navigation vers le formulaire de création
-    this.router.navigate(['/create-event']);
+    this.router.navigate(['/create-event']); // Navigation vers le formulaire de création
   }
 }

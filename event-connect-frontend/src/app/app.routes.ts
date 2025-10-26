@@ -7,5 +7,6 @@ export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomePageComponent, title: 'EventConnect - Home' },
     { path: 'organizer-home', component: OrganizerHomePageComponent, title: 'EventConnect - Home Organizer' },
-    { path: 'create-event', component: EventFormPageComponent, title: 'EventConnect - Event Form'},
+    { path: 'create-event', component: EventFormPageComponent, title: 'EventConnect - Event Form Create'},
+    { path: 'edit-event/:id', component: EventFormPageComponent, title: 'EventConnect - Event Form Edit' }
 ];

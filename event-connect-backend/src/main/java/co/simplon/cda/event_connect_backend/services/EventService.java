@@ -1,15 +1,17 @@
 package co.simplon.cda.event_connect_backend.services;
 
-import co.simplon.cda.event_connect_backend.dtos.CategoryDTO;
-import co.simplon.cda.event_connect_backend.dtos.EventDTO;
+import co.simplon.cda.event_connect_backend.dtos.category.CategoryDTO;
+import co.simplon.cda.event_connect_backend.dtos.event.EventCreateDTO;
+import co.simplon.cda.event_connect_backend.dtos.event.EventUpdateDTO;
+import co.simplon.cda.event_connect_backend.dtos.event.EventViewDTO;
 import co.simplon.cda.event_connect_backend.entities.Category;
 import co.simplon.cda.event_connect_backend.entities.Event;
 import co.simplon.cda.event_connect_backend.repositories.CategoryRepository;
 import co.simplon.cda.event_connect_backend.repositories.EventRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -21,7 +23,7 @@ public class EventService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void create(EventDTO inputs) {
+    public void create(EventCreateDTO inputs) {
         Event event = new Event();
         event.setNameEvent(inputs.nameEvent());
         event.setImgUrl(inputs.imgUrl());
@@ -31,18 +33,17 @@ public class EventService {
         event.setContact(inputs.contact());
         event.setPrice(inputs.price());
         event.setNumberPlace(inputs.numberPlace());
-        event.setAdress(inputs.adress());
+        event.setAddress(inputs.address());
 
-        if (inputs.categoryId() != null) {
-            Category category = categoryRepository.findById(inputs.categoryId())
-                    .orElseThrow(() -> new RuntimeException("Category not found"));
-            event.setCategory(category);
+        List<Category> categories = new ArrayList<>();
+        if (inputs.categoryIds() != null) {
+            categories = categoryRepository.findAllById(inputs.categoryIds());
         }
-
+        event.setCategories(categories);
         eventRepository.save(event);
     }
 
-    public void update(EventDTO inputs, Integer id) {
+    public void update(EventUpdateDTO inputs, Integer id) {
         Event event = eventRepository.findById(id).orElseThrow();
         event.setNameEvent(inputs.nameEvent());
         event.setImgUrl(inputs.imgUrl());
@@ -52,59 +53,74 @@ public class EventService {
         event.setContact(inputs.contact());
         event.setPrice(inputs.price());
         event.setNumberPlace(inputs.numberPlace());
-        event.setAdress(inputs.adress());
+        event.setAddress(inputs.address());
 
-        if (inputs.categoryId() != null) {
-            Category category = categoryRepository.findById(inputs.categoryId())
-                    .orElseThrow(() -> new RuntimeException("Category not found"));
-            event.setCategory(category);
+        if (inputs.categoryIds() != null && !inputs.categoryIds().isEmpty()) {
+            List<Category> categories = categoryRepository.findAllById(inputs.categoryIds());
+            if (categories.isEmpty()) {
+                throw new RuntimeException("Aucune catégorie trouvée");
+            }
+            event.setCategories(categories);
         }
 
         eventRepository.save(event);
     }
 
     public void delete(Integer id) {
-
         eventRepository.deleteById(id);
     }
 
-    public List<EventDTO> getAllEvents() {
-        return eventRepository.findAll().stream()
-                .map(event -> new EventDTO(
-                        event.getId(),
-                        event.getNameEvent(),
-                        event.getImgUrl(),
-                        event.getDescription(),
-                        event.getDateEvent(),
-                        event.getProgram(),
-                        event.getContact(),
-                        event.getPrice(),
-                        event.getNumberPlace(),
-                        event.getAdress(),
-                        event.getCategory() != null ? event.getCategory().getId() : null,
-                        event.getCategory() != null ? new CategoryDTO(event.getCategory().getId(), event.getCategory().getNameCategory()) : null
-                ))
-                .collect(Collectors.toList());
+    public List<EventViewDTO> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        List<EventViewDTO> result = new ArrayList<>();
+        for (Event event : events) {
+            List<CategoryDTO> categoryDTOs = new ArrayList<>();
+            if (event.getCategories() != null) {
+                for (Category category : event.getCategories()) {
+                    categoryDTOs.add(new CategoryDTO(category.getId(), category.getNameCategory()));
+                }
+            }
+            result.add(new EventViewDTO(
+                    event.getId(),
+                    event.getNameEvent(),
+                    event.getImgUrl(),
+                    event.getDescription(),
+                    event.getDateEvent(),
+                    event.getProgram(),
+                    event.getContact(),
+                    event.getPrice(),
+                    event.getNumberPlace(),
+                    event.getAddress(),
+                    categoryDTOs
+            ));
+        }
+        return result;
     }
 
-    public List<EventDTO> getEventsByCategory(Integer categoryId) {
-        return eventRepository.findByCategoryId(categoryId).stream()
-                .map(event -> new EventDTO(
-                        event.getId(),
-                        event.getNameEvent(),
-                        event.getImgUrl(),
-                        event.getDescription(),
-                        event.getDateEvent(),
-                        event.getProgram(),
-                        event.getContact(),
-                        event.getPrice(),
-                        event.getNumberPlace(),
-                        event.getAdress(),
-                        event.getCategory().getId(),
-                        new CategoryDTO(event.getCategory().getId(), event.getCategory().getNameCategory())
-                ))
-                .collect(Collectors.toList());
+    public List<EventViewDTO> getEventsByCategory(Integer categoryId) {
+        List<Event> events = eventRepository.findByCategoriesId(categoryId);
+        List<EventViewDTO> result = new ArrayList<>();
+        for (Event event : events) {
+            List<CategoryDTO> categoryDTOs = new ArrayList<>();
+            if (event.getCategories() != null) {
+                for (Category category : event.getCategories()) {
+                    categoryDTOs.add(new CategoryDTO(category.getId(), category.getNameCategory()));
+                }
+            }
+            result.add(new EventViewDTO(
+                    event.getId(),
+                    event.getNameEvent(),
+                    event.getImgUrl(),
+                    event.getDescription(),
+                    event.getDateEvent(),
+                    event.getProgram(),
+                    event.getContact(),
+                    event.getPrice(),
+                    event.getNumberPlace(),
+                    event.getAddress(),
+                    categoryDTOs
+            ));
+        }
+        return result;
     }
-
-
 }
