@@ -22,6 +22,8 @@ export class EventCardComponent {
   categories: Category[] = [];
   filters: Filter[] = [];
 
+  visibleEventsCount = 6;
+
   private categoryService = inject(CategoryService);
   private eventService = inject(EventService);
 
@@ -30,24 +32,32 @@ export class EventCardComponent {
     this.loadEvents();
   }
 
+  /** Charge les événements depuis le service */
   private loadEvents(): void {
     this.eventService.getAllEvents().subscribe((data: Event[]) => {
       this.events = data;
     });
   }
 
+  /** Charge les catégories et initialise les filtres */
   private loadCategories(): void {
     this.categoryService.getAllCategories().subscribe((data: Category[]) => {
-      this.categories = data;
-  
-      this.filters = this.categories.map((category, index) => ({
-        id: String(category.id),
-        label: category.nameCategory,
-        active: index === 0
-      }));
+      // Supprime la catégorie "Tout" si elle existe déjà en BDD
+      this.categories = data.filter(cat => cat.nameCategory.toLowerCase() !== 'tout');
+
+      // Crée les filtres avec un bouton "Tout" par défaut
+      this.filters = [
+        { id: 'tous', label: 'Tout', active: true },
+        ...this.categories.map(category => ({
+          id: String(category.id),
+          label: category.nameCategory,
+          active: false
+        }))
+      ];
     });
   }
 
+  /** Retourne les événements filtrés par catégorie */
   get filteredEvents(): Event[] {
     const activeFilter = this.filters.find(f => f.active);
     if (!activeFilter || activeFilter.id === 'tous') {
@@ -59,29 +69,37 @@ export class EventCardComponent {
     );
   }
 
-  getCategoryNames(event: Event): string {
-    return event.categories?.map(cat => cat.nameCategory).join(', ') || '';
+  /** Retourne les événements visibles (2 lignes = 6 cartes par défaut) */
+  get visibleEvents(): Event[] {
+    return this.filteredEvents.slice(0, this.visibleEventsCount);
   }
 
+  /** Gestion du changement de filtre */
   toggleFilter(filterId: string): void {
-    this.filters.forEach(filter => {
-      filter.active = filter.id === filterId;
-    });
+    this.filters.forEach(filter => filter.active = filter.id === filterId);
+    this.visibleEventsCount = 6;
   }
 
+  /** Renvoie le nom de la catégorie active (utile pour le message “aucun événement”) */
+  getActiveCategoryLabel(): string {
+    const active = this.filters.find(f => f.active);
+    return active ? active.label : '';
+  }
+
+  /** Bouton “En voir +” */
+  loadMoreEvents(): void {
+    this.visibleEventsCount = this.filteredEvents.length;
+  }
+
+  /** Boutons d’action */
   shareEvent(event: Event): void {
-    console.log('Sharing event:', event.nameEvent);
+    console.log('Partager :', event.nameEvent);
     // Implémentation du partage
   }
 
   toggleFavorite(event: Event): void {
-    console.log('Toggle favorite for:', event.nameEvent);
+    console.log('Favori :', event.nameEvent);
     // Implémentation du favori
-  }
-
-  loadMoreEvents(): void {
-    console.log('Loading more events...');
-    // Implémentation "load more"
   }
 
 }
