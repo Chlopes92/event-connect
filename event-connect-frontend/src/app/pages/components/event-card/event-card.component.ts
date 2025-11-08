@@ -4,6 +4,7 @@ import { CategoryService } from '../../../services/category/category.service';
 import { Category } from '../../../shared/models/Category';
 import { Event } from '../../../shared/models/Event';
 import { EventService } from '../../../services/event/event.service';
+import { RouterLink } from '@angular/router';
 
 interface Filter {
   id: string;

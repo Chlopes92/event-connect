@@ -8,10 +8,14 @@ import { Event } from '../../shared/models/Event';
   providedIn: 'root'
 })
 export class EventService {
-
+  
   private http = inject(HttpClient);
 
   getAllEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${EVENT_URL}`);
+  }
+
+  getEventById(id: number): Observable<Event> {
+    return this.http.get<Event>(`${EVENT_URL}/${id}`);
   }
 }

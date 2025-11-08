@@ -1,0 +1,35 @@
+<section class="container">
+     <div class="event-details-header">
+      <button type="button" class="back-button" (click)="goBack()">← Retour à l'accueil</button>
+    </div>
+    @if(event.id){
+    <ul>
+        <article>
+            <li><img class="img-event" [src]="event.imgUrl" [alt]="event.nameEvent"></li>
+        </article>
+        <div class="container-text">
+            <li>
+                <h2>{{ event.nameEvent }}</h2>
+            </li>
+            <li>
+                <p> {{ event.price === 0 || !event.price ? 'Gratuit' : event.price + ' €' }}</p>
+            </li>
+            <li>
+                <p>{{ event.dateEvent | date: 'dd/MM/yyyy' }}</p>
+            </li>
+            <li>
+                <p>{{ event.address }}</p>
+            </li>
+        </div>
+
+        <div>
+            <h2>Description</h2>
+            <p>{{ event.description }}</p>
+            <h2>Programmes</h2>
+            <p>{{ event.program }}</p>
+            <h2>Contacter l'organisateur</h2>
+            <p>{{ event.contact }}</p>
+        </div>
+    </ul>
+    }
+</section>

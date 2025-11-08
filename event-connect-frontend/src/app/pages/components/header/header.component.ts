@@ -8,5 +8,11 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  scrollToEvents() {
+    const element = document.getElementById('events-container');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 
 }

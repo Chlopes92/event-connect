@@ -1,0 +1,138 @@
+<!-- Main Content -->
+<div class="auth-container">
+    <div class="auth-card">
+      <!-- Left Side - Existing Client -->
+      <div class="auth-side existing-client" [class.active]="!isNewClient">
+        <div class="image-overlay">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=1000&fit=crop" alt="Event">
+          <div class="overlay-gradient"></div>
+        </div>
+        <div class="content">
+          <h2 class="title">Déjà organisateur ?</h2>
+          <p class="description">Gérez vos événements, suivez vos participants et développez votre activité.</p>
+          
+          <form [formGroup]="existingClientForm" (ngSubmit)="onExistingClientSubmit()" *ngIf="!isNewClient">
+            <div class="form-group">
+              <input 
+                type="email" 
+                formControlName="email" 
+                placeholder="Email"
+                class="form-input">
+              <div class="error" *ngIf="existingClientForm.get('email')?.invalid && existingClientForm.get('email')?.touched">
+                Email valide requis
+              </div>
+            </div>
+            <div class="form-group">
+              <input 
+                type="password" 
+                formControlName="password" 
+                placeholder="Mot de passe"
+                class="form-input">
+              <div class="error" *ngIf="existingClientForm.get('password')?.invalid && existingClientForm.get('password')?.touched">
+                Mot de passe requis
+              </div>
+            </div>
+            <button type="submit" class="submit-btn" [disabled]="existingClientForm.invalid">
+              SE CONNECTER
+            </button>
+          </form>
+
+          <button class="switch-btn" *ngIf="isNewClient" (click)="switchToExistingClient()" routerLink="/organizer-dashboard">
+            CONNEXION
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Side - New Client -->
+      <div class="auth-side new-client" [class.active]="isNewClient">
+        <div class="content">
+          <h2 class="title">Créer un compte organisateur</h2>
+          
+          <form [formGroup]="newClientForm" (ngSubmit)="onNewClientSubmit()" *ngIf="isNewClient">
+            <div class="form-group">
+              <label>*Nom</label>
+              <input 
+                type="text" 
+                formControlName="nom" 
+                class="form-input">
+              <div class="error" *ngIf="newClientForm.get('nom')?.invalid && newClientForm.get('nom')?.touched">
+                Nom requis
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>*Prénom</label>
+              <input 
+                type="text" 
+                formControlName="prenom" 
+                class="form-input">
+              <div class="error" *ngIf="newClientForm.get('prenom')?.invalid && newClientForm.get('prenom')?.touched">
+                Prénom requis
+              </div>
+            </div>
+
+            <div class="form-group">
+                <label>*Téléphone</label>
+              <input 
+                  type="text" 
+                  formControlName="telephone" 
+                  class="form-input">
+                <div class="error" *ngIf="newClientForm.get('telephone')?.invalid && newClientForm.get('telephone')?.touched">
+                  Téléphone requis
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>*Nom de l'organisation</label>
+              <input 
+                  type="text" 
+                  formControlName="telephone" 
+                  class="form-input">
+                <div class="error" *ngIf="newClientForm.get('nomOrganisation')?.invalid && newClientForm.get('nomOrganisation')?.touched">
+                  Nom de l'organisation requis
+                </div>
+              </div>
+  
+
+            <div class="form-group">
+              <label>*Email</label>
+              <input 
+                type="email" 
+                formControlName="email" 
+                class="form-input">
+              <div class="error" *ngIf="newClientForm.get('email')?.invalid && newClientForm.get('email')?.touched">
+                Email valide requis
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>*Mot de passe</label>
+              <input 
+                type="password" 
+                formControlName="password" 
+                class="form-input">
+              <div class="error" *ngIf="newClientForm.get('password')?.invalid && newClientForm.get('password')?.touched">
+                Minimum 6 caractères
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="newClientForm.invalid">
+              CRÉER UN COMPTE
+            </button>
+          </form>
+
+          <div class="divider">
+            <span>Vous êtes participant ?</span>
+          </div>
+
+          <button class="organizer-btn" routerLink="/home">
+            ACCÈS PARTICIPANT
+          </button>
+
+          <button class="switch-btn-mobile" *ngIf="!isNewClient" (click)="switchToNewClient()">
+            CRÉER UN COMPTE
+          </button>
+        </div>
+      </div>
+    </div>
+</div>

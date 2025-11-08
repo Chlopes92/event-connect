@@ -1,0 +1,16 @@
+.form-header {
+    margin-bottom: 24px;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: color 0.2s;
+    color: var(--color-font);
+  }
+  
+  p, h1, h2, h3, h4, h5, h6 {
+    color: var(--color-font);
+  }
