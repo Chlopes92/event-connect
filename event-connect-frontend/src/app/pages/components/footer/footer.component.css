@@ -45,14 +45,17 @@ footer {
     flex-direction: row; 
     align-items: center;
     text-align: left; 
+    gap: 20px
 }
 
 .logo-footer {
     margin-right: 20px; 
+    width: 20vw;
 }
 
 .newsletter-section {
     margin-top: 0; 
+    width: 50vw;
 }
 
 .newsletter-input {
@@ -88,13 +91,14 @@ form button {
     justify-content: center;
     border-radius: 0px 12px 12px 12px;
     position: absolute;
-    right: 3%;
+    right: 5%;
 }
 
 .disclaimer {
     font-size: 0.8rem;
-    margin-top: 10px;
+    margin-top: 1rem;
     max-width: 800px;
+    margin-left: 2%;
 }
 
 .social-icons {
@@ -172,4 +176,8 @@ hr {
     border: 0.5px solid white;
     margin: 20px 0;
     width: 80%;
+}
+
+h3.newsletter-section-title {
+    margin-left: 3%;
 }

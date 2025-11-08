@@ -1,4 +1,29 @@
 <section>
-    <app-carousel></app-carousel>
-    <app-event-card></app-event-card>
+  <app-carousel></app-carousel>
+
+  <div class="app-container" id="events-container">
+    <header class="header">
+      <h1 class="title">Prochainement</h1>
+
+      <div class="filters">
+        <button
+          *ngFor="let filter of filters"
+          class="filter-btn"
+          [class.active]="filter.active"
+          (click)="toggleFilter(filter.id)"
+        >
+          {{ filter.label }}
+        </button>
+      </div>
+    </header>
+
+    <app-event-card
+      [events]="visibleEvents"
+      [activeCategoryLabel]="activeCategoryLabel">
+    </app-event-card>
+
+    <div class="load-more" *ngIf="visibleEventsCount < filteredEvents.length">
+      <button class="load-more-btn" (click)="loadMoreEvents()">En voir +</button>
+    </div>
+  </div>
 </section>

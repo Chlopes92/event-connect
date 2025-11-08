@@ -7,17 +7,42 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 3rem;
+    /* Header transparent par défaut */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
+    backdrop-filter: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+  }
+  
+  /* Header caché */
+  .header.hidden {
+    transform: translateY(-100%);
+  }
+  
+  /* Header solide après scroll */
+  .header.scrolled {
     background: rgba(40, 0, 60, 0.55);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   }
   
   .logo {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    cursor: pointer;
   }
   
+  .logo img {
+    transition: transform 0.3s ease;
+  }
+  
+  .logo img:hover {
+    transform: scale(1.05);
+  }
   
   .logo-text {
     font-size: 0.9rem;
@@ -33,7 +58,7 @@
   }
   
   .nav-item {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
@@ -42,15 +67,39 @@
     position: relative;
   }
   
+  .nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+  }
+  
   .nav-item:hover,
   .nav-item.active {
     color: white;
   }
   
-  .header-actions {
-    display: flex;
-    gap: 1rem;
-    cursor: pointer;
+  .nav-item:hover::after {
+    width: 100%;
   }
   
+  .header-actions {
+    display: flex;
+    gap: 1.5rem;
+    height: 4.5vh;
+  }
   
+  .header-actions img {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+  }
+  
+  .header-actions img:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }

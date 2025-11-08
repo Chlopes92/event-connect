@@ -1,10 +1,13 @@
-<header class="header">
+<header class="header" 
+        [class.scrolled]="isScrolled" 
+        [class.hidden]="!isVisible"
+        [class.transparent]="isHomePage && !isScrolled">
     <div class="logo">
       <img routerLink="/home" src="assets/logo/logo-header.png" alt="Retour à l'accueil">
     </div>
     <nav class="nav">
       <a href="#" class="nav-item">ACCUEIL</a>
-      <a href="#app-container" (click)="scrollToEvents()" class="nav-item">EVENTS</a>
+      <a href="#app-container" (click)="scrollToEvents($event)" class="nav-item">EVENTS</a>
       <a href="#" class="nav-item">A PROPOS</a>
     </nav>
     <div class="header-actions">
