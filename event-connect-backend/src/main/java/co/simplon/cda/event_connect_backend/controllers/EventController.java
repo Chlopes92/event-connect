@@ -54,4 +54,9 @@ public class EventController {
         return eventService.getEventsByCategory(categoryId);
     }
 
+    @GetMapping("/{id}")
+    public EventViewDTO getById(@PathVariable Integer id) {
+        return eventService.getById(id);
+    }
+
 }

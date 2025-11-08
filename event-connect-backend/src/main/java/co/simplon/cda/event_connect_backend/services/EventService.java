@@ -123,4 +123,29 @@ public class EventService {
         }
         return result;
     }
+
+    public EventViewDTO getById(Integer id) {
+        Event event = eventRepository.findById(id).orElseThrow();
+
+        List<CategoryDTO> categoryDTOs = new ArrayList<>();
+        if (event.getCategories() != null) {
+            for (Category category : event.getCategories()) {
+                categoryDTOs.add(new CategoryDTO(category.getId(), category.getNameCategory()));
+            }
+        }
+
+        return new EventViewDTO(
+                event.getId(),
+                event.getNameEvent(),
+                event.getImgUrl(),
+                event.getDescription(),
+                event.getDateEvent(),
+                event.getProgram(),
+                event.getContact(),
+                event.getPrice(),
+                event.getNumberPlace(),
+                event.getAddress(),
+                categoryDTOs
+        );
+    }
 }
