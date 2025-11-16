@@ -1,0 +1,142 @@
+<div class="auth-container">
+    <div class="auth-card">
+      <!-- Left Side - Existing Client -->
+      <div class="auth-side existing-client" [class.active]="!isNewClient">
+        <div class="image-overlay">
+          <img src="assets/events/digital-immersion.png" alt="Event">
+          <div class="overlay-gradient"></div>
+        </div>
+        <div class="content">
+          <h2 class="title">Déjà client ?</h2>
+          <p class="description">Créez des événements inoubliables avec notre plateforme</p>
+          
+          @if(!isNewClient){
+          <form [formGroup]="existingClientForm" (ngSubmit)="onExistingClientSubmit()">
+            <div class="form-group">
+              <input 
+                type="email" 
+                formControlName="email" 
+                placeholder="Email"
+                class="form-input">
+              @if(existingClientForm.get('email')?.invalid && existingClientForm.get('email')?.touched){
+              <div class="error">
+                Email valide requis
+              </div>
+              }
+            </div>
+            <div class="form-group">
+              <input 
+                type="password" 
+                formControlName="password" 
+                placeholder="Mot de passe"
+                class="form-input">
+              @if(existingClientForm.get('password')?.invalid && existingClientForm.get('password')?.touched){
+              <div class="error">
+                Mot de passe requis
+              </div>
+              }
+            </div>
+            <button type="submit" class="submit-btn" [disabled]="existingClientForm.invalid">
+              SE CONNECTER
+            </button>
+          </form>
+          }
+
+          @if(isNewClient){
+          <button class="switch-btn" (click)="switchToExistingClient()">
+            CONNEXION
+          </button>
+          }
+        </div>
+      </div>
+
+      <!-- Right Side - New Client -->
+      <div class="auth-side new-client" [class.active]="isNewClient">
+        <div class="content">
+          <h2 class="title color-font">Nouveau client ?</h2>
+          
+          @if(isNewClient){
+          <form [formGroup]="newClientForm" (ngSubmit)="onNewClientSubmit()">
+            <div class="form-group">
+              <label>Nom *</label>
+              <input 
+                type="text" 
+                formControlName="lastName" 
+                class="form-input">
+              @if(newClientForm.get('lastName')?.invalid && newClientForm.get('lastName')?.touched){
+              <div class="error">
+                Nom requis
+              </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Prénom *</label>
+              <input 
+                type="text" 
+                formControlName="firstName" 
+                class="form-input">
+              @if(newClientForm.get('firstName')?.invalid && newClientForm.get('firstName')?.touched){
+              <div class="error">
+                Prénom requis
+              </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Email *</label>
+              <input 
+                type="email" 
+                formControlName="email" 
+                class="form-input">
+              @if(newClientForm.get('email')?.invalid && newClientForm.get('email')?.touched){
+              <div class="error">
+                Email valide requis
+              </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Mot de passe *</label>
+              <input 
+                type="password" 
+                formControlName="password" 
+                class="form-input">
+              @if(newClientForm.get('password')?.invalid && newClientForm.get('password')?.touched){
+              <div class="error">
+                Minimum 6 caractères
+              </div>
+              }
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="newClientForm.invalid">
+              CRÉER UN COMPTE
+            </button>
+          </form>
+          }
+
+          @if(!isNewClient){
+          <p class="color-font"> Créer votre compte ! </p>
+
+          <button class="switch-btn-create" (click)="switchToNewClient()">
+            CRÉER UN COMPTE
+          </button>
+        }
+
+          <div class="divider">
+            <span>Vous êtes organisateur ?</span>
+          </div>
+
+          <button class="client-btn" routerLink="/organizer-signup">
+            Accès organisateur
+          </button>
+
+          @if(!isNewClient){
+          <button class="switch-btn-mobile" (click)="switchToNewClient()">
+            CRÉER UN COMPTE
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+</div>

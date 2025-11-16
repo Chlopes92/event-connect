@@ -1,11 +1,11 @@
 <section>
   <app-carousel></app-carousel>
 
-  <div class="app-container" id="events-container">
+  <div class="app-container">
     <header class="header">
       <h1 class="title">Prochainement</h1>
 
-      <div class="filters">
+      <div class="filters" id="events-container">
         <button
           *ngFor="let filter of filters"
           class="filter-btn"
@@ -22,8 +22,10 @@
       [activeCategoryLabel]="activeCategoryLabel">
     </app-event-card>
 
-    <div class="load-more" *ngIf="visibleEventsCount < filteredEvents.length">
+    @if(visibleEventsCount < filteredEvents.length){
+    <div class="load-more">
       <button class="load-more-btn" (click)="loadMoreEvents()">En voir +</button>
     </div>
+    }
   </div>
 </section>

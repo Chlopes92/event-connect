@@ -3,11 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../services/event/event.service';
 import { Event } from '../../shared/models/Event';
-import { EventCardComponent } from '../components/event-card/event-card.component';
 
 @Component({
   selector: 'app-event-details-page',
-  imports: [CommonModule, EventCardComponent],
+  imports: [CommonModule],
   templateUrl: './event-details-page.component.html',
   styleUrl: './event-details-page.component.css'
 })

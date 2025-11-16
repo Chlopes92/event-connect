@@ -30,7 +30,7 @@
     justify-content: center;
     transition: all 0.5s ease;
     
-    &.existing-organizer {
+    &.existing-client {
       background: rgba(45, 5, 82, 0.862);
       
       &:not(.active) {
@@ -44,7 +44,7 @@
       }
     }
   
-    &.new-organizer {
+    &.new-client {
       background: white;
       border-left: 1px solid var(--color-font);
       
@@ -52,7 +52,7 @@
         flex: 0.9;
         
         .content {
-          form, .divider, .organizer-btn {
+          form, .divider, .client-btn {
             display: none;
           }
         }
@@ -92,7 +92,7 @@
     max-width: 550px;
   }
   
-  .existing-organizer .content {
+  .existing-client .content {
     color: white;
   }
   
@@ -102,7 +102,7 @@
     font-weight: 600;
   }
   
-  .new-organizer .title {
+  .new-client .title {
     color: var(--color-font);
   }
   
@@ -156,7 +156,7 @@
     }
   }
   
-  .existing-organizer .form-input {
+  .existing-client .form-input {
     background: rgba(255, 255, 255, 0.95);
     border-color: rgba(255, 255, 255, 0.3);
   
@@ -199,7 +199,7 @@
     }
   }
   
-  .existing-organizer .submit-btn {
+  .existing-client .submit-btn {
     background: rgba(255, 255, 255, 0.25);
     border: 2px solid white;
   
@@ -275,7 +275,7 @@
     }
   }
   
-  .organizer-btn {
+  .client-btn {
     width: 100%;
     padding: 16px;
     color: white;
@@ -303,8 +303,8 @@
     }
   
     .auth-side {
-      &.existing-organizer:not(.active),
-      &.new-organizer:not(.active) {
+      &.existing-client:not(.active),
+      &.new-client:not(.active) {
         flex: 0;
         display: none;
       }
