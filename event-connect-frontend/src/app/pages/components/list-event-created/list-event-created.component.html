@@ -10,26 +10,75 @@
     </button>
   </div>
 
+  <!-- Loading State -->
+  @if(isLoading){
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement des événements...</p>
+  </div>
+  }
+
+  <!-- Error State -->
+  @if(errorMessage && !isLoading){
+  <div class="error-state">
+    <p class="error-message">{{ errorMessage }}</p>
+    <button type="button" class="retry-button" (click)="loadEvents()">
+      Réessayer
+    </button>
+  </div>
+  }
+
   <!-- Events List -->
+  @if(!isLoading && !errorMessage){
   <div class="events-list">
-    @for(event of events; track event) {
+    @for(event of events; track event.id) {
     <div class="event-card">
       <!-- Event Image -->
       <div class="event-image">
-        <img [src]="event.image" [alt]="event.title" />
+        <img [src]="getEventImage(event)" [alt]="event.nameEvent" />
+        <div class="event-category-badge">
+          {{ getCategoryName(event) }}
+        </div>
       </div>
 
       <!-- Event Content -->
       <div class="event-content">
         <div class="event-header">
-          <h4 class="event-title">{{ event.title }}</h4>
-          <span class="event-price">{{ event.price }}</span>
+          <h4 class="event-title">{{ event.nameEvent }}</h4>
+          <span class="event-price">{{ getEventPrice(event) }}</span>
         </div>
         
         <div class="event-details">
-          <div class="detail-line"></div>
-          <div class="detail-line"></div>
+          <div class="detail-line">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ getEventDate(event) }}</span>
+          </div>
+          
+          <div class="detail-line">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 13.43C13.7231 13.43 15.12 12.0331 15.12 10.31C15.12 8.58687 13.7231 7.19 12 7.19C10.2769 7.19 8.88 8.58687 8.88 10.31C8.88 12.0331 10.2769 13.43 12 13.43Z" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M3.62 8.49C5.59 -0.169998 18.42 -0.159997 20.38 8.5C21.53 13.58 18.37 17.88 15.6 20.54C13.59 22.48 10.41 22.48 8.39 20.54C5.63 17.88 2.47 13.57 3.62 8.49Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span>{{ event.address }}</span>
+          </div>
+
+          @if(event.numberPlace){
+          <div class="detail-line">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 21V19C3 17.9391 3.42143 16.9217 4.17157 16.1716C4.92172 15.4214 5.93913 15 7 15H11C12.0609 15 13.0783 15.4214 13.8284 16.1716C14.5786 16.9217 15 17.9391 15 19V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 11H22M19 8V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ event.numberPlace }} places</span>
+          </div>
+          }
         </div>
+
+        @if(event.description){
+        <p class="event-description">{{ event.description | slice:0:120 }}{{ event.description.length > 120 ? '...' : '' }}</p>
+        }
       </div>
 
       <!-- Event Actions -->
@@ -56,11 +105,13 @@
           </svg>
         </button>
       </div>
-    </div> }
+    </div>
+    }
   </div>
+  }
 
   <!-- Empty State -->
-  @if(events.length === 0){
+  @if(events.length === 0 && !isLoading && !errorMessage){
   <div class="empty-state">
     <div class="empty-icon">
       <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,5 +124,6 @@
     <button type="button" class="create-button" (click)="createNewEvent()">
       Créer un événement
     </button>
-  </div>}
+  </div>
+  }
 </div>

@@ -2,15 +2,21 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router); // Remplace l'injection dans le constructor
+  const router = inject(Router);
 
-  const localData = localStorage.getItem('token');
-  if(localData != null){
-    return true;
+  const token = localStorage.getItem('jwt'); // même clé partout
+
+  if (token) return true;
+
+  // stocker la route demandée
+  localStorage.setItem('redirectUrl', state.url);
+
+  // redirect selon type d'utilisateur
+  if (state.url.startsWith('/organizer')) {
+    router.navigateByUrl('/organizer-signup');
   } else {
-    // Stocker l'URL où l'utilisateur tentait d'accèder
-    localStorage.setItem('redirectUrl', state.url);
-    router.navigateByUrl('/signin');
-    return false;
+    router.navigateByUrl('/client-signup');
   }
+
+  return false;
 };

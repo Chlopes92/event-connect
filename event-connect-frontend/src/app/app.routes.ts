@@ -6,13 +6,14 @@ import { OrganizerSignupPageComponent } from './pages/organizer-signup-page/orga
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 import { EventDetailsPageComponent } from './pages/event-details-page/event-details-page.component';
 import { ClientSignupPageComponent } from './pages/client-signup-page/client-signup-page.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomePageComponent, title: 'EventConnect - Home' },
-    { path: 'organizer-dashboard', component: OrganizerHomePageComponent, title: 'EventConnect - Home Organizer' },
-    { path: 'create-event', component: EventFormPageComponent, title: 'EventConnect - Event Form Create'},
-    { path: 'edit-event/:id', component: EventFormPageComponent, title: 'EventConnect - Event Form Edit' },
+    { path: 'organizer-dashboard', component: OrganizerHomePageComponent, title: 'EventConnect - Home Organizer', canActivate: [authGuard] },
+    { path: 'create-event', component: EventFormPageComponent, title: 'EventConnect - Event Form Create', canActivate: [authGuard] },
+    { path: 'edit-event/:id', component: EventFormPageComponent, title: 'EventConnect - Event Form Edit', canActivate: [authGuard] },
     { path: 'organizer-signup', component: OrganizerSignupPageComponent, title: 'EventConnect - Organizer Signup' },
     { path: 'client-signup', component: ClientSignupPageComponent, title: 'EventConnect - Client Signup' },
     { path: 'event-details/:id', component: EventDetailsPageComponent, title: 'EventConnect - Event Details'},

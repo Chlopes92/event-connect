@@ -123,6 +123,7 @@
             type="date" 
             formControlName="date"
             class="form-input"
+            [min]="today"
             [class.error]="isFieldInvalid('date')">
           @if(isFieldInvalid('date')){
           <div class="error-message">
