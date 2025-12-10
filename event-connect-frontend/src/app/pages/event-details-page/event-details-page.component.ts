@@ -26,7 +26,6 @@ export class EventDetailsPageComponent implements OnInit{
         this.eventService.getEventById(id).subscribe({
           next: (event) => {
             this.event = event;
-            console.log('Event récupéré :', this.event);
           },
           error: (err) => {
             console.error('Erreur lors du chargement de l’événement :', err);

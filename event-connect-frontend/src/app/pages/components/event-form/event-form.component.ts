@@ -20,9 +20,10 @@ interface Toast {
   styleUrl: './event-form.component.css'
 })
 export class EventFormComponent implements OnInit {
- eventForm: FormGroup;
-  toasts: Toast[] = [];
+  eventForm: FormGroup;
+  imageFile: File | null = null;
   imagePreview: string | null = null;
+  toasts: Toast[] = [];
   isEditMode: boolean = false;
   isDragOver: boolean = false;
   categories: Category[] = [];
@@ -55,10 +56,8 @@ export class EventFormComponent implements OnInit {
     this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
         this.categories = categories;
-        console.log('Catégories chargées:', categories);
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des catégories:', error);
         this.addToast('error', 'Erreur lors du chargement des catégories');
       }
     });
@@ -76,7 +75,6 @@ export class EventFormComponent implements OnInit {
     this.isLoading = true;
     this.eventService.getEventById(id).subscribe({
       next: (event) => {
-        console.log('Événement chargé:', event);
         
         // Patcher les valeurs du formulaire
         this.eventForm.patchValue({
@@ -90,12 +88,13 @@ export class EventFormComponent implements OnInit {
           price: event.price || '',
           programs: event.program || ''
         });
-        
-        this.imagePreview = event.imgUrl || null;
+        if(event.imgUrl) {
+          this.imagePreview = this.eventService.getImageUrl(event.imgUrl);
+        }
+        // this.imagePreview = event.imgUrl || null;
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement de l\'événement:', error);
         this.addToast('error', 'Erreur lors du chargement de l\'événement');
         this.isLoading = false;
         // Rediriger vers la liste après 2 secondes
@@ -134,10 +133,10 @@ export class EventFormComponent implements OnInit {
       dateEvent: formValue.date,
       program: formValue.programs || '',
       contact: formValue.contact,
-      price: formValue.price ? +formValue.price : undefined,
-      numberPlace: formValue.participants ? +formValue.participants : undefined,
+      price: formValue.price ? +formValue.price : 0,
+      numberPlace: +formValue.participants,
       address: formValue.location,
-      imgUrl: this.imagePreview || undefined,
+      //imgUrl: this.imagePreview || undefined,
       categories: [selectedCategory]
     };
 
@@ -145,32 +144,28 @@ export class EventFormComponent implements OnInit {
       // Mode édition - UPDATE
       eventData.id = this.eventId;
       
-      this.eventService.updateEvent(this.eventId, eventData).subscribe({
+      this.eventService.updateEvent(this.eventId, eventData, this.imageFile || undefined).subscribe({
         next: (response) => {
-          console.log('Événement mis à jour:', response);
           this.addToast('success', 'Événement mis à jour avec succès ✅');
           this.isLoading = false;
           // Redirection après 2 secondes
           setTimeout(() => this.router.navigate(['/organizer-dashboard']), 2000);
         },
         error: (error) => {
-          console.error('Erreur lors de la mise à jour:', error);
           this.addToast('error', 'Erreur lors de la mise à jour de l\'événement ❌');
           this.isLoading = false;
         }
       });
     } else {
       // Mode création - CREATE
-      this.eventService.createEvent(eventData).subscribe({
+      this.eventService.createEvent(eventData, this.imageFile || undefined).subscribe({
         next: (response) => {
-          console.log('Événement créé:', response);
           this.addToast('success', 'Événement créé avec succès 🎉');
           this.isLoading = false;
           // Redirection après 2 secondes
           setTimeout(() => this.router.navigate(['/organizer-dashboard']), 2000);
         },
         error: (error) => {
-          console.error('Erreur lors de la création:', error);
           this.addToast('error', 'Erreur lors de la création de l\'événement ❌');
           this.isLoading = false;
         }
@@ -188,14 +183,12 @@ export class EventFormComponent implements OnInit {
     this.isLoading = true;
     this.eventService.deleteEvent(this.eventId).subscribe({
       next: (response) => {
-        console.log('Événement supprimé:', response);
         this.addToast('success', 'Événement supprimé avec succès 🗑️');
         this.isLoading = false;
         // Redirection après 1.5 secondes
         setTimeout(() => this.router.navigate(['/organizer-dashboard']), 1500);
       },
       error: (error) => {
-        console.error('Erreur lors de la suppression:', error);
         this.addToast('error', 'Erreur lors de la suppression de l\'événement ❌');
         this.isLoading = false;
       }
@@ -208,25 +201,18 @@ export class EventFormComponent implements OnInit {
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
-    if (file) {
-      // Vérification de la taille (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        this.addToast('error', 'L\'image ne doit pas dépasser 5MB');
-        return;
-      }
+    if(!file) return;
 
-      // Vérification du type
-      if (!file.type.startsWith('image/')) {
-        this.addToast('error', 'Le fichier doit être une image');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreview = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    if(file.size > 5 * 1024 * 1024) {
+      this.addToast('error', 'Image trop grande (max 5MB)');
+      return;
     }
+
+    this.imageFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => this.imagePreview = e.target.result;
+    reader.readAsDataURL(file);
   }
 
   onDragOver(event: DragEvent): void {
@@ -275,6 +261,7 @@ export class EventFormComponent implements OnInit {
 
   removeImage(): void {
     this.imagePreview = null;
+    this.imageFile = null;
   }
 
   private addToast(type: 'success' | 'error' | 'warning', message: string): void {

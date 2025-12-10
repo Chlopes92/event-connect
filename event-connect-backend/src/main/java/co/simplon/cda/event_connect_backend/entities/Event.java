@@ -64,7 +64,7 @@ public class Event {
     )
     private List<Category> categories = new ArrayList<>();
 
-    /* @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 
@@ -74,7 +74,7 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "profile_id")
     )
-    private List<Profile> registeredProfiles = new ArrayList<>(); */
+    private List<Profile> registeredProfiles = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -164,7 +164,7 @@ public class Event {
         this.categories = categories;
     }
 
-   /* public Profile getProfile() {
+    public Profile getProfile() {
         return profile;
     }
 
@@ -178,5 +178,5 @@ public class Event {
 
     public void setRegisteredProfiles(List<Profile> registeredProfiles) {
         this.registeredProfiles = registeredProfiles;
-    }*/
+    }
 }

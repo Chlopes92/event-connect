@@ -4,56 +4,131 @@ import co.simplon.cda.event_connect_backend.dtos.event.EventCreateDTO;
 import co.simplon.cda.event_connect_backend.dtos.event.EventUpdateDTO;
 import co.simplon.cda.event_connect_backend.dtos.event.EventViewDTO;
 import co.simplon.cda.event_connect_backend.services.EventService;
+import co.simplon.cda.event_connect_backend.services.FileStorageService;
+import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Contrôleur REST pour la gestion des événements
+ * Expose les endpoints CRUD pour l'API événements
+ *
+ * Routes :
+ * - GET    /events           → Liste tous les événements (public)
+ * - GET    /events/{id}      → Détails d'un événement (public)
+ * - GET    /events/by-category/{id} → Événements par catégorie (public)
+ * - POST   /events           → Créer un événement (authentifié)
+ * - PUT    /events/{id}      → Modifier un événement (authentifié + owner)
+ * - DELETE /events/{id}      → Supprimer un événement (authentifié + owner)
+ */
 @RestController
 @RequestMapping("/events")
 public class EventController {
 
     private final EventService eventService;
+    private final FileStorageService fileStorageService;
 
-    public EventController(EventService eventService) {
+    /**
+     * Constructeur avec injection de dépendances
+     */
+    public EventController(EventService eventService, FileStorageService fileStorageService) {
         this.eventService = eventService;
+        this.fileStorageService = fileStorageService;
     }
 
-    @PostMapping()
-    public ResponseEntity<String> create(@RequestBody EventCreateDTO inputs) {
-        // try {
-        System.out.println("Entrée de l'event: " + inputs);
-        eventService.create(inputs);
-        return ResponseEntity.ok("Event créée avec succès");
-       /* } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erreur lors de la création de la ressource: " + e.getMessage());
-        }*/
+    /**
+     * Crée un nouvel événement avec upload d'image
+     *
+     * Format de la requête : multipart/form-data
+     * - "event" : JSON avec les données de l'événement
+     * - "image" : Fichier image
+     *
+     * Sécurité : Nécessite une authentification JWT
+     * L'utilisateur est automatiquement associé comme créateur
+     */
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> create(
+            @Valid @RequestPart("event") EventCreateDTO inputs,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        // Sauvegarde de l'image si fournie
+        String imgUrl = null;
+        if(image != null && !image.isEmpty()) {
+            imgUrl = fileStorageService.saveImage(image);
+        }
+        // Création de l'événement en base
+        eventService.create(inputs, imgUrl);
+        return ResponseEntity.ok(Map.of(
+                "message", "Event créé avec succès",
+                "status", "success"
+        ));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody EventUpdateDTO inputs) {
-        eventService.update(inputs, id);
-        return ResponseEntity.ok("Event mise à jour avec succès");
+    /**
+     * Met à jour un événement existant
+     *
+     * Sécurité :
+     * - Nécessite authentification
+     * - Seul le créateur peut modifier son événement
+     */
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> update(@PathVariable Integer id,
+                                         @Valid @RequestPart("event") EventUpdateDTO inputs,
+                                         @RequestPart(value = "image", required = false) MultipartFile image) {
+        // Sauvegarde de la nouvelle image si fournie
+        String imgUrl = (image != null) ? fileStorageService.saveImage(image) : null;
+
+        // Mise à jour en base
+        eventService.update(inputs, id, imgUrl);
+        return ResponseEntity.ok(Map.of(
+                "message", "Event mis à jour avec succès",
+                "status", "success"
+        ));
     }
 
+    /**
+     * Supprime un événement
+     *
+     * Sécurité :
+     * - Nécessite authentification
+     * - Seul le créateur peut supprimer son événement
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Integer id) {
         eventService.delete(id);
-        return ResponseEntity.ok("Event supprimée avec succès");
+        return ResponseEntity.ok(Map.of(
+                "message", "Event supprimé avec succès",
+                "status", "success"
+        ));
     }
 
+    /**
+     * Récupère tous les événements
+     * Endpoint public, accessible sans authentification
+     */
     @GetMapping()
     public List<EventViewDTO> getAllEvents() {
         return eventService.getAllEvents();
     }
 
+    /**
+     * Récupère les événements d'une catégorie spécifique
+     * Utilisé pour le filtrage sur la page d'accueil
+     */
     @GetMapping("/by-category/{categoryId}")
     public List<EventViewDTO> getEventsByCategory(@PathVariable Integer categoryId) {
         return eventService.getEventsByCategory(categoryId);
     }
 
+    /**
+     * Récupère les détails d'un événement spécifique
+     * Utilisé pour la page de détails
+     */
     @GetMapping("/{id}")
     public EventViewDTO getById(@PathVariable Integer id) {
         return eventService.getById(id);

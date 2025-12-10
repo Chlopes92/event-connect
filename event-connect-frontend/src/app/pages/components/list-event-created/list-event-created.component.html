@@ -35,7 +35,7 @@
     <div class="event-card">
       <!-- Event Image -->
       <div class="event-image">
-        <img [src]="getEventImage(event)" [alt]="event.nameEvent" />
+        <img [src]="getImageUrl(event)" [alt]="event.nameEvent">
         <div class="event-category-badge">
           {{ getCategoryName(event) }}
         </div>

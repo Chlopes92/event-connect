@@ -1,0 +1,40 @@
+# Version du format Docker Compose (3.8 est une version stable et récente)
+version: '3.8'
+
+# Liste des services (conteneurs) à créer
+services:
+  # Nom du service (vous pouvez l'appeler comme vous voulez)
+  db:
+    # Image Docker à utiliser (postgres version 16.2 depuis Docker Hub)
+    image: postgres:16.2
+
+    # Nom personnalisé du conteneur (facultatif, mais pratique pour le retrouver)
+    container_name: eventconnect-db
+
+    # Variables d'environnement pour configurer PostgreSQL
+    environment:
+      # Nom de la base de données qui sera créée automatiquement
+      POSTGRES_DB: eventconnect
+      # Nom d'utilisateur pour se connecter à la BDD
+      POSTGRES_USER: <USER>
+      # Mot de passe pour se connecter à la BDD
+      POSTGRES_PASSWORD: <PASSWORD>
+
+    # Mapping des ports : port_sur_votre_machine:port_dans_le_conteneur
+    # Permet d'accéder à la BDD via localhost:5432 depuis votre PC
+    ports:
+      - "5432:5432"
+
+    # Volumes pour persister les données (sinon elles disparaissent si vous supprimez le conteneur)
+    volumes:
+      # postgres_data est un volume nommé qui stocke les données de la BDD
+      # /var/lib/postgresql/data est l'emplacement des données dans le conteneur
+      - postgres_data:/var/lib/postgresql/data
+
+    # Politique de redémarrage : redémarre automatiquement sauf si vous l'arrêtez manuellement
+    restart: unless-stopped
+
+# Déclaration des volumes nommés utilisés ci-dessus
+volumes:
+  # Crée un volume Docker pour stocker les données de manière permanente
+  postgres_data:

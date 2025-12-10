@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTCreator.Builder;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import java.time.Instant;
+import java.util.List;
 
 public class JwtProvider {
 
@@ -17,11 +18,12 @@ public class JwtProvider {
         this.expiration = expiration;
     }
 
-    public String create(String subject) {
+    public String create(String subject, List<String> roles) {
         Instant issuedAt = Instant.now();
         Builder builder = JWT.create()
                 .withIssuedAt(issuedAt)
-                .withSubject(subject);
+                .withSubject(subject)
+                .withClaim("roles", roles);
 
         if (expiration > -1) {
             Instant expiresAt = issuedAt.plusSeconds(expiration);

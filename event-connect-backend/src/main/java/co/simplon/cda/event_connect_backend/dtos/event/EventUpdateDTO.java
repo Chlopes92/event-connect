@@ -6,10 +6,20 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * DTO pour la mise à jour d'un événement
+ *
+ * Différences avec EventCreateDTO :
+ * - Pas de validations strictes (optionnelles en update)
+ * - Contient l'id pour identifier l'événement à modifier
+ * - imgUrl peut être null si l'image n'est pas modifiée
+ *
+ * Utilisé lors du PUT /events/{id}
+ */
 public record EventUpdateDTO(
             Integer id,
             String nameEvent,
-            String imgUrl,
+            String imgUrl, // null si l'image n'est pas modifiée
             String description,
             LocalDate dateEvent,
             String program,
@@ -17,7 +27,7 @@ public record EventUpdateDTO(
             BigDecimal price,
             Integer numberPlace,
             String address,
-            List<Integer> categoryIds,
+            List<Integer> categoryIds, // Nouvelles catégories sélectionnées
             List<CategoryDTO> categories
 ) {}
 

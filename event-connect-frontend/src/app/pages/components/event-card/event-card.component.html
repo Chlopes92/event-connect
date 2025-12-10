@@ -2,7 +2,7 @@
   <a
     *ngFor="let event of events"
     class="event-card"
-    [style.background-image]="'url(' + event.imgUrl + ')'"
+    [style.background-image]="'url(' + getImageUrl(event.imgUrl)  + ')'"
     href="/event-details/{{ event.id }}"
   >
     <div class="event-overlay">

@@ -8,6 +8,7 @@
     justify-content: center;
     padding: 60px 20px;
     min-height: 100vh;
+    position: relative; /* Pour les toasts */
   }
   
   .auth-card {
@@ -295,6 +296,107 @@
       transform: translateY(-2px);
     }
   }
+
+  /* ================================================================
+     🎨 TOAST SYSTEM - Notifications magnifiques
+     ================================================================ */
+  
+  .toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 420px;
+  }
+  
+  .toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-left: 4px solid;
+    min-width: 320px;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  /* 🎨 Toast Success (Vert) */
+  .toast-success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
+    border-left-color: #059669;
+    color: white;
+  }
+  
+  /* 🎨 Toast Error (Rouge) */
+  .toast-error {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%);
+    border-left-color: #DC2626;
+    color: white;
+  }
+  
+  /* 🎨 Toast Warning (Orange) */
+  .toast-warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(217, 119, 6, 0.95) 100%);
+    border-left-color: #D97706;
+    color: white;
+  }
+  
+  .toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+  
+  .toast-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toast-message {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    flex: 1;
+  }
+  
+  .toast-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toast-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
   
   @media (max-width: 1024px) {
     .auth-card {
@@ -333,6 +435,18 @@
 
     .form-group.half {
       width: 100%;
+    }
+
+    /* Toasts sur mobile */
+    .toast-container {
+      top: 16px;
+      right: 16px;
+      left: 16px;
+      max-width: none;
+    }
+
+    .toast {
+      min-width: auto;
     }
   }
   

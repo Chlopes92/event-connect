@@ -30,10 +30,8 @@ export class ListEventCreatedComponent {
       next: (events: Event[]) => {
         this.events = events;
         this.isLoading = false;
-        console.log('Événements chargés:', events);
       },
       error: (error: any) => {
-        console.error('Erreur lors du chargement des événements:', error);
         this.errorMessage = 'Erreur lors du chargement des événements';
         this.isLoading = false;
       }
@@ -60,7 +58,6 @@ export class ListEventCreatedComponent {
 
     this.eventService.deleteEvent(eventId).subscribe({
       next: (response: any) => {
-        console.log('Événement supprimé:', response);
         // Recharger la liste des événements
         this.loadEvents();
       },
@@ -92,8 +89,8 @@ export class ListEventCreatedComponent {
     });
   }
 
-  getEventImage(event: Event): string {
-    return event.imgUrl || 'assets/images/default-event.jpg';
+  getImageUrl(event: Event): string {
+    return this.eventService.getImageUrl(event.imgUrl ?? '');
   }
 
   getCategoryName(event: Event): string {

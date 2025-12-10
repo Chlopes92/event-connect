@@ -24,6 +24,7 @@ export class EventCardComponent {
   @Input() activeCategoryLabel: string = '';
 
   private shareService = inject(ShareService);
+  private eventService = inject(EventService);
 
   /** Partager un événement */
   async shareEvent(event: Event, $event: MouseEvent): Promise<void> {
@@ -40,13 +41,16 @@ export class EventCardComponent {
     await this.shareService.share(shareData);
   }
 
+  getImageUrl(filename: string | undefined): string {
+    return this.eventService.getImageUrl(filename);
+  }
+
   /** Gérer les favoris */
   toggleFavorite(event: Event, $event: MouseEvent): void {
     // Empêcher la navigation vers event-details
     $event.preventDefault();
     $event.stopPropagation();
-    
-    console.log('Favori :', event.nameEvent);
+  
     // TODO: Implémenter la logique des favoris
   }
 }

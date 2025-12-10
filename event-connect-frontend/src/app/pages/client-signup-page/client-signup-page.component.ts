@@ -41,7 +41,6 @@ export class ClientSignupPageComponent {
 
   onNewClientSubmit() {
     if (this.newClientForm.valid) {
-      console.log('New Client:', this.newClientForm.value);
       // Naviguer vers le dashboard après création du compte
       this.router.navigate(['/']);
     }
@@ -49,7 +48,6 @@ export class ClientSignupPageComponent {
 
   onExistingClientSubmit() {
     if (this.existingClientForm.valid) {
-      console.log('Existing Client:', this.existingClientForm.value);
       // Naviguer vers le dashboard après connexion
       this.router.navigate(['/']);
     }
