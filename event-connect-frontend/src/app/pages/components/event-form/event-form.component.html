@@ -164,23 +164,26 @@
         }
       </div>
   
-      <!-- Catégorie de l'événement -->
+      <!-- 🔧 NOUVEAU : Catégories multiples avec checkboxes -->
       <div class="form-group">
-        <label class="form-label required">Catégorie de l'événement</label>
-        <select 
-          formControlName="category"
-          class="form-select"
-          [class.error]="isFieldInvalid('category')">
-          <!-- Option vide par défaut -->
-          <option value="">Sélectionnez une catégorie</option>
-          <!-- Boucle sur ton mock -->
-          <option *ngFor="let category of categories" [value]="category.id">
-            {{ category.nameCategory }}
-          </option>
-        </select>
-        @if(isFieldInvalid('category')){
+        <label class="form-label required">Catégories de l'événement</label>
+        <div class="categories-container">
+          <div 
+            *ngFor="let category of categories" 
+            class="category-checkbox"
+            [class.selected]="isCategorySelected(category.id!)"
+            (click)="toggleCategory(category.id!)">
+            <input 
+              type="checkbox" 
+              [checked]="isCategorySelected(category.id!)"
+              (click)="$event.stopPropagation()"
+              (change)="toggleCategory(category.id!)">
+            <span class="category-label">{{ category.nameCategory }}</span>
+          </div>
+        </div>
+        @if(isFieldInvalid('categories')){
         <div class="error-message">
-          {{ getFieldError('category') }}
+          Veuillez sélectionner au moins une catégorie
         </div>
         }
       </div>
@@ -219,7 +222,7 @@
           formControlName="contact"
           class="form-input"
           [class.error]="isFieldInvalid('contact')"
-          placeholder="Email et téléphone de contact">
+          placeholder="Email de contact">
         @if(isFieldInvalid('contact')){
         <div class="error-message">
           {{ getFieldError('contact') }}
@@ -232,8 +235,8 @@
         <button 
           type="submit" 
           class="submit-button"
-          [disabled]="eventForm.invalid">
-          {{ isEditMode ? 'Mettre à jour l\'événement' : 'Créer l\'événement' }}
+          [disabled]="eventForm.invalid || isLoading">
+          {{ isLoading ? 'Enregistrement...' : (isEditMode ? 'Mettre à jour l\'événement' : 'Créer l\'événement') }}
         </button>
       </div>
   

@@ -14,6 +14,15 @@
     cursor: pointer;
     padding: 8px 0;
     transition: color 0.2s;
+    color: #6B7280;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .back-button:hover {
+    color: #374151;
   }
   
   .event-form {
@@ -89,6 +98,59 @@
     background-size: 16px;
     padding-right: 40px;
     appearance: none;
+  }
+  
+  /* NOUVEAU : Styles pour les catégories multiples */
+  .categories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    background: #F9FAFB;
+  }
+
+  .category-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .category-checkbox:hover {
+    border-color: var(--color-violet);
+    background: #EFF6FF;
+  }
+
+  .category-checkbox.selected {
+    border-color: var(--color-violet);
+    background: var(--color-violet);
+  }
+
+  .category-checkbox.selected .category-label {
+    color: white;
+    font-weight: 600;
+  }
+
+  .category-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  .category-label {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
   }
   
   .image-upload-container {
@@ -211,114 +273,121 @@
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.3s;
     min-width: 200px;
   }
   
   .submit-button:hover:not(:disabled) {
     background: #B91C1C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
   }
   
   .submit-button:disabled {
     background: #9CA3AF;
     cursor: not-allowed;
+    opacity: 0.6;
   }
   
-  /* Toast System */
+  /* ================================================================
+      TOAST SYSTEM - Notifications uniformes et magnifiques
+     ================================================================ */
+  
   .toast-container {
     position: fixed;
     top: 24px;
     right: 24px;
-    z-index: 1000;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    max-width: 400px;
+    max-width: 420px;
   }
   
   .toast {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(8px);
-    animation: slideIn 0.3s ease-out;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     border-left: 4px solid;
+    min-width: 320px;
   }
   
-  .toast-success {
-    background: rgba(240, 253, 244, 0.95);
-    border-left-color: #10B981;
-    color: #065F46;
-  }
-  
-  .toast-error {
-    background: rgba(254, 242, 242, 0.95);
-    border-left-color: #EF4444;
-    color: #991B1B;
-  }
-  
-  .toast-warning {
-    background: rgba(255, 251, 235, 0.95);
-    border-left-color: #F59E0B;
-    color: #92400E;
-  }
-  
-  .toast-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex: 1;
-  }
-  
-  .toast-icon {
-    flex-shrink: 0;
-  }
-  
-  .toast-success .toast-icon {
-    color: #10B981;
-  }
-  
-  .toast-error .toast-icon {
-    color: #EF4444;
-  }
-  
-  .toast-warning .toast-icon {
-    color: #F59E0B;
-  }
-  
-  .toast-message {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.4;
-  }
-  
-  .toast-close {
-    background: none;
-    border: none;
-    padding: 4px;
-    border-radius: 4px;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    flex-shrink: 0;
-  }
-  
-  .toast-close:hover {
-    opacity: 1;
-  }
-  
-  @keyframes slideIn {
+  @keyframes slideInRight {
     from {
-      transform: translateX(100%);
+      transform: translateX(400px);
       opacity: 0;
     }
     to {
       transform: translateX(0);
       opacity: 1;
     }
+  }
+  
+  /* Toast Success (Vert) */
+  .toast-success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
+    border-left-color: #059669;
+    color: white;
+  }
+  
+  /* Toast Error (Rouge) */
+  .toast-error {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%);
+    border-left-color: #DC2626;
+    color: white;
+  }
+  
+  /* Toast Warning (Orange) */
+  .toast-warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(217, 119, 6, 0.95) 100%);
+    border-left-color: #D97706;
+    color: white;
+  }
+  
+  .toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+  
+  .toast-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toast-message {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    flex: 1;
+  }
+  
+  .toast-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toast-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
   }
   
   /* Responsive design */
@@ -346,10 +415,15 @@
       min-width: 100%;
     }
     
+    /* Toasts sur mobile */
     .toast-container {
       top: 16px;
       right: 16px;
       left: 16px;
       max-width: none;
+    }
+
+    .toast {
+      min-width: auto;
     }
   }

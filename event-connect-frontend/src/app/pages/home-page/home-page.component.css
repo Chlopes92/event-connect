@@ -65,6 +65,38 @@
   background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
 }
 
+/* 🔄 Filters Loading Skeleton */
+.filters-loading {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.filters-skeleton {
+  width: 400px;
+  height: 40px;
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 25px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 📱 Responsive */
 @media (max-width: 768px) {
   .app-container {
     padding: 15px;
@@ -102,6 +134,10 @@
   .search-icon {
     width: 60px;
     height: 60px;
+  }
+
+  .filters-skeleton {
+    width: 250px;
   }
 }
 

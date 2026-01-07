@@ -25,6 +25,10 @@ export class HomePageComponent {
   categories: Category[] = [];
   filters: Filter[] = [];
   visibleEventsCount = 6;
+  
+  // 🆕 Loading states
+  isLoadingEvents: boolean = true;
+  isLoadingCategories: boolean = true;
 
   private eventService = inject(EventService);
   private categoryService = inject(CategoryService);
@@ -34,24 +38,55 @@ export class HomePageComponent {
     this.loadEvents();
   }
 
+  /**
+   * 📥 Charger les événements
+   */
   private loadEvents(): void {
-    this.eventService.getAllEvents().subscribe((data: Event[]) => {
-      this.events = data;
+    this.isLoadingEvents = true;
+    
+    this.eventService.getAllEvents().subscribe({
+      next: (data: Event[]) => {
+        this.events = data;
+        this.isLoadingEvents = false;
+      },
+      error: (error) => {
+        console.error('❌ Erreur chargement événements:', error);
+        this.isLoadingEvents = false;
+      }
     });
   }
 
+  /**
+   * 📥 Charger les catégories
+   */
   private loadCategories(): void {
-    this.categoryService.getAllCategories().subscribe((data: Category[]) => {
-      this.categories = data.filter(cat => cat.nameCategory.toLowerCase() !== 'tout');
-      this.filters = [
-        { id: 'tous', label: 'Tout', active: true },
-        ...this.categories.map(cat => ({
-          id: String(cat.id),
-          label: cat.nameCategory,
-          active: false
-        }))
-      ];
+    this.isLoadingCategories = true;
+    
+    this.categoryService.getAllCategories().subscribe({
+      next: (data: Category[]) => {
+        this.categories = data.filter(cat => cat.nameCategory.toLowerCase() !== 'tout');
+        this.filters = [
+          { id: 'tous', label: 'Tout', active: true },
+          ...this.categories.map(cat => ({
+            id: String(cat.id),
+            label: cat.nameCategory,
+            active: false
+          }))
+        ];
+        this.isLoadingCategories = false;
+      },
+      error: (error) => {
+        console.error('❌ Erreur chargement catégories:', error);
+        this.isLoadingCategories = false;
+      }
     });
+  }
+
+  /**
+   * 🔄 Loading général (événements OU catégories en cours)
+   */
+  get isLoading(): boolean {
+    return this.isLoadingEvents || this.isLoadingCategories;
   }
 
   get filteredEvents(): Event[] {

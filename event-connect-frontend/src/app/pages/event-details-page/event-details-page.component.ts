@@ -4,40 +4,99 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../services/event/event.service';
 import { Event } from '../../shared/models/Event';
 
+/**
+ * 🎨 Interface Toast
+ */
+interface Toast {
+  id: number;
+  type: 'success' | 'error' | 'warning' | 'info';
+  message: string;
+}
+
 @Component({
   selector: 'app-event-details-page',
   imports: [CommonModule],
   templateUrl: './event-details-page.component.html',
   styleUrl: './event-details-page.component.css'
 })
-export class EventDetailsPageComponent implements OnInit{
- event!: Event;
+export class EventDetailsPageComponent implements OnInit {
+  event!: Event;
+  isLoading: boolean = true;
+  toasts: Toast[] = [];
 
- constructor(
+  constructor(
     public activatedRoute: ActivatedRoute, 
-    private eventService:EventService,
-    private router:Router
+    private eventService: EventService,
+    private router: Router
   ) {}
 
- ngOnInit() {
+  ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      const id = Number(params['id']); // 🔹 conversion en number
-      if (id) {
-        this.eventService.getEventById(id).subscribe({
-          next: (event) => {
-            this.event = event;
-          },
-          error: (err) => {
-            console.error('Erreur lors du chargement de l’événement :', err);
-            this.router.navigate(['/']); // 🔹 redirige si erreur
-          }
-        });
+      const id = Number(params['id']);
+      
+      if (!id || isNaN(id)) {
+        this.addToast('error', 'ID d\'événement invalide ⚠️');
+        setTimeout(() => this.router.navigate(['/home']), 2000);
+        return;
+      }
+
+      this.loadEventDetails(id);
+    });
+  }
+
+  /**
+   * 📥 Charger les détails de l'événement
+   */
+  private loadEventDetails(id: number): void {
+    this.isLoading = true;
+
+    this.eventService.getEventById(id).subscribe({
+      next: (event) => {
+        this.event = event;
+        this.isLoading = false;
+      },
+      error: (error: Error) => {
+        console.error('❌ Erreur chargement événement:', error.message);
+        this.addToast('error', error.message || 'Impossible de charger cet événement');
+        this.isLoading = false;
+        
+        setTimeout(() => this.router.navigate(['/home']), 2000);
       }
     });
   }
 
-  goBack() {
-    window.history.back(); // Navigation vers la page précédente
+  /**
+   * ⬅️ Retour à la page précédente
+   */
+  goBack(): void {
+    window.history.back();
   }
 
+  /**
+   * 🖼️ Obtenir l'URL complète de l'image
+   */
+  getImageUrl(filename: string | undefined): string {
+    return this.eventService.getImageUrl(filename);
+  }
+
+  /**
+   * 🎨 Ajouter un toast
+   */
+  private addToast(type: 'success' | 'error' | 'warning' | 'info', message: string): void {
+    const toast: Toast = {
+      id: Date.now(),
+      type,
+      message
+    };
+    
+    this.toasts.push(toast);
+    setTimeout(() => this.removeToast(toast.id), 5000);
+  }
+
+  /**
+   * 🗑️ Supprimer un toast
+   */
+  removeToast(id: number): void {
+    this.toasts = this.toasts.filter(toast => toast.id !== id);
+  }
 }

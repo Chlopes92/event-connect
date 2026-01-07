@@ -5,18 +5,31 @@
     <header class="header">
       <h1 class="title">Prochainement</h1>
 
+      <!-- 🔄 Loading des filtres -->
+      @if(isLoadingCategories){
+      <div class="filters-loading">
+        <div class="filters-skeleton"></div>
+      </div>
+      } @else {
       <div class="filters" id="events-container">
         <button
           *ngFor="let filter of filters"
           class="filter-btn"
           [class.active]="filter.active"
-          (click)="toggleFilter(filter.id)"
-        >
+          (click)="toggleFilter(filter.id)">
           {{ filter.label }}
         </button>
       </div>
+      }
     </header>
 
+    <!-- 🔄 Loading des événements -->
+    @if(isLoadingEvents){
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement des événements...</p>
+    </div>
+    } @else {
     <app-event-card
       [events]="visibleEvents"
       [activeCategoryLabel]="activeCategoryLabel">
@@ -26,6 +39,7 @@
     <div class="load-more">
       <button class="load-more-btn" (click)="loadMoreEvents()">En voir +</button>
     </div>
+    }
     }
   </div>
 </section>

@@ -1,5 +1,5 @@
 <div class="auth-container">
-    <!-- 🎨 Toast Container (en haut à droite) -->
+    <!-- Toast Container (en haut à droite) -->
     <div class="toast-container">
       <div 
         *ngFor="let toast of toasts" 
@@ -142,10 +142,16 @@
                 type="text" 
                 formControlName="phone" 
                 autocomplete="phone"
+                placeholder="Ex: 0612345678"
                 class="form-input">
               @if(newOrganizerForm.get('phone')?.invalid && newOrganizerForm.get('phone')?.touched) {
               <div class="error">
-                Téléphone requis
+                @if(newOrganizerForm.get('phone')?.errors?.['required']) {
+                  Téléphone requis
+                }
+                @if(newOrganizerForm.get('phone')?.errors?.['pattern']) {
+                  Format invalide (Ex: 0612345678 ou +33612345678)
+                }
               </div>
               }
             </div>
@@ -159,7 +165,12 @@
                 class="form-input">
               @if(newOrganizerForm.get('email')?.invalid && newOrganizerForm.get('email')?.touched) {
               <div class="error">
-                Email valide requis
+                @if(newOrganizerForm.get('email')?.errors?.['required']) {
+                  Email requis
+                }
+                @if(newOrganizerForm.get('email')?.errors?.['email'] || newOrganizerForm.get('email')?.errors?.['pattern']) {
+                  Email invalide
+                }
               </div>
               }
             </div>
@@ -173,7 +184,15 @@
                 class="form-input">
               @if(newOrganizerForm.get('password')?.invalid && newOrganizerForm.get('password')?.touched) {
               <div class="error">
-                Minimum 8 caractères
+                @if(newOrganizerForm.get('password')?.errors?.['required']) {
+                  Mot de passe requis
+                }
+                @if(newOrganizerForm.get('password')?.errors?.['minlength']) {
+                  Minimum 8 caractères
+                }
+                @if(newOrganizerForm.get('password')?.errors?.['pattern']) {
+                  Le mot de passe doit contenir : 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial (&#64;$!%*?&)
+                }
               </div>
               }
             </div>

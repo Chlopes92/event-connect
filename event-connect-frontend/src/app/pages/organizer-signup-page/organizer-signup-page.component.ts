@@ -35,16 +35,44 @@ export class OrganizerSignupPageComponent {
     private accountService: AccountService
   ) {
     this.newOrganizerForm = this.fb.group({
-      lastName: ['', Validators.required],
-      firstName: ['', Validators.required],
-      organization: ['', Validators.required],
-      phone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      lastName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50)
+      ]],
+      firstName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50)
+      ]],
+      organization: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(100)
+      ]],
+      phone: ['', [
+        Validators.required,
+        Validators.pattern(/^(?:(?:\+|00)33|0)[1-9](?:[0-9]{8})$/) // Regex téléphone français
+      ]],
+      email: ['', [
+        Validators.required, 
+        Validators.email,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(72),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,72}$/) // Regex complexe
+      ]]
     });
 
     this.existingOrganizerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [
+        Validators.required, 
+        Validators.email,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      ]],
       password: ['', Validators.required]
     });
   }
@@ -76,7 +104,7 @@ export class OrganizerSignupPageComponent {
       phone: formValue.phone,
       email: formValue.email,
       password: formValue.password,
-      roleId: 2 // ROLE_ADMIN 
+      roleId: 2 // ROLE_ADMIN pour organisateur
     };
 
     this.accountService.signup(profile).subscribe({
