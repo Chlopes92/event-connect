@@ -1,0 +1,36 @@
+# FICHIERS D'ENVIRONNEMENT ET SECRETS
+.env
+.env.*
+!.env.example
+
+# BACKEND (Spring Boot)
+event-connect-backend/target/
+event-connect-backend/.mvn/
+event-connect-backend/**/*.class
+event-connect-backend/uploads/
+
+# ✅ COMMITER les application*.properties (ils utilisent des env vars)
+# application-*.properties  ← SUPPRIMER CETTE LIGNE
+
+# FRONTEND (Angular)
+event-connect-frontend/node_modules/
+event-connect-frontend/dist/
+event-connect-frontend/.angular/
+event-connect-frontend/uploads/
+
+# Environment files
+event-connect-frontend/src/environments/environment.prod.ts
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# SYSTÈME
+.DS_Store
+Thumbs.db
+*.lnk
+
+# LOGS
+*.log
+logs/
