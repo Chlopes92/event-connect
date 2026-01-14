@@ -1,0 +1,163 @@
+# docker-compose.yml
+# Fichier qui décrit tous les conteneurs Docker de ton application
+
+# Liste de tous les services (conteneurs) à créer
+services:
+  
+  # === SERVICE 1 : Base de données PostgreSQL ===
+  db:
+    # Image Docker à utiliser (postgres version 16.2 depuis Docker Hub)
+    image: postgres:16.2
+    
+    # Nom personnalisé du conteneur (plus facile à retrouver)
+    container_name: eventconnect-db
+    
+    # Variables d'environnement pour configurer PostgreSQL
+    environment:
+      # Nom de la base de données qui sera créée automatiquement
+      POSTGRES_DB: ${POSTGRES_DB}
+      # Nom d'utilisateur pour se connecter à la BDD
+      POSTGRES_USER: ${POSTGRES_USER}
+      # Mot de passe pour se connecter à la BDD
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    
+    # Mapping des ports : port_sur_ta_machine:port_dans_le_conteneur
+    # Permet d'accéder à la BDD via localhost:5432 depuis ton PC
+    ports:
+      - "5432:5432"
+    
+    # Volumes pour sauvegarder les données
+    volumes:
+      # Volume nommé qui stocke les données de la BDD de façon permanente
+      # Même si tu supprimes le conteneur, les données restent
+      - postgres_data:/var/lib/postgresql/data
+      # Monte le dossier init-scripts dans le conteneur
+      # PostgreSQL exécute automatiquement tous les .sql qu'il trouve dans ce dossier
+      # C'est comme ça que tes données seront importées au premier démarrage
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    
+    # Vérification de santé : Docker vérifie que PostgreSQL est bien démarré
+    healthcheck:
+      # Commande pour tester si PostgreSQL répond
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      # Vérifier toutes les 10 secondes
+      interval: 10s
+      # Attendre max 5 secondes pour une réponse
+      timeout: 5s
+      # Essayer 5 fois avant de considérer que c'est mort
+      retries: 5
+    
+    # Politique de redémarrage : redémarre automatiquement sauf si tu l'arrêtes manuellement
+    restart: unless-stopped
+    
+    # Réseau partagé pour que les conteneurs se parlent entre eux
+    networks:
+      - eventconnect-network
+
+  # === SERVICE 2 : Backend Spring Boot ===
+  backend:
+    # Construire l'image Docker à partir du Dockerfile dans le dossier backend
+    build:
+      # Dossier contenant le code backend
+      context: ./event-connect-backend
+      # Nom du fichier de construction (Dockerfile)
+      dockerfile: Dockerfile
+    
+    # Nom du conteneur backend
+    container_name: eventconnect-backend
+    
+    # Mapping des ports : ton_pc:conteneur
+    # Le backend sera accessible via localhost:8080 depuis ton PC
+    ports:
+      - "8080:8080"
+    
+    # Variables d'environnement pour Spring Boot
+    environment:
+      # AJOUT : Active le profil Spring Boot (dev ou prod)
+      # Lit depuis .env ou utilise "dev" par défaut
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      
+      # URL de connexion à la BDD
+      # On utilise "db" (nom du service ci-dessus) au lieu de "localhost"
+      # Car dans Docker, chaque conteneur est isolé
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      
+      # Nom d'utilisateur pour se connecter à la BDD
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      
+      # Mot de passe pour se connecter à la BDD
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      
+      # Clé secrète pour signer les tokens JWT
+      JWT_SECRET: ${JWT_SECRET}
+    
+    # Volumes pour persister les uploads
+    volumes:
+      - ./event-connect-backend/uploads:/app/uploads
+    
+    # Dépendances : le backend attend que la BDD soit prête (healthy)
+    # Sinon il va essayer de se connecter à une BDD qui n'existe pas encore
+    depends_on:
+      db:
+        # Attend que le healthcheck de "db" soit OK
+        condition: service_healthy
+    
+    # Redémarre automatiquement en cas de plantage
+    restart: unless-stopped
+    
+    # Utilise le même réseau que la BDD pour communiquer
+    networks:
+      - eventconnect-network
+
+  # === SERVICE 3 : Frontend Angular ===
+  frontend:
+    # Construire l'image Docker à partir du Dockerfile dans le dossier frontend
+    build:
+      # Dossier contenant le code frontend
+      context: ./event-connect-frontend
+      # Nom du fichier de construction (Dockerfile)
+      dockerfile: Dockerfile
+    
+    # Nom du conteneur frontend
+    container_name: eventconnect-frontend
+    
+    # Mapping des ports : ton_pc:conteneur
+    # Angular sera accessible via localhost:4200 depuis ton PC
+    ports:
+      - "4200:4200"
+    
+    # Dépendances : le frontend attend que le backend soit démarré
+    depends_on:
+      - backend
+    
+    # Volumes pour le développement
+    volumes:
+      # Synchronise ton code local avec le conteneur (hot reload)
+      # = les modifications dans ton éditeur sont visibles immédiatement dans le navigateur
+      - ./event-connect-frontend:/app
+      # Évite d'écraser node_modules du conteneur avec ceux de ta machine
+      # Car les dépendances npm peuvent être différentes entre Windows et Linux
+      - /app/node_modules
+    
+    # Redémarre automatiquement en cas de plantage
+    restart: unless-stopped
+    
+    # Utilise le même réseau pour communiquer avec le backend
+    networks:
+      - eventconnect-network
+
+# Déclaration des volumes nommés utilisés ci-dessus
+volumes:
+  # Crée un volume Docker pour stocker les données de manière permanente
+  # Les données survivent même si tu supprimes le conteneur
+  # C'est un espace de stockage géré par Docker
+  postgres_data:
+
+# Déclaration des réseaux
+networks:
+  # Réseau virtuel qui permet aux 3 conteneurs de communiquer entre eux
+  # C'est comme s'ils étaient sur le même réseau local
+  # Docker gère automatiquement les DNS : "db", "backend", "frontend" sont des noms valides
+  eventconnect-network:
+    # Type de réseau : bridge (le plus courant, isolé du réseau de ta machine)
+    driver: bridge
