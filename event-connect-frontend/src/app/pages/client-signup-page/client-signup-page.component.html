@@ -43,9 +43,13 @@
           }
 
           @if(isNewClient){
-          <button class="switch-btn" (click)="switchToExistingClient()">
-            CONNEXION
-          </button>
+          <div class="login-btn-wrapper" [class.disabled]="!loginEnabled">
+            <button class="switch-btn" 
+                    (click)="loginEnabled && switchToExistingClient()">
+              CONNEXION
+              <span *ngIf="!loginEnabled" class="tooltip">Bientôt disponible</span>
+            </button>
+          </div>
           }
         </div>
       </div>

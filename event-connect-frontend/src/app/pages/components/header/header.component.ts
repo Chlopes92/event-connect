@@ -15,6 +15,11 @@ export class HeaderComponent {
   isHomePage = false;
   lastScrollPosition = 0;
 
+  // Variables pour les fonctionnalités non développées
+  wishlistEnabled = false;
+  ticketEnabled = false;
+  aboutEnabled = false;
+
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -74,5 +79,4 @@ export class HeaderComponent {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
-
 }

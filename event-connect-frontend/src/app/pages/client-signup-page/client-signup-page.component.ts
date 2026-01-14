@@ -13,6 +13,9 @@ export class ClientSignupPageComponent {
   isNewClient = true;
   newClientForm: FormGroup;
   existingClientForm: FormGroup;
+  
+  // Variable pour contrôler le bouton connexion
+  loginEnabled = false;
 
   constructor(private fb: FormBuilder, private router: Router) {
     // Formulaire complet avec tous les champs de la maquette
@@ -52,5 +55,4 @@ export class ClientSignupPageComponent {
       this.router.navigate(['/']);
     }
   }
-
 }

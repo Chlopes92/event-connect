@@ -166,6 +166,7 @@ form button {
 .nav-footer a {
     color: white;
     text-decoration: none;
+    cursor: not-allowed;
 }
 
 .nav-footer a:hover {
@@ -180,4 +181,81 @@ hr {
 
 h3.newsletter-section-title {
     margin-left: 3%;
+}
+
+/* Styles pour les liens désactivés du footer */
+.nav-footer li {
+    border-right: 2px solid white;
+    padding: 0 10px;
+    position: relative;
+}
+
+.nav-footer li.disabled {
+    opacity: 0.4;
+}
+
+.nav-footer li.disabled:hover {
+    opacity: 0.25;
+}
+
+.nav-footer li.no-border {
+    border-right: none;
+}
+
+.nav-footer a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.nav-footer li.disabled a {
+    cursor: not-allowed;
+    pointer-events: all;
+}
+
+.nav-footer li:not(.disabled) a:hover {
+    text-decoration: underline;
+}
+
+/* Empêcher le soulignement pour les liens désactivés */
+.nav-footer li.disabled a:hover {
+    text-decoration: none;
+}
+
+/* Styles pour le tooltip du footer */
+.nav-footer .tooltip {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.95);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    letter-spacing: 0.3px;
+}
+
+/* Petite flèche pour le tooltip du footer */
+.nav-footer .tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(0, 0, 0, 0.95);
+}
+
+/* Afficher le tooltip au hover */
+.nav-footer li.disabled:hover .tooltip {
+    opacity: 1;
 }
