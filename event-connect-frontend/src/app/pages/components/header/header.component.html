@@ -8,11 +8,22 @@
     <nav class="nav">
       <a href="#" class="nav-item">ACCUEIL</a>
       <a href="#app-container" (click)="scrollToEvents($event)" class="nav-item">EVENTS</a>
-      <a href="#" class="nav-item">A PROPOS</a>
+      <a [class.disabled]="!aboutEnabled" class="nav-item">
+        A PROPOS
+        <span *ngIf="!aboutEnabled" class="tooltip">Bientôt disponible</span>
+      </a>
     </nav>
     <div class="header-actions">
-        <img routerLink="/client-signup" src="assets/icons/account.png" alt="Compte">
-        <img routerLink="/" src="assets/icons/wishlist.png" alt="Liste des souhaits">
-        <img routerLink="/"src="assets/icons/ticket.png" alt="Billeterie">
+        <img  class="icon-account" routerLink="/client-signup" src="assets/icons/account.png" alt="Compte">
+        
+        <div class="icon-wrapper" [class.disabled]="!wishlistEnabled">
+          <img src="assets/icons/wishlist.png" alt="Liste des souhaits">
+          <span *ngIf="!wishlistEnabled" class="tooltip">Bientôt disponible</span>
+        </div>
+        
+        <div class="icon-wrapper" [class.disabled]="!ticketEnabled">
+          <img src="assets/icons/ticket.png" alt="Billeterie">
+          <span *ngIf="!ticketEnabled" class="tooltip">Bientôt disponible</span>
+        </div>
     </div>
 </header>

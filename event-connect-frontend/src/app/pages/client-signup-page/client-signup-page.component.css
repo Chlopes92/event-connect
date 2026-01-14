@@ -295,6 +295,70 @@
       transform: translateY(-2px);
     }
   }
+
+  /* Wrapper pour le bouton connexion */
+.login-btn-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.login-btn-wrapper.disabled {
+  opacity: 0.4;
+}
+
+.login-btn-wrapper.disabled:hover {
+  opacity: 0.25;
+}
+
+.login-btn-wrapper.disabled .switch-btn {
+  cursor: not-allowed;
+  pointer-events: all;
+}
+
+/* Empêcher les effets hover pour le bouton désactivé */
+.login-btn-wrapper.disabled .switch-btn:hover {
+  background: transparent;
+  color: white;
+  transform: none;
+}
+
+/* Styles pour le tooltip du bouton connexion */
+.login-btn-wrapper .tooltip {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.95);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  letter-spacing: 0.3px;
+}
+
+/* Petite flèche pour le tooltip */
+.login-btn-wrapper .tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0, 0, 0, 0.95);
+}
+
+/* Afficher le tooltip au hover */
+.login-btn-wrapper.disabled:hover .tooltip {
+  opacity: 1;
+}
   
   @media (max-width: 1024px) {
     .auth-card {
