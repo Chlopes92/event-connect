@@ -117,7 +117,7 @@ INSERT INTO t_events (name_event, img_url, description, date_event, program, con
     'Compagnie Indigo Fusion - contact@indigofusion.fr - 01 72 98 32 15',
     20.00,
     500,
-    'Théâtre Lumière, 12 rue des Arts, Paris 3e',
+    'Théâtre Lumière, 12 rue des Arts, 75003 Paris',
     1
 ),
 (
