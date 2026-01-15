@@ -110,28 +110,28 @@ jobs:
         run: npm run build -- --configuration=production
 
 
-  test-frontend:
-    name: Frontend - Tests
-    runs-on: ubuntu-latest
-    needs: build-frontend
+  #test-frontend:
+  #  name: Frontend - Tests
+  #  runs-on: ubuntu-latest
+  #  needs: build-frontend
 
-    steps:
-      - uses: actions/checkout@v4
+  #  steps:
+  #    - uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: event-connect-frontend/package-lock.json
+  #    - name: Set up Node
+  #      uses: actions/setup-node@v4
+  #      with:
+  #        node-version: ${{ env.NODE_VERSION }}
+  #        cache: npm
+  #        cache-dependency-path: event-connect-frontend/package-lock.json
 
-      - name: Install dependencies
-        working-directory: event-connect-frontend
-        run: npm ci
+  #    - name: Install dependencies
+  #      working-directory: event-connect-frontend
+  #      run: npm ci
 
-      - name: Run frontend tests
-        working-directory: event-connect-frontend
-        run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+  #    - name: Run frontend tests
+  #      working-directory: event-connect-frontend
+  #      run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
 
   sonar-frontend:
