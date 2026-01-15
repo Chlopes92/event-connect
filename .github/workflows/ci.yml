@@ -1,4 +1,4 @@
-name: CI Pipeline with SonarCloud
+name: CI Pipeline
 
 on:
   push:
@@ -11,54 +11,143 @@ env:
   NODE_VERSION: '18'
 
 jobs:
-  backend:
-    name: Backend Tests & Analysis
+  # =========================
+  # BACKEND
+  # =========================
+
+  build-backend:
+    name: Backend - Build
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: maven
+
+      - name: Compile backend
+        working-directory: event-connect-backend
+        run: mvn clean compile
+
+
+  test-backend:
+    name: Backend - Tests
+    runs-on: ubuntu-latest
+    needs: build-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: maven
+
+      - name: Run tests + coverage
+        working-directory: event-connect-backend
+        run: mvn test jacoco:report
+
+
+  sonar-backend:
+    name: Backend - SonarCloud
+    runs-on: ubuntu-latest
+    needs: test-backend
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 21
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: maven
 
-      - name: Build & Test
-        working-directory: ./event-connect-backend
-        run: mvn clean test jacoco:report
+      - name: Build & test (required for sonar)
+        working-directory: event-connect-backend
+        run: mvn test jacoco:report
 
       - name: SonarCloud Scan
-        working-directory: ./event-connect-backend
+        working-directory: event-connect-backend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn sonar:sonar -Dsonar.projectKey=event-connect-backend -Dsonar.organization=chlopes92
+        run: mvn sonar:sonar
 
-  frontend:
-    name: Frontend Tests & Analysis
+
+  # =========================
+  # FRONTEND
+  # =========================
+
+  build-frontend:
+    name: Frontend - Build
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: event-connect-frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: event-connect-frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: event-connect-frontend
+        run: npm run build -- --configuration=production
+
+
+  test-frontend:
+    name: Frontend - Tests
+    runs-on: ubuntu-latest
+    needs: build-frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: event-connect-frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: event-connect-frontend
+        run: npm ci
+
+      - name: Run frontend tests
+        working-directory: event-connect-frontend
+        run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+
+
+  sonar-frontend:
+    name: Frontend - SonarCloud
+    runs-on: ubuntu-latest
+    needs: test-frontend
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: event-connect-frontend/package-lock.json
-
-      - name: Install & Test
-        working-directory: ./event-connect-frontend
-        run: |
-          npm ci
-          npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -67,8 +156,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: event-connect-frontend
-          args: -Dsonar.projectKey=event-connect-frontend -Dsonar.organization=chlopes92
-
-      - name: Build
-        working-directory: ./event-connect-frontend
-        run: npm run build -- --configuration=production
+          args: >
+            -Dsonar.projectKey=event-connect-frontend
+            -Dsonar.organization=chlopes92
