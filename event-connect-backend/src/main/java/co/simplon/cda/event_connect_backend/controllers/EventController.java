@@ -30,6 +30,15 @@ import java.util.Map;
 @RequestMapping("/events")
 public class EventController {
 
+    // CONSTANTES - CLÉS DE RÉPONSE JSON
+    private static final String RESPONSE_KEY_MESSAGE = "message";
+    private static final String RESPONSE_KEY_STATUS = "status";
+    private static final String RESPONSE_STATUS_SUCCESS = "success";
+
+    // Messages de succès
+    private static final String MSG_EVENT_CREATED = "Event créé avec succès";
+    private static final String MSG_EVENT_UPDATED = "Event mis à jour avec succès";
+    private static final String MSG_EVENT_DELETED = "Event supprimé avec succès";
     private final EventService eventService;
     private final FileStorageService fileStorageService;
 
@@ -64,8 +73,8 @@ public class EventController {
         // Création de l'événement en base
         eventService.create(inputs, imgUrl);
         return ResponseEntity.ok(Map.of(
-                "message", "Event créé avec succès",
-                "status", "success"
+                RESPONSE_KEY_MESSAGE, MSG_EVENT_CREATED,
+                RESPONSE_KEY_STATUS, RESPONSE_STATUS_SUCCESS
         ));
     }
 
@@ -86,8 +95,8 @@ public class EventController {
         // Mise à jour en base
         eventService.update(inputs, id, imgUrl);
         return ResponseEntity.ok(Map.of(
-                "message", "Event mis à jour avec succès",
-                "status", "success"
+                RESPONSE_KEY_MESSAGE, MSG_EVENT_UPDATED,
+                RESPONSE_KEY_STATUS, RESPONSE_STATUS_SUCCESS
         ));
     }
 
@@ -102,8 +111,8 @@ public class EventController {
     public ResponseEntity<Map<String, String>> delete(@PathVariable Integer id) {
         eventService.delete(id);
         return ResponseEntity.ok(Map.of(
-                "message", "Event supprimé avec succès",
-                "status", "success"
+                RESPONSE_KEY_MESSAGE, MSG_EVENT_DELETED,
+                RESPONSE_KEY_STATUS, RESPONSE_STATUS_SUCCESS
         ));
     }
 
