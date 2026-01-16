@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-
 import { OrganizerHomePageComponent } from './organizer-home-page.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('OrganizerHomePageComponent', () => {
   let component: OrganizerHomePageComponent;
@@ -12,13 +9,12 @@ describe('OrganizerHomePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrganizerHomePageComponent]
+      imports: [OrganizerHomePageComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting()
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(OrganizerHomePageComponent);
     component = fixture.componentInstance;
