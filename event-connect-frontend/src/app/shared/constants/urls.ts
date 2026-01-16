@@ -1,4 +1,6 @@
-const BASE_URL = 'http://localhost:8080';
+import { environment } from "../../../environments/environment";
+
+const BASE_URL = environment.apiUrl;
 
 export const EVENT_URL = `${BASE_URL}/events`;
 export const CATEGORY_URL = `${BASE_URL}/categories`;

@@ -42,11 +42,36 @@
                 <p>© EventConnect 2026</p>
                 <nav>
                     <ul class="nav-footer">
-                        <li><a routerLink="/legal-information">Mentions légales</a></li>
-                        <li><a routerLink="/privacy-policy">Politiques de confidentialité</a></li>
-                        <li><a routerLink="/general-conditions-of-sale">CGV</a></li>
-                        <li><a routerLink="/contact">Contact</a></li>
-                        <li class="no-border"><a routerLink="/contact">Service après-vente</a></li>
+                        <li [class.disabled]="!legalEnabled">
+                            <a [routerLink]="legalEnabled ? '/legal-information' : null">
+                                Mentions légales
+                                <span *ngIf="!legalEnabled" class="tooltip">Bientôt disponible</span>
+                            </a>
+                        </li>
+                        <li [class.disabled]="!privacyEnabled">
+                            <a [routerLink]="privacyEnabled ? '/privacy-policy' : null">
+                                Politiques de confidentialité
+                                <span *ngIf="!privacyEnabled" class="tooltip">Bientôt disponible</span>
+                            </a>
+                        </li>
+                        <li [class.disabled]="!cgvEnabled">
+                            <a [routerLink]="cgvEnabled ? '/general-conditions-of-sale' : null">
+                                CGV
+                                <span *ngIf="!cgvEnabled" class="tooltip">Bientôt disponible</span>
+                            </a>
+                        </li>
+                        <li [class.disabled]="!contactEnabled">
+                            <a [routerLink]="contactEnabled ? '/contact' : null">
+                                Contact
+                                <span *ngIf="!contactEnabled" class="tooltip">Bientôt disponible</span>
+                            </a>
+                        </li>
+                        <li class="no-border" [class.disabled]="!savEnabled">
+                            <a [routerLink]="savEnabled ? '/contact' : null">
+                                Service après-vente
+                                <span *ngIf="!savEnabled" class="tooltip">Bientôt disponible</span>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>
