@@ -8,8 +8,7 @@ describe('OrganizerSignupPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrganizerSignupPageComponent]
-    })
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(OrganizerSignupPageComponent);
