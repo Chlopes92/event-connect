@@ -13,11 +13,7 @@ public class Role {
     @Column(name = "role", nullable = false, length = 50)
     private String name;
 
-    public Role() {
-
-    }
-
-    // Getters / Setters
+    // Getters & Setters
     public Integer getId() {
         return id;
     }
