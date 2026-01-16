@@ -2,17 +2,9 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ListEventCreatedComponent } from './list-event-created.component';
-<<<<<<< Updated upstream
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-=======
-<<<<<<< Updated upstream
-=======
 import { EventService } from '../../../services/event/event.service';
 import { Event } from '../../../shared/models/Event';
 import Swal from 'sweetalert2';
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
 describe('ListEventCreatedComponent', () => {
   let component: ListEventCreatedComponent;
@@ -51,27 +43,12 @@ describe('ListEventCreatedComponent', () => {
     } as any));
 
     await TestBed.configureTestingModule({
-<<<<<<< Updated upstream
-      imports: [ListEventCreatedComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
-    }).compileComponents();
-=======
-<<<<<<< Updated upstream
-      imports: [ListEventCreatedComponent]
-    })
-    .compileComponents();
-=======
       imports: [ListEventCreatedComponent],
       providers: [
         { provide: EventService, useValue: mockEventService },
         { provide: Router, useValue: mockRouter }
       ]
     }).compileComponents();
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
     fixture = TestBed.createComponent(ListEventCreatedComponent);
     component = fixture.componentInstance;
