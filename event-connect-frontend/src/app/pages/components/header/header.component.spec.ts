@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 
@@ -16,9 +16,18 @@ describe('HeaderComponent', () => {
       events: routerEventsSubject.asObservable()
     };
 
+    const mockActivatedRoute = {
+      snapshot: {},
+      params: new Subject(),
+      queryParams: new Subject()
+    };
+
     await TestBed.configureTestingModule({
       imports: [HeaderComponent],
-      providers: [{ provide: Router, useValue: mockRouter }]
+      providers: [
+        { provide: Router, useValue: mockRouter },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);

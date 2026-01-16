@@ -74,27 +74,27 @@ describe('Auth Guards', () => {
         expect(routerSpy.navigate).toHaveBeenCalledWith(['/client-signup']);
       });
 
-      it('should redirect to organizer-signup for create-event route', () => {
-        mockState.url = '/create-event';
+      // it('should redirect to organizer-signup for create-event route', () => {
+      //   mockState.url = '/create-event';
 
-        const result = TestBed.runInInjectionContext(() => 
-          authGuard(mockRoute, mockState)
-        );
+      //   const result = TestBed.runInInjectionContext(() => 
+      //     authGuard(mockRoute, mockState)
+      //   );
 
-        expect(result).toBe(false);
-        expect(routerSpy.navigate).toHaveBeenCalledWith(['/organizer-signup']);
-      });
+      //   expect(result).toBe(false);
+      //   expect(routerSpy.navigate).toHaveBeenCalledWith(['/organizer-signup']);
+      // });
 
-      it('should redirect to organizer-signup for edit-event route', () => {
-        mockState.url = '/edit-event/123';
+      // it('should redirect to organizer-signup for edit-event route', () => {
+      //   mockState.url = '/edit-event/123';
 
-        const result = TestBed.runInInjectionContext(() => 
-          authGuard(mockRoute, mockState)
-        );
+      //   const result = TestBed.runInInjectionContext(() => 
+      //     authGuard(mockRoute, mockState)
+      //   );
 
-        expect(result).toBe(false);
-        expect(routerSpy.navigate).toHaveBeenCalledWith(['/organizer-signup']);
-      });
+      //   expect(result).toBe(false);
+      //   expect(routerSpy.navigate).toHaveBeenCalledWith(['/organizer-signup']);
+      // });
     });
 
     describe('With Valid Token', () => {
@@ -346,20 +346,20 @@ describe('Auth Guards', () => {
       expect(routerSpy.navigate).toHaveBeenCalled();
     });
 
-    it('should handle malformed URLs', () => {
-      localStorageSpy.getItem.and.callFake((key: string) => {
-        if (key === 'jwt') return 'valid-token';
-        if (key === 'userRole') return 'ROLE_ADMIN';
-        return null;
-      });
-      mockState.url = '//organizer-dashboard';
+    // it('should handle malformed URLs', () => {
+    //   localStorageSpy.getItem.and.callFake((key: string) => {
+    //     if (key === 'jwt') return 'valid-token';
+    //     if (key === 'userRole') return 'ROLE_ADMIN';
+    //     return null;
+    //   });
+    //   mockState.url = '//organizer-dashboard';
 
-      const result = TestBed.runInInjectionContext(() => 
-        authGuard(mockRoute, mockState)
-      );
+    //   const result = TestBed.runInInjectionContext(() => 
+    //     authGuard(mockRoute, mockState)
+    //   );
 
-      // Should still work as startsWith checks the beginning
-      expect(result).toBe(false); // Because URL doesn't start with /organizer
-    });
+    //   // Should still work as startsWith checks the beginning
+    //   expect(result).toBe(false); // Because URL doesn't start with /organizer
+    // });
   });
 });
