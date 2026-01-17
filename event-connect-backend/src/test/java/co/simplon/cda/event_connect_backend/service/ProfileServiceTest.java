@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -159,9 +160,80 @@ class ProfileServiceTest {
         verify(profileRepository, never()).save(any());
     }
 
+    /**
+     * TEST 4 : create() - Téléphone déjà existant (contrainte DB)
+     * Couvre le bloc catch avec phone
+     */
+    @Test
+    void create_WithDuplicatePhone_ShouldThrowDuplicateResourceException() {
+        // GIVEN
+        ProfileCreateDTO dto = new ProfileCreateDTO(
+                "john@example.com",
+                "John",
+                "Doe",
+                "password123",
+                "0123456789",
+                "Test Org",
+                1
+        );
+
+        when(profileRepository.existsByEmail("john@example.com")).thenReturn(false);
+        when(roleRepository.findById(1)).thenReturn(Optional.of(testRole));
+        when(passwordEncoder.encode("password123")).thenReturn("$2a$10$hashedPassword");
+
+        // Simuler une exception de contrainte d'unicité sur le téléphone
+        DataIntegrityViolationException dbException = new DataIntegrityViolationException(
+                "could not execute statement; SQL [n/a]; constraint [unique_phone]; nested exception is org.hibernate.exception.ConstraintViolationException"
+        );
+        when(profileRepository.save(any(Profile.class))).thenThrow(dbException);
+
+        // WHEN & THEN
+        assertThatThrownBy(() -> profileService.create(dto))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessageContaining("phone");
+
+        verify(profileRepository, times(1)).save(any(Profile.class));
+    }
+
+    /**
+     * TEST 5 : create() - Erreur DB générique
+     * Couvre le else du bloc catch
+     */
+    @Test
+    void create_WithDatabaseError_ShouldThrowDuplicateResourceException() {
+        // GIVEN
+        ProfileCreateDTO dto = new ProfileCreateDTO(
+                "john@example.com",
+                "John",
+                "Doe",
+                "password123",
+                "0123456789",
+                "Test Org",
+                1
+        );
+
+        when(profileRepository.existsByEmail("john@example.com")).thenReturn(false);
+        when(roleRepository.findById(1)).thenReturn(Optional.of(testRole));
+        when(passwordEncoder.encode("password123")).thenReturn("$2a$10$hashedPassword");
+
+        // Simuler une exception DB générique (pas phone ni email)
+        DataIntegrityViolationException dbException = new DataIntegrityViolationException(
+                "Unknown database error"
+        );
+        when(profileRepository.save(any(Profile.class))).thenThrow(dbException);
+
+        // WHEN & THEN
+        assertThatThrownBy(() -> profileService.create(dto))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessageContaining("Erreur lors de la création du profil");
+
+        verify(profileRepository, times(1)).save(any(Profile.class));
+    }
+
+
     // ========== TESTS authenticate() ==========
     /**
-     * TEST 4 : authenticate() - Cas nominal
+     * TEST 5 : authenticate() - Cas nominal
      * Vérifie qu'un JWT est généré pour des credentials valides
      */
     @Test
@@ -188,7 +260,7 @@ class ProfileServiceTest {
     }
 
     /**
-     * TEST 5 : authenticate() - Email inexistant
+     * TEST 6 : authenticate() - Email inexistant
      * Vérifie que InvalidCredentialsException est levée
      * Message générique pour éviter l'énumération des comptes
      */
@@ -211,7 +283,7 @@ class ProfileServiceTest {
     }
 
     /**
-     * TEST 6 : authenticate() - Mot de passe incorrect
+     * TEST 7 : authenticate() - Mot de passe incorrect
      * Vérifie que InvalidCredentialsException est levée
      */
     @Test
@@ -233,7 +305,7 @@ class ProfileServiceTest {
     }
 
     /**
-     * TEST 7 : getByEmail() - Cas nominal
+     * TEST 8 : getByEmail() - Cas nominal
      * Vérifie la récupération d'un profil par email
      */
     @Test
@@ -252,7 +324,7 @@ class ProfileServiceTest {
     }
 
     /**
-     * TEST 8 : getByEmail() - Profil inexistant
+     * TEST 9 : getByEmail() - Profil inexistant
      */
     @Test
     void getByEmail_WhenProfileDoesNotExist_ShouldThrowResourceNotFoundException() {
