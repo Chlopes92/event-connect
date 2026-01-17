@@ -6,7 +6,7 @@ import { OrganizerSignupPageComponent } from './pages/organizer-signup-page/orga
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 import { EventDetailsPageComponent } from './pages/event-details-page/event-details-page.component';
 import { ClientSignupPageComponent } from './pages/client-signup-page/client-signup-page.component';
-import { authGuard, organizerGuard } from './guards/auth.guard';
+import { organizerGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     // Routes publiques (pas d'authentification requise)

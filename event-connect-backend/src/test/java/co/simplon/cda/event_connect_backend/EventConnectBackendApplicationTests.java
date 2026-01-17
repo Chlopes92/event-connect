@@ -23,7 +23,6 @@ class EventConnectBackendApplicationTests {
 		// Vérifie que le contexte Spring a bien démarré
 		assertThat(applicationContext).isNotNull();
 	}
-
 	@Test
 	void allRepositoriesAreLoaded() {
 		// Vérifie que les repositories sont bien chargés

@@ -11,7 +11,6 @@ package co.simplon.cda.event_connect_backend.exceptions;
  * Retourne un code HTTP 409 Conflict au client
  */
 public class DuplicateResourceException extends RuntimeException {
-
     private final String resourceName;
     private final String fieldName;
     private final Object fieldValue;

@@ -4,9 +4,12 @@ import co.simplon.cda.event_connect_backend.dtos.profile.ProfileAuthenticateDTO;
 import co.simplon.cda.event_connect_backend.dtos.profile.ProfileCreateDTO;
 import co.simplon.cda.event_connect_backend.services.ProfileService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/profiles")
@@ -26,9 +29,4 @@ public class ProfileController {
     public String authenticate(@Valid @RequestBody ProfileAuthenticateDTO inputs) {
         return profileService.authenticate(inputs);
     }
-
-    /*@GetMapping
-    public List<ProfileViewDTO> getAll() {
-        return profileService.getAllProfiles();
-    }*/
 }

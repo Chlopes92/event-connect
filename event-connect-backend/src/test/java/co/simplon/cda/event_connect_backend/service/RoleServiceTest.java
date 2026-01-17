@@ -60,14 +60,11 @@ class RoleServiceTest {
         List<RoleDTO> result = roleService.getAllRoles();
 
         // THEN
-        assertThat(result).isNotNull();
-        assertThat(result).hasSize(2);
-
+        assertThat(result).isNotNull().hasSize(2);
         assertThat(result.get(0).id()).isEqualTo(1);
-        assertThat(result.get(0).name()).isEqualTo("ROLE_USER");  // ✅ name() pas role()
-
+        assertThat(result.get(0).name()).isEqualTo("ROLE_USER");
         assertThat(result.get(1).id()).isEqualTo(2);
-        assertThat(result.get(1).name()).isEqualTo("ROLE_ADMIN");  // ✅ name() pas role()
+        assertThat(result.get(1).name()).isEqualTo("ROLE_ADMIN");
 
         verify(roleRepository, times(1)).findAll();
     }
@@ -85,8 +82,7 @@ class RoleServiceTest {
         List<RoleDTO> result = roleService.getAllRoles();
 
         // THEN
-        assertThat(result).isNotNull();
-        assertThat(result).isEmpty();
+        assertThat(result).isNotNull().isEmpty();
 
         verify(roleRepository, times(1)).findAll();
     }
@@ -104,7 +100,7 @@ class RoleServiceTest {
 
         // THEN
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).name()).isEqualTo("ROLE_USER");  // ✅ name() pas role()
+        assertThat(result.get(0).name()).isEqualTo("ROLE_USER");
 
         verify(roleRepository, times(1)).findAll();
     }

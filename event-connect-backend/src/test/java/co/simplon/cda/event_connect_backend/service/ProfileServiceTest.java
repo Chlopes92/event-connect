@@ -38,7 +38,7 @@ import static org.mockito.Mockito.*;
  * Focus sécurité : validation des credentials, hashage des mots de passe
  */
 @ExtendWith(MockitoExtension.class)
-public class ProfileServiceTest {
+class ProfileServiceTest {
 
     @Mock
     private ProfileRepository profileRepository;
@@ -62,7 +62,7 @@ public class ProfileServiceTest {
         testRole.setName("ROLE_USER");
 
         testProfile = new Profile();
-        // ⚠️ PAS de setId() car Profile n'a pas de setter pour l'ID (géré par JPA)
+        // PAS de setId() car Profile n'a pas de setter pour l'ID (géré par JPA)
         testProfile.setEmail("test@example.com");
         testProfile.setFirstName("John");
         testProfile.setLastName("Doe");

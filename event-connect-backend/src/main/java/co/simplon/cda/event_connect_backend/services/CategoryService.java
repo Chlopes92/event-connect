@@ -5,7 +5,6 @@ import co.simplon.cda.event_connect_backend.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -19,6 +18,6 @@ public class CategoryService {
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(cat -> new CategoryDTO(cat.getId(), cat.getNameCategory()))
-                .collect(Collectors.toList());
+                .toList();
     }
 }
