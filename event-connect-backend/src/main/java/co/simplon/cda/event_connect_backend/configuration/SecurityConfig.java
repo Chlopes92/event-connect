@@ -99,7 +99,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Activativation des CORS, désativation CSRF (non nécessaire)
-        return http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable())
+        return http.cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 // Configuration des autorisations par endpoint
                 .authorizeHttpRequests(req -> req
                         // Routes publiques (GET uniquement)
