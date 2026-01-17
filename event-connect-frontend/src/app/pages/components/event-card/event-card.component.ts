@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import { CategoryService } from '../../../services/category/category.service';
-import { Category } from '../../../shared/models/Category';
 import { Event } from '../../../shared/models/Event';
 import { EventService } from '../../../services/event/event.service';
-import { RouterLink } from '@angular/router';
 import { ShareService } from '../../../services/share/share.service';
 
 interface Filter {
@@ -51,6 +48,5 @@ export class EventCardComponent {
     $event.preventDefault();
     $event.stopPropagation();
   
-    // TODO: Implémenter la logique des favoris
   }
 }

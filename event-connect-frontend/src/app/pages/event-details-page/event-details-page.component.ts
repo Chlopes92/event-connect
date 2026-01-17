@@ -26,8 +26,8 @@ export class EventDetailsPageComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute, 
-    private eventService: EventService,
-    private router: Router
+    readonly eventService: EventService,
+    readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -69,7 +69,7 @@ export class EventDetailsPageComponent implements OnInit {
    * ⬅️ Retour à la page précédente
    */
   goBack(): void {
-    window.history.back();
+    globalThis.history.back();
   }
 
   /**

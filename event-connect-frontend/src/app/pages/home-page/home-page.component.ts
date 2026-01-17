@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../components/event-card/event-card.component';
 import { CarouselComponent } from '../components/carousel/carousel.component';
@@ -20,7 +20,7 @@ interface Filter {
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
   events: Event[] = [];
   categories: Category[] = [];
   filters: Filter[] = [];
@@ -30,8 +30,8 @@ export class HomePageComponent {
   isLoadingEvents: boolean = true;
   isLoadingCategories: boolean = true;
 
-  private eventService = inject(EventService);
-  private categoryService = inject(CategoryService);
+  readonly eventService = inject(EventService);
+  readonly categoryService = inject(CategoryService);
 
   ngOnInit(): void {
     this.loadCategories();
