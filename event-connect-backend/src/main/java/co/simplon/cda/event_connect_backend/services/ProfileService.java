@@ -111,7 +111,7 @@ public class ProfileService {
                 throw new DuplicateResourceException(RESOURCE_NAME_PROFILE, FIELD_NAME_PHONE, inputs.phone());
             }
             logger.error("Erreur lors de la création du profil : ", e);
-            throw new RuntimeException(ERROR_PROFILE_CREATION, e);
+            throw new DuplicateResourceException(ERROR_PROFILE_CREATION);
         }
     }
 
