@@ -25,10 +25,17 @@ import javax.crypto.spec.SecretKeySpec;
  */
 @Configuration
 public class SecurityConfig {
+    // Définir des constantes pour les endpoints
+    private static final String EVENTS_BASE_PATH = "/events";
+    private static final String EVENTS_PATH = "/events/**";
+    private static final String CATEGORIES_PATH = "/categories";
+    private static final String UPLOAD_IMAGES_PATH = "/upload/images/**";
+    private static final String PROFILES_BASE_PATH = "/profiles";
+    private static final String PROFILES_AUTH_PATH = "/profiles/authenticate";
+
     // Injection des propriétés depuis application.properties
     @Value("${eventconnect.jwt.secret}")
     private String secret;
-
     @Value("${eventconnect.jwt.expiration}")
     private long expiration;
 
@@ -92,21 +99,22 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Activativation des CORS, désativation CSRF (non nécessaire)
-        return http.cors(Customizer.withDefaults()).csrf((csrf) -> csrf.disable())
+        return http.cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 // Configuration des autorisations par endpoint
-                .authorizeHttpRequests((req) -> req
+                .authorizeHttpRequests(req -> req
                         // Routes publiques (GET uniquement)
-                        .requestMatchers(HttpMethod.GET, "/events", "/events/**", "/categories", "/upload/images/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, EVENTS_BASE_PATH, EVENTS_PATH, CATEGORIES_PATH, UPLOAD_IMAGES_PATH).permitAll()
                         // Routes d'inscription/connexion (anonymous only)
-                        .requestMatchers(HttpMethod.POST, "/profiles", "/profiles/authenticate").anonymous()
+                        .requestMatchers(HttpMethod.POST, PROFILES_BASE_PATH, PROFILES_AUTH_PATH).anonymous()
                         // Routes protégées pour les events (nécessite authentification)
-                        .requestMatchers(HttpMethod.POST, "/events").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/events/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/events/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, EVENTS_BASE_PATH).authenticated()
+                        .requestMatchers(HttpMethod.PUT, EVENTS_PATH).authenticated()
+                        .requestMatchers(HttpMethod.DELETE, EVENTS_PATH).authenticated()
                         // Toutes les autres routes nécessitent une authentification
                         .anyRequest().authenticated())
                 // Active l'authentification OAuth2 Resource Server avec JWT
-                .oauth2ResourceServer((srv) -> srv.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(srv -> srv.jwt(Customizer.withDefaults()))
                 .build();
     }
 }

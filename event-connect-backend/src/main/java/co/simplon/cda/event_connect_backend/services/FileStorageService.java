@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.List;
 
 import java.util.UUID;
@@ -44,14 +43,17 @@ public class FileStorageService {
 
     // Configuration
     private final Path uploadPath = Paths.get("uploads/events");
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("png", "jpg", "jpeg", "webp");
-    private static final List<String> ALLOWED_MIME_TYPES = Arrays.asList(
-            "image/png",
-            "image/jpeg",
-            "image/jpg",
-            "image/webp"
-    );
+    private static final long MAX_FILE_SIZE = 5L * 1024 * 1024; // 5 MB
+    private static final List<String> ALLOWED_EXTENSIONS = List.of("png", "jpg", "jpeg", "webp");
+    private static final List<String> ALLOWED_MIME_TYPES = List.of("image/png", "image/jpeg", "image/jpg", "image/webp");
+
+    // Messages d'erreur constants
+    private static final String ERROR_INVALID_FILENAME = "Nom de fichier invalide";
+    private static final String ERROR_FILE_TOO_LARGE = "Le fichier est trop volumineux (%s). Taille maximale : %s";
+    private static final String ERROR_INVALID_FILE_TYPE = "Type de fichier non autorisé. Formats acceptés : PNG, JPG, JPEG, WEBP";
+    private static final String ERROR_INVALID_EXTENSION = "Extension non autorisée : .%s. Extensions acceptées : %s";
+    private static final String ERROR_SAVING_FILE = "Erreur lors de la sauvegarde du fichier";
+    private static final String ERROR_CREATING_DIRECTORY = "Impossible de créer le dossier de stockage";
 
     /**
      * Constructeur : Crée le dossier de stockage s'il n'existe pas
@@ -62,7 +64,7 @@ public class FileStorageService {
             logger.info("Dossier de stockage initialisé : {}", uploadPath.toAbsolutePath());
         } catch (IOException e) {
             logger.error("Erreur lors de la création du dossier uploads", e);
-            throw new RuntimeException("Impossible de créer le dossier de stockage : " + e.getMessage());
+            throw new InvalidFileException(ERROR_CREATING_DIRECTORY, e);
         }
     }
 
@@ -93,7 +95,7 @@ public class FileStorageService {
                     formatFileSize(file.getSize()),
                     formatFileSize(MAX_FILE_SIZE));
             throw new InvalidFileException(
-                    String.format("Le fichier est trop volumineux (%s). Taille maximale : %s",
+                    String.format(ERROR_FILE_TOO_LARGE,
                             formatFileSize(file.getSize()),
                             formatFileSize(MAX_FILE_SIZE))
             );
@@ -103,24 +105,21 @@ public class FileStorageService {
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_MIME_TYPES.contains(contentType.toLowerCase())) {
             logger.warn("Type MIME non autorisé : {} pour fichier {}", contentType, file.getOriginalFilename());
-            throw new InvalidFileException(
-                    "Type de fichier non autorisé. Formats acceptés : PNG, JPG, JPEG, WEBP"
-            );
+            throw new InvalidFileException(ERROR_INVALID_FILE_TYPE);
         }
 
         // 3. Validation de l'extension
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || !originalFilename.contains(".")) {
             logger.warn("Nom de fichier invalide : {}", originalFilename);
-            throw new InvalidFileException("Nom de fichier invalide");
+            throw new InvalidFileException(ERROR_INVALID_FILENAME);
         }
 
         String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
         if (!ALLOWED_EXTENSIONS.contains(extension)) {
+            String errorMessage = String.format(ERROR_INVALID_EXTENSION, extension, ALLOWED_EXTENSIONS);
             logger.warn("Extension non autorisée : {} pour fichier {}", extension, originalFilename);
-            throw new InvalidFileException(
-                    "Extension non autorisée : ." + extension + ". Extensions acceptées : " + ALLOWED_EXTENSIONS
-            );
+            throw new InvalidFileException(errorMessage);
         }
 
         // 4. Génération d'un nom unique
@@ -134,7 +133,7 @@ public class FileStorageService {
             return filename;
         } catch (IOException e) {
             logger.error("Erreur lors de la sauvegarde du fichier : {}", originalFilename, e);
-            throw new InvalidFileException("Erreur lors de la sauvegarde du fichier", e);
+            throw new InvalidFileException(ERROR_SAVING_FILE, e);
         }
     }
 
@@ -174,9 +173,8 @@ public class FileStorageService {
     public Path getImagePath(String filename) {
         if (filename == null || filename.isBlank()) {
             logger.warn("Tentative d'accès à un fichier avec nom vide");
-            throw new InvalidFileException("Nom de fichier invalide");
+            throw new InvalidFileException(ERROR_INVALID_FILENAME);
         }
-
         return uploadPath.resolve(filename);
     }
 
@@ -190,7 +188,7 @@ public class FileStorageService {
     private String formatFileSize(long size) {
         if (size < 1024) {
             return size + " B";
-        } else if (size < 1024 * 1024) {
+        } else if (size < 1024L * 1024) {
             return String.format("%.1f KB", size / 1024.0);
         } else {
             return String.format("%.1f MB", size / (1024.0 * 1024.0));

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
  * Tests : cas nominal + liste vide
  */
 @ExtendWith(MockitoExtension.class)
-public class CategoryServiceTest {
+class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
@@ -59,12 +59,9 @@ public class CategoryServiceTest {
         List<CategoryDTO> result = categoryService.getAllCategories();
 
         // THEN
-        assertThat(result).isNotNull();
-        assertThat(result).hasSize(2);
-
+        assertThat(result).isNotNull().hasSize(2);
         assertThat(result.get(0).id()).isEqualTo(1);
         assertThat(result.get(0).nameCategory()).isEqualTo("Festival");
-
         assertThat(result.get(1).id()).isEqualTo(2);
         assertThat(result.get(1).nameCategory()).isEqualTo("Concert");
 
@@ -84,8 +81,7 @@ public class CategoryServiceTest {
         List<CategoryDTO> result = categoryService.getAllCategories();
 
         // THEN
-        assertThat(result).isNotNull();
-        assertThat(result).isEmpty();
+        assertThat(result).isNotNull().isEmpty();
 
         verify(categoryRepository, times(1)).findAll();
     }

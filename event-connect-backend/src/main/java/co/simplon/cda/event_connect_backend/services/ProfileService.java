@@ -35,8 +35,17 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ProfileService {
-
     private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
+
+    // Constantes pour les noms de ressources
+    private static final String RESOURCE_NAME_PROFILE = "Profile";
+    private static final String RESOURCE_NAME_ROLE = "Role";
+    private static final String FIELD_NAME_EMAIL = "email";
+    private static final String FIELD_NAME_PHONE = "phone";
+    private static final String FIELD_NAME_ID = "id";
+
+    // Messages d'erreur
+    private static final String ERROR_PROFILE_CREATION = "Erreur lors de la création du profil";
 
     private final ProfileRepository profileRepository;
     private final RoleRepository roleRepository;
@@ -69,14 +78,14 @@ public class ProfileService {
         // 1. Validation de l'unicité de l'email
         if (profileRepository.existsByEmail(inputs.email())) {
             logger.warn("Tentative d'inscription avec email existant : {}", inputs.email());
-            throw new DuplicateResourceException("Profile", "email", inputs.email());
+            throw new DuplicateResourceException(RESOURCE_NAME_PROFILE, FIELD_NAME_EMAIL, inputs.email());
         }
 
         // 2. Vérification de l'existence du rôle
         Role role = roleRepository.findById(inputs.roleId())
                 .orElseThrow(() -> {
                     logger.error("Tentative de création avec rôle inexistant : {}", inputs.roleId());
-                    return new ResourceNotFoundException("Role", "id", inputs.roleId());
+                    return new ResourceNotFoundException(RESOURCE_NAME_ROLE, FIELD_NAME_ID, inputs.roleId());
                 });
 
         // 3. Construction de l'entité Profile
@@ -88,7 +97,6 @@ public class ProfileService {
         // 4. Hashage sécurisé du mot de passe avec BCrypt
         String encodedPassword = passwordEncoder.encode(inputs.password());
         profile.setPassword(encodedPassword);
-
         profile.setPhone(inputs.phone());
         profile.setOrganization(inputs.organization());
         profile.setRole(role);
@@ -168,7 +176,7 @@ public class ProfileService {
                         profile.getOrganization(),
                         new RoleDTO(profile.getRole().getId(), profile.getRole().getName())
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

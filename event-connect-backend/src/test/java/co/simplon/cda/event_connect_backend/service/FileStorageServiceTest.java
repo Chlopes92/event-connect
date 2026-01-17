@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
  * - Sauvegarde et suppression de fichiers
  */
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)  // ✅ Pour éviter UnnecessaryStubbingException
+@MockitoSettings(strictness = Strictness.LENIENT)
 class FileStorageServiceTest {
 
     private FileStorageService fileStorageService;
@@ -44,7 +44,6 @@ class FileStorageServiceTest {
     }
 
     // ========== TESTS saveImage() ==========
-
     @Test
     void saveImage_WithValidPngFile_ShouldSaveFile() {
         MultipartFile mockFile = createMockFile("test.png", "image/png", 1024);
@@ -122,7 +121,6 @@ class FileStorageServiceTest {
     }
 
     // ========== TESTS deleteImage() ==========
-
     @Test
     void deleteImage_WithNonExistentFile_ShouldNotThrowException() {
         fileStorageService.deleteImage("non-existent-file.png");
@@ -135,7 +133,6 @@ class FileStorageServiceTest {
     }
 
     // ========== TESTS getImagePath() ==========
-
     @Test
     void getImagePath_WithValidFilename_ShouldReturnPath() {
         Path result = fileStorageService.getImagePath("test.png");
@@ -158,7 +155,6 @@ class FileStorageServiceTest {
     }
 
     // ========== MÉTHODES UTILITAIRES ==========
-
     private MultipartFile createMockFile(String filename, String contentType, long size) {
         MultipartFile mockFile = mock(MultipartFile.class);
 

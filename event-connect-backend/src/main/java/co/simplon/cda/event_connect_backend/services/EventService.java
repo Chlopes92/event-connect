@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Service métier pour la gestion des événements
  * Gère la logique de création, modification, suppression et consultation des événements
@@ -42,8 +39,11 @@ import java.util.List;
 @Service
 @Transactional
 public class EventService {
-
     private static final Logger logger = LoggerFactory.getLogger(EventService.class);
+
+    // Constantes pour éviter la duplication de chaînes
+    private static final String RESOURCE_NAME_EVENT = "Event";
+    private static final String FIELD_NAME_ID = "id";
 
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
@@ -133,7 +133,7 @@ public class EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.warn("Événement non trouvé : {}", id);
-                    return new ResourceNotFoundException("Event", "id", id);
+                    return new ResourceNotFoundException(RESOURCE_NAME_EVENT, FIELD_NAME_ID, id);
                 });
 
         // Vérification des autorisations
@@ -183,7 +183,7 @@ public class EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.warn("Événement non trouvé pour suppression : {}", id);
-                    return new ResourceNotFoundException("Event", "id", id);
+                    return new ResourceNotFoundException(RESOURCE_NAME_EVENT, FIELD_NAME_ID, id);
                 });
 
         // Vérification des autorisations
@@ -211,7 +211,7 @@ public class EventService {
         List<Event> events = eventRepository.findAll();
         return events.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -224,7 +224,7 @@ public class EventService {
         List<Event> events = eventRepository.findByCategoriesId(categoryId);
         return events.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -237,7 +237,7 @@ public class EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.warn("Événement non trouvé : {}", id);
-                    return new ResourceNotFoundException("Event", "id", id);
+                    return new ResourceNotFoundException(RESOURCE_NAME_EVENT, FIELD_NAME_ID, id);
                 });
 
         return convertToDTO(event);
@@ -250,7 +250,7 @@ public class EventService {
         List<CategoryDTO> categoryDTOs = event.getCategories() != null
                 ? event.getCategories().stream()
                 .map(cat -> new CategoryDTO(cat.getId(), cat.getNameCategory()))
-                .collect(Collectors.toList())
+                .toList()
                 : new ArrayList<>();
 
         return new EventViewDTO(
