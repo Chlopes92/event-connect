@@ -50,18 +50,28 @@ public class ImageController {
                     case "jpg", "jpeg" -> MediaType.IMAGE_JPEG;
                     default -> MediaType.APPLICATION_OCTET_STREAM;
                 };
-
                 return ResponseEntity.ok()
                         .contentType(mediaType)
                         .body(resource);
             }
 
-            logger.warn("Image non trouvée : {}", filename);
+            logger.warn("Image non trouvée : {}", sanitizeForLogging(filename));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         } catch (IOException e) {
-            logger.error("Erreur lors de la lecture du fichier : {}", filename, e);
+            logger.error("Erreur lors de la lecture du fichier : {}", sanitizeForLogging(filename), e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    /**
+     * Nettoie le nom de fichier pour éviter les attaques par log injection.
+     * Supprime les caractères de contrôle (newline, carriage return, tab).
+     */
+    private String sanitizeForLogging(String input) {
+        if (input == null) {
+            return "null";
+        }
+        return input.replaceAll("[\\r\\n\\t]", " ");
     }
 }

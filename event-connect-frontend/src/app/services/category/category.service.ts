@@ -9,7 +9,7 @@ import { Category } from '../../shared/models/Category';
 })
 export class CategoryService {
 
-  private http = inject(HttpClient);
+  readonly http = inject(HttpClient);
 
   getAllCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(`${CATEGORY_URL}`);
