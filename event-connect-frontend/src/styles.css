@@ -1,57 +1,61 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-    --color-font: #190043;
-    --color-violet: #3C096C;
-    --color-pink: #D9222A;
-    --color-yellow: #F7B802;
+  --color-font: #190043;
+  --color-violet: #3C096C;
+  --color-pink: #D9222A;
+  --color-yellow: #F7B802;
 }
 
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    /* color: var(--color-violet); */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 h1, h2, h3, h4 {
-    font-family: "Comfortaa", sans-serif;
-    font-weight: bold;
-    /*padding-bottom: 15px;*/
+  font-family: "Comfortaa", sans-serif;
+  font-weight: bold;
 }
 
 h5 {
-    font-family: "Comfortaa", sans-serif;
-    font-weight: bold;
-    padding-bottom: 6px;
+  font-family: "Comfortaa", sans-serif;
+  font-weight: bold;
+  padding-bottom: 6px;
 }
 
 h1 {
-    font-size: 36px;
+  font-size: 36px;
 }
 
 h2 {
-    font-size: 30px;
+  font-size: 30px;
 }
 
 h3 {
-    font-size: 25px;
+  font-size: 25px;
 }
 
 h4 {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 p {
-    font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 a, button {
-    font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body { 
+  height: 100%; 
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto
+  "Helvetica Neue", sans-serif;
+}
 
 /* 🔄 Loading Overlay - Plein écran avec fond blanc */
 .loading-overlay {

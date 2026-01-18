@@ -6,7 +6,6 @@ import co.simplon.cda.event_connect_backend.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RoleService {

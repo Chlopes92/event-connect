@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import { CategoryService } from '../../../services/category/category.service';
-import { Category } from '../../../shared/models/Category';
 import { Event } from '../../../shared/models/Event';
 import { EventService } from '../../../services/event/event.service';
-import { RouterLink } from '@angular/router';
 import { ShareService } from '../../../services/share/share.service';
 
 interface Filter {
@@ -23,8 +20,8 @@ export class EventCardComponent {
   @Input() events: Event[] = [];
   @Input() activeCategoryLabel: string = '';
 
-  private shareService = inject(ShareService);
-  private eventService = inject(EventService);
+  readonly shareService = inject(ShareService);
+  readonly eventService = inject(EventService);
 
   /** Partager un événement */
   async shareEvent(event: Event, $event: MouseEvent): Promise<void> {
@@ -35,7 +32,7 @@ export class EventCardComponent {
     const shareData = {
       title: event.nameEvent,
       text: `Découvrez cet événement : ${event.nameEvent}\n${event.address}\nLe ${new Date(event.dateEvent).toLocaleDateString('fr-FR')}`,
-      url: `${window.location.origin}/event-details/${event.id}`
+      url: `${globalThis.location.origin}/event-details/${event.id}`
     };
 
     await this.shareService.share(shareData);
@@ -50,7 +47,5 @@ export class EventCardComponent {
     // Empêcher la navigation vers event-details
     $event.preventDefault();
     $event.stopPropagation();
-  
-    // TODO: Implémenter la logique des favoris
   }
 }

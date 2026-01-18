@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { filter } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   isScrolled = false;
   isVisible = true;
   isHomePage = false;
@@ -20,7 +20,7 @@ export class HeaderComponent {
   ticketEnabled = false;
   aboutEnabled = false;
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   ngOnInit() {
     // Vérifie si on est sur la home page au chargement

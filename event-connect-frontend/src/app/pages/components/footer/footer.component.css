@@ -3,6 +3,16 @@ footer {
     color: white;
 }
 
+hr {
+    border: 0.5px solid white;
+    margin: 20px 0;
+    width: 80%;
+}
+
+h3.newsletter-section-title {
+    margin-left: 3%;
+}
+
 .footer-background {
     position: absolute;
     top: 0;
@@ -77,7 +87,6 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin-top: 10px; */
 }
 
 form button {
@@ -157,37 +166,15 @@ form button {
 .nav-footer li {
     border-right: 2px solid white;
     padding: 0 10px;
+    position: relative;
 }
 
 .nav-footer li.no-border {
     border-right: none;
 }
 
-.nav-footer a {
-    color: white;
-    text-decoration: none;
-    cursor: not-allowed;
-}
-
 .nav-footer a:hover {
     text-decoration: underline;
-}
-
-hr {
-    border: 0.5px solid white;
-    margin: 20px 0;
-    width: 80%;
-}
-
-h3.newsletter-section-title {
-    margin-left: 3%;
-}
-
-/* Styles pour les liens désactivés du footer */
-.nav-footer li {
-    border-right: 2px solid white;
-    padding: 0 10px;
-    position: relative;
 }
 
 .nav-footer li.disabled {
@@ -198,14 +185,10 @@ h3.newsletter-section-title {
     opacity: 0.25;
 }
 
-.nav-footer li.no-border {
-    border-right: none;
-}
-
 .nav-footer a {
     color: white;
     text-decoration: none;
-    cursor: pointer;
+    cursor: not-allowed;
     position: relative;
 }
 

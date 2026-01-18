@@ -5,7 +5,6 @@ import co.simplon.cda.event_connect_backend.services.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.io.TempDir;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -16,9 +15,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 
 /**
  * Tests unitaires pour FileStorageService
@@ -32,11 +34,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class FileStorageServiceTest {
-
     private FileStorageService fileStorageService;
-
-    @TempDir
-    Path tempDir;
 
     @BeforeEach
     void setUp() {
@@ -49,9 +47,7 @@ class FileStorageServiceTest {
         MultipartFile mockFile = createMockFile("test.png", "image/png", 1024);
         String filename = fileStorageService.saveImage(mockFile);
 
-        assertThat(filename).isNotNull();
-        assertThat(filename).endsWith(".png");
-        assertThat(filename).contains("-");
+        assertThat(filename).isNotNull().endsWith(".png").contains("-");
     }
 
     @Test
@@ -59,8 +55,7 @@ class FileStorageServiceTest {
         MultipartFile mockFile = createMockFile("test.jpg", "image/jpeg", 2048);
         String filename = fileStorageService.saveImage(mockFile);
 
-        assertThat(filename).isNotNull();
-        assertThat(filename).endsWith(".jpg");
+        assertThat(filename).isNotNull().endsWith(".jpg");
     }
 
     @Test
@@ -123,13 +118,18 @@ class FileStorageServiceTest {
     // ========== TESTS deleteImage() ==========
     @Test
     void deleteImage_WithNonExistentFile_ShouldNotThrowException() {
-        fileStorageService.deleteImage("non-existent-file.png");
+        // Vérifie que la suppression d'un fichier inexistant ne lève pas d'exception
+        assertThatCode(() -> fileStorageService.deleteImage("non-existent-file.png"))
+                .doesNotThrowAnyException();
     }
 
     @Test
     void deleteImage_WithEmptyFilename_ShouldNotThrowException() {
-        fileStorageService.deleteImage("");
-        fileStorageService.deleteImage(null);
+        // Vérifie que la suppression avec nom vide ou null ne lève pas d'exception
+        assertThatCode(() -> {
+            fileStorageService.deleteImage("");
+            fileStorageService.deleteImage(null);
+        }).doesNotThrowAnyException();
     }
 
     // ========== TESTS getImagePath() ==========
@@ -137,8 +137,7 @@ class FileStorageServiceTest {
     void getImagePath_WithValidFilename_ShouldReturnPath() {
         Path result = fileStorageService.getImagePath("test.png");
 
-        assertThat(result).isNotNull();
-        assertThat(result.toString()).endsWith("test.png");
+        assertThat(result).isNotNull().asString().endsWith("test.png");
     }
 
     @Test
@@ -169,7 +168,6 @@ class FileStorageServiceTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         return mockFile;
     }
 }

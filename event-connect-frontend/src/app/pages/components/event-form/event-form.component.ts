@@ -5,7 +5,6 @@ import { CategoryService } from '../../../services/category/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../shared/models/Category';
 import { EventService } from '../../../services/event/event.service';
-import { Event } from '../../../shared/models/Event';
 import Swal from 'sweetalert2';
 
 /**
@@ -55,14 +54,14 @@ export class EventFormComponent implements OnInit {
   today: string = '';
 
   // Services injectés
-  private categoryService = inject(CategoryService);
-  private eventService = inject(EventService);
-  private router = inject(Router);
+  readonly categoryService = inject(CategoryService);
+  readonly eventService = inject(EventService);
+  readonly router = inject(Router);
 
   /**
    * Constructor - Initialisation du formulaire avec validations
    */
-  constructor(private fb: FormBuilder, private route: ActivatedRoute) {
+  constructor(private readonly fb: FormBuilder, private readonly route: ActivatedRoute) {
     this.eventForm = this.fb.group({
       // Titre de l'événement
       title: ['', [
@@ -219,7 +218,7 @@ export class EventFormComponent implements OnInit {
     this.isLoading = true;
     const formValue = this.eventForm.value;
 
-    // ✅ NOUVELLE APPROCHE : Envoyer directement les IDs
+    // Envoyer directement les IDs
     const categoryIds: number[] = formValue.categories || [];
     
     // Vérifier qu'au moins une catégorie est sélectionnée
@@ -245,7 +244,7 @@ export class EventFormComponent implements OnInit {
       price: formValue.price ? +formValue.price : 0,
       numberPlace: +formValue.participants,
       address: formValue.location,
-      categoryIds: categoryIds // ✅ Envoyer uniquement les IDs
+      categoryIds: categoryIds // Envoyer uniquement les IDs
     };
 
     if (this.isEditMode && this.eventId) {
@@ -424,7 +423,7 @@ export class EventFormComponent implements OnInit {
   getFieldError(fieldName: string): string {
     const field = this.eventForm.get(fieldName);
     
-    if (!field || !field.errors) {
+    if (!field?.errors) {
       return '';
     }
 
