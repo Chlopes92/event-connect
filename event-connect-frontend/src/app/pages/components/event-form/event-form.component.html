@@ -43,7 +43,7 @@
       
       <!-- Image de l'événement -->
       <div class="form-group">
-        <label class="form-label required">Image de l'événement</label>
+        <label for="eventImage" class="form-label required">Image de l'événement</label>
         <div class="image-upload-container">
           <div 
             class="image-upload-area"
@@ -52,7 +52,12 @@
             (click)="fileInput.click()"
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
-            (drop)="onDrop($event)">
+            (drop)="onDrop($event)"
+            role="button"
+            tabindex="0"
+            (keydown.enter)="fileInput.click()"
+            (keydown.space)="fileInput.click(); $event.preventDefault()"
+            aria-label="Zone de téléchargement d'image">
             
             @if(!imagePreview){
             <div class="upload-placeholder">
@@ -91,8 +96,9 @@
   
       <!-- Titre de l'événement -->
       <div class="form-group">
-        <label class="form-label required">Titre de l'événement</label>
+        <label for="eventTitle" class="form-label required">Titre de l'événement</label>
         <input 
+          id="eventTitle"
           type="text" 
           formControlName="title"
           class="form-input"
@@ -107,8 +113,9 @@
   
       <!-- Prix -->
       <div class="form-group">
-        <label class="form-label">Prix</label>
+        <label for="eventPrice" class="form-label">Prix</label>
         <input 
+          id="eventPrice"
           type="text" 
           formControlName="price"
           class="form-input"
@@ -118,8 +125,9 @@
       <!-- Date et Nombre de places -->
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label required">Date</label>
+          <label for="eventDate" class="form-label required">Date</label>
           <input 
+            id="eventDate"
             type="date" 
             formControlName="date"
             class="form-input"
@@ -133,8 +141,9 @@
         </div>
         
         <div class="form-group">
-          <label class="form-label required">Nombre de places</label>
+          <label for="eventParticipants" class="form-label required">Nombre de places</label>
           <input 
+            id="eventParticipants"
             type="number" 
             formControlName="participants"
             class="form-input"
@@ -150,8 +159,9 @@
   
       <!-- Lieu -->
       <div class="form-group">
-        <label class="form-label required">Lieu</label>
+        <label for="eventLocation" class="form-label required">Lieu</label>
         <input 
+          id="eventLocation"
           type="text" 
           formControlName="location"
           class="form-input"
@@ -166,7 +176,7 @@
   
       <!-- 🔧 NOUVEAU : Catégories multiples avec checkboxes -->
       <div class="form-group">
-        <label class="form-label required">Catégories de l'événement</label>
+        <label id="categoriesLabel" class="form-label required">Catégories de l'événement</label>
         <div class="categories-container">
           <div 
             *ngFor="let category of categories" 
@@ -174,6 +184,7 @@
             [class.selected]="isCategorySelected(category.id!)"
             (click)="toggleCategory(category.id!)">
             <input 
+              [id]="'category-' + category.id"
               type="checkbox" 
               [checked]="isCategorySelected(category.id!)"
               (click)="$event.stopPropagation()"
@@ -190,8 +201,9 @@
   
       <!-- Description -->
       <div class="form-group">
-        <label class="form-label required">Description</label>
+        <label  for="eventDescription" class="form-label required">Description</label>
         <textarea 
+          id="eventDescription"
           formControlName="description"
           class="form-textarea"
           [class.error]="isFieldInvalid('description')"
@@ -206,8 +218,9 @@
   
       <!-- Programmes -->
       <div class="form-group">
-        <label class="form-label required">Programmes</label>
+        <label for="eventPrograms" class="form-label required">Programmes</label>
         <textarea 
+          id="eventPrograms"
           formControlName="programs"
           class="form-textarea"
           rows="4"
@@ -216,8 +229,9 @@
   
       <!-- Contact -->
       <div class="form-group">
-        <label class="form-label required">Contact</label>
+        <label for="eventContact" class="form-label required">Contact</label>
         <input 
+          id="eventContact"
           type="email" 
           formControlName="contact"
           class="form-input"

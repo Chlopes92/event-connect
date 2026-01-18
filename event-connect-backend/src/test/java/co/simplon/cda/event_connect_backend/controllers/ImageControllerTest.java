@@ -1,6 +1,5 @@
 package co.simplon.cda.event_connect_backend.controllers;
 
-import co.simplon.cda.event_connect_backend.exceptions.InvalidFileException;
 import co.simplon.cda.event_connect_backend.services.FileStorageService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
