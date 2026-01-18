@@ -45,7 +45,8 @@
       <div class="form-group">
         <label for="eventImage" class="form-label required">Image de l'événement</label>
         <div class="image-upload-container">
-          <div 
+          <button 
+            type="button"
             class="image-upload-area"
             [class.drag-over]="isDragOver"
             [class.has-image]="imagePreview"
@@ -53,11 +54,7 @@
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
             (drop)="onDrop($event)"
-            role="button"
-            tabindex="0"
-            (keydown.enter)="fileInput.click()"
-            (keydown.space)="fileInput.click(); $event.preventDefault()"
-            aria-label="Zone de téléchargement d'image">
+            aria-label="Cliquez ou glissez-déposez pour télécharger une image">
             
             @if(!imagePreview){
             <div class="upload-placeholder">
@@ -75,15 +72,15 @@
             
             @if(imagePreview){
             <div class="image-preview">
-              <img [src]="imagePreview" alt="Aperçu de l'image" class="preview-image">
-              <button type="button" class="remove-image-btn" (click)="removeImage(); $event.stopPropagation()">
+              <img [src]="imagePreview" alt="Aperçu du fichier téléchargé" class="preview-image">
+              <button type="button" class="remove-image-btn" (click)="removeImage(); $event.stopPropagation()" aria-label="Supprimer l'image">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
             </div>
             }
-          </div>
+          </button>
           
           <input 
             #fileInput
@@ -176,21 +173,23 @@
   
       <!-- 🔧 NOUVEAU : Catégories multiples avec checkboxes -->
       <div class="form-group">
-        <label id="categoriesLabel" class="form-label required">Catégories de l'événement</label>
+        <label for="categoriesLabel" class="form-label required">Catégories de l'événement</label>
         <div class="categories-container">
-          <div 
+          <label
             *ngFor="let category of categories" 
             class="category-checkbox"
             [class.selected]="isCategorySelected(category.id!)"
-            (click)="toggleCategory(category.id!)">
+            (click)="toggleCategory(category.id!)"
+            [for]="'category-' + category.id">
             <input 
               [id]="'category-' + category.id"
               type="checkbox" 
               [checked]="isCategorySelected(category.id!)"
               (click)="$event.stopPropagation()"
-              (change)="toggleCategory(category.id!)">
+              (change)="toggleCategory(category.id!)"
+              (keydown.space)="toggleCategory(category.id!); $event.preventDefault()">
             <span class="category-label">{{ category.nameCategory }}</span>
-          </div>
+        </label>
         </div>
         @if(isFieldInvalid('categories')){
         <div class="error-message">

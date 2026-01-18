@@ -16,8 +16,8 @@ export class CarouselComponent implements OnInit, OnDestroy {
   isAutoPlayPaused = false;
   
   particles = Array.from({ length: 80 }, () => ({
-    x: Math.random() * (typeof globalThis.window !== 'undefined' ? window.innerWidth : 1200),
-    y: Math.random() * (typeof globalThis.window !== 'undefined' ? window.innerHeight : 800),
+    x: Math.random() * (globalThis.window !== undefined ? window.innerWidth : 1200),
+    y: Math.random() * (globalThis.window !== undefined ? window.innerHeight : 800),
     delay: Math.random() * 4
   }));
 

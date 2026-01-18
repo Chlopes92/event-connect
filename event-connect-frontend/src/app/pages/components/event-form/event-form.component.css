@@ -100,7 +100,9 @@
     appearance: none;
   }
   
-  /* NOUVEAU : Styles pour les catégories multiples */
+  /* ================================================================
+     CATÉGORIES MULTIPLES - Version accessible avec <label>
+     ================================================================ */
   .categories-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -111,7 +113,8 @@
     background: #F9FAFB;
   }
 
-  .category-checkbox {
+  /* ✅ CORRECTION : <label> au lieu de <div> pour l'accessibilité */
+  label.category-checkbox {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -122,27 +125,34 @@
     cursor: pointer;
     transition: all 0.2s;
     user-select: none;
+    margin: 0; /* Reset du margin par défaut des labels */
   }
 
-  .category-checkbox:hover {
+  label.category-checkbox:hover {
     border-color: var(--color-violet);
     background: #EFF6FF;
   }
 
-  .category-checkbox.selected {
+  label.category-checkbox.selected {
     border-color: var(--color-violet);
     background: var(--color-violet);
   }
 
-  .category-checkbox.selected .category-label {
+  label.category-checkbox.selected .category-label {
     color: white;
     font-weight: 600;
   }
 
-  .category-checkbox input[type="checkbox"] {
+  label.category-checkbox input[type="checkbox"] {
     width: 18px;
     height: 18px;
     cursor: pointer;
+    margin: 0; /* Reset du margin par défaut */
+  }
+
+  label.category-checkbox input[type="checkbox"]:focus {
+    outline: 2px solid var(--color-violet);
+    outline-offset: 2px;
   }
 
   .category-label {
@@ -153,34 +163,61 @@
     cursor: pointer;
   }
   
+  /* ================================================================
+     ZONE D'UPLOAD D'IMAGE - Version accessible avec <button>
+     ================================================================ */
   .image-upload-container {
     position: relative;
   }
   
-  .image-upload-area {
+  /* ✅ CORRECTION : Styles pour <button> au lieu de <div> */
+  button.image-upload-area {
+    /* Reset des styles par défaut du bouton */
+    width: 100%;
+    font: inherit;
+    text-align: center;
+    
+    /* Styles de la zone d'upload */
     border: 2px dashed #D1D5DB;
     border-radius: 8px;
     padding: 40px 24px;
-    text-align: center;
     cursor: pointer;
     transition: all 0.2s;
     background: #F9FAFB;
+    display: block;
   }
   
-  .image-upload-area:hover {
+  button.image-upload-area:hover {
+    border-color: var(--color-violet);
+    background: #EFF6FF;
+  }
+
+  button.image-upload-area:focus {
+    outline: 2px solid var(--color-violet);
+    outline-offset: 2px;
+    border-color: var(--color-violet);
+  }
+  
+  button.image-upload-area.drag-over {
     border-color: var(--color-violet);
     background: #EFF6FF;
   }
   
-  .image-upload-area.drag-over {
-    border-color: var(--color-violet);
-    background: #EFF6FF;
-  }
-  
-  .image-upload-area.has-image {
+  button.image-upload-area.has-image {
     padding: 0;
     border: 1px solid #D1D5DB;
     background: transparent;
+  }
+
+  /* Assurer que le contenu du bouton ne capte pas les événements */
+  button.image-upload-area .upload-placeholder,
+  button.image-upload-area .image-preview {
+    pointer-events: none;
+  }
+
+  /* Le bouton de suppression doit rester cliquable */
+  button.image-upload-area .remove-image-btn {
+    pointer-events: auto;
   }
   
   .upload-placeholder {
@@ -243,6 +280,11 @@
     cursor: pointer;
     transition: background-color 0.2s;
   }
+
+  .remove-image-btn:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
   
   .remove-image-btn:hover {
     background: rgba(0, 0, 0, 0.7);
@@ -276,6 +318,11 @@
     transition: all 0.3s;
     min-width: 200px;
   }
+
+  .submit-button:focus {
+    outline: 2px solid #DC2626;
+    outline-offset: 2px;
+  }
   
   .submit-button:hover:not(:disabled) {
     background: #B91C1C;
@@ -290,7 +337,7 @@
   }
   
   /* ================================================================
-      TOAST SYSTEM - Notifications uniformes et magnifiques
+     TOAST SYSTEM - Notifications uniformes et magnifiques
      ================================================================ */
   
   .toast-container {
@@ -383,14 +430,85 @@
     align-items: center;
     justify-content: center;
   }
+
+  .toast-close:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+  }
   
   .toast-close:hover {
     opacity: 1;
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
   }
+
+  /* ================================================================
+     ATTRIBUTS ARIA POUR L'ACCESSIBILITÉ
+     ================================================================ */
+
+  /* Indiquer visuellement les champs invalides via ARIA */
+  [aria-invalid="true"] {
+    border-color: #DC2626 !important;
+  }
+
+  [aria-invalid="true"]:focus {
+    outline-color: #DC2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  }
+
+  /* Animation pour les messages d'erreur (role="alert") */
+  [role="alert"] {
+    animation: slideInError 0.3s ease;
+  }
+
+  @keyframes slideInError {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Indicateur de chargement accessible */
+  [aria-busy="true"] {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  /* Classe utilitaire pour cacher visuellement mais garder accessible */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* SVG décoratifs cachés aux lecteurs d'écran */
+  svg[aria-hidden="true"] {
+    pointer-events: none;
+  }
+
+  /* Style du focus pour tous les éléments interactifs */
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--color-violet, #667eea);
+    outline-offset: 2px;
+  }
   
-  /* Responsive design */
+  /* ================================================================
+     RESPONSIVE DESIGN
+     ================================================================ */
   @media (max-width: 768px) {
     .form-container {
       padding: 16px;
@@ -401,7 +519,7 @@
       gap: 24px;
     }
     
-    .image-upload-area {
+    button.image-upload-area {
       padding: 24px 16px;
     }
     
@@ -413,6 +531,10 @@
     .submit-button {
       padding: 14px 32px;
       min-width: 100%;
+    }
+
+    .categories-container {
+      grid-template-columns: 1fr;
     }
     
     /* Toasts sur mobile */
