@@ -164,4 +164,98 @@ describe('CarouselComponent', () => {
     expect(style.transform).toContain('translateX(700px)');
     expect(style.transform).toContain('scale(0.84)');
   });
+
+  // Tests supplémentaires pour améliorer la couverture (80%+)
+  it('should advance slide automatically after 10 seconds', fakeAsync(() => {
+    fixture.detectChanges();
+    component.isAutoPlayPaused = false;
+    const initialIndex = component.currentIndex;
+    
+    component.startAutoPlay();
+    tick(10000);
+    tick(600);
+    
+    expect(component.currentIndex).toBeGreaterThan(initialIndex);
+  }));
+
+  it('should handle stopAutoPlay with undefined interval', () => {
+    component.autoPlayInterval = undefined;
+    expect(() => component.stopAutoPlay()).not.toThrow();
+  });
+
+  it('should not advance if transitioning during autoplay', fakeAsync(() => {
+    fixture.detectChanges();
+    component.isTransitioning = true;
+    const initialIndex = component.currentIndex;
+    
+    component.startAutoPlay();
+    tick(10000);
+    tick(600);
+    
+    expect(component.currentIndex).toBe(initialIndex);
+  }));
+
+  it('should initialize particles with valid delay range', () => {
+    component.particles.forEach(particle => {
+      expect(particle.delay).toBeGreaterThanOrEqual(0);
+      expect(particle.delay).toBeLessThan(4);
+    });
+  });
+
+  it('should handle goToSlide with transitioning state', fakeAsync(() => {
+    fixture.detectChanges();
+    component.isTransitioning = true;
+    const initialIndex = component.currentIndex;
+    
+    component.goToSlide(3);
+    tick(600);
+    
+    expect(component.currentIndex).toBe(initialIndex);
+  }));
+
+  it('should correctly wrap index when jumping slides', fakeAsync(() => {
+    fixture.detectChanges();
+    const slidesLength = component.slides.length;
+    component.currentIndex = slidesLength - 2;
+    
+    component.goToSlide(3);
+    tick(600);
+    
+    const expectedIndex = (slidesLength - 2 + 3) % slidesLength;
+    expect(component.currentIndex).toBe(expectedIndex);
+  }));
+
+  it('should return different box shadows for different indices', () => {
+    const style0 = component.getCardStyle(0);
+    const style1 = component.getCardStyle(1);
+    
+    expect(style0.boxShadow).not.toBe(style1.boxShadow);
+  });
+
+  it('should calculate correct z-index descending order', () => {
+    expect(component.getCardStyle(0).zIndex).toBe(10);
+    expect(component.getCardStyle(1).zIndex).toBe(9);
+    expect(component.getCardStyle(3).zIndex).toBe(7);
+  });
+
+  it('should map events with title, description and image', () => {
+    fixture.detectChanges();
+    
+    component.slides.forEach(slide => {
+      expect(slide.title).toBeDefined();
+      expect(slide.description).toBeDefined();
+      expect(slide.image).toBeDefined();
+    });
+  });
+
+  it('should handle rapid navigation attempts', fakeAsync(() => {
+    fixture.detectChanges();
+    
+    component.nextSlide();
+    tick(100);
+    component.nextSlide();
+    tick(500);
+    
+    expect(component.currentIndex).toBe(1);
+  }));
 });
