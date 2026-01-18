@@ -34,11 +34,31 @@ describe('CarouselComponent', () => {
 
   // Particles
   it('should initialize particles with valid properties', () => {
+    // Couvre les lignes 18-22 : création des particles
+    expect(component.particles.length).toBe(80);
     component.particles.forEach(p => {
       expect(p.x).toBeDefined();
+      expect(typeof p.x).toBe('number');
       expect(p.y).toBeDefined();
+      expect(typeof p.y).toBe('number');
       expect(p.delay).toBeGreaterThanOrEqual(0);
       expect(p.delay).toBeLessThan(4);
+    });
+  });
+
+  it('should use window dimensions for particles when available', () => {
+    // Couvre la branche globalThis.window !== undefined
+    const newComponent = new CarouselComponent();
+    expect(newComponent.particles[0].x).toBeLessThanOrEqual(window.innerWidth || 1200);
+    expect(newComponent.particles[0].y).toBeLessThanOrEqual(window.innerHeight || 800);
+  });
+
+  it('should handle nullish coalescing for image fallback', () => {
+    // Couvre ligne 31 : image ?? 'assets/default-event.jpg'
+    fixture.detectChanges();
+    component.slides.forEach(slide => {
+      expect(slide.image).toBeTruthy();
+      expect(typeof slide.image).toBe('string');
     });
   });
 
@@ -74,12 +94,26 @@ describe('CarouselComponent', () => {
     component.isTransitioning = true;
     const index = component.currentIndex;
     
+    // Couvre les 3 lignes "if (this.isTransitioning) return"
     component.nextSlide();
+    expect(component.currentIndex).toBe(index);
+    
     component.previousSlide();
+    expect(component.currentIndex).toBe(index);
+    
     component.goToSlide(2);
     tick(600);
-    
     expect(component.currentIndex).toBe(index);
+  }));
+
+  it('should execute navigation when not transitioning', fakeAsync(() => {
+    // Force la couverture des branches normales (sans early return)
+    fixture.detectChanges();
+    component.isTransitioning = false;
+    
+    component.nextSlide();
+    tick(600);
+    expect(component.currentIndex).toBe(1);
   }));
 
   it('should jump to slide correctly', fakeAsync(() => {
