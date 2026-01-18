@@ -38,14 +38,14 @@ export class HeaderComponent implements OnInit {
     // Détecte si on est sur la home page
     this.isHomePage = url === '/' || url === '/home';
     
+    if (this.isHomePage) {  // Condition positive
+    // Sur la home, on vérifie la position du scroll
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    this.isScrolled = scrollPosition > 100;
+  } else {
     // Si on n'est pas sur la home, le header est toujours solide
-    if (!this.isHomePage) {
-      this.isScrolled = true;
-    } else {
-      // Sur la home, on vérifie la position du scroll
-      const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-      this.isScrolled = scrollPosition > 100;
-    }
+    this.isScrolled = true;
+  }
   }
 
   @HostListener('window:scroll', [])

@@ -27,7 +27,7 @@ export class OrganizerSignupPageComponent {
   
   // Système de toasts
   toasts: Toast[] = [];
-  isLoading: boolean = false;
+  isLoading = false;
 
   constructor(
     readonly fb: FormBuilder, 
@@ -52,18 +52,18 @@ export class OrganizerSignupPageComponent {
       ]],
       phone: ['', [
         Validators.required,
-        Validators.pattern(/^(?:(?:\+|00)33|0)[1-9](?:[0-9]{8})$/) // Regex téléphone français
+        Validators.pattern(/^(?:(?:\+|00)33|0)[1-9](?:\d{8})$/) // Regex téléphone français
       ]],
       email: ['', [
         Validators.required, 
         Validators.email,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        Validators.pattern(/^[a-zA-Z\d._%+-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/)
       ]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(72),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,72}$/) // Regex complexe
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\dA-Za-z@$!%*?&]{8,72}$/) // Regex complexe
       ]]
     });
 
@@ -71,7 +71,7 @@ export class OrganizerSignupPageComponent {
       email: ['', [
         Validators.required, 
         Validators.email,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        Validators.pattern(/^[a-zA-Z\d._%+-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/)
       ]],
       password: ['', Validators.required]
     });
@@ -108,40 +108,44 @@ export class OrganizerSignupPageComponent {
     };
 
     this.accountService.signup(profile).subscribe({
-      next: (response) => {
+      next: () => {
         this.addToast('success', '🎉 Inscription réussie ! Connexion en cours...');
         
-        // Connexion automatique après inscription
+        // ✅ CORRIGÉ: Extraction pour réduire l'imbrication
         const credentials: ProfileLogin = {
           email: formValue.email,
           password: formValue.password
         };
 
-        setTimeout(() => {
-          this.accountService.login(credentials).subscribe({
-            next: (token) => {
-              localStorage.setItem('jwt', token);
-              localStorage.setItem('userEmail', formValue.email);
-              localStorage.setItem('userRole', 'ROLE_ADMIN');
-              
-              this.router.navigate(['/organizer-dashboard']);
-            },
-            error: (error: Error) => {
-              console.error('❌ Erreur de connexion automatique:', error.message);
-              this.addToast('success', 'Inscription réussie ! Veuillez vous connecter 👇');
-              setTimeout(() => {
-                this.switchToExistingOrganizer();
-              }, 2000);
-            }
-          });
-        }, 1000);
-
+        setTimeout(() => this.handleAutoLogin(credentials), 1000);
         this.isLoading = false;
       },
       error: (error: Error) => {
         console.error('❌ Erreur lors de l\'inscription:', error.message);
         this.addToast('error', error.message);
         this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * ✅ MÉTHODE: Gère la connexion automatique après inscription
+   * Extrait pour éviter l'imbrication excessive (>4 niveaux)
+   */
+  private handleAutoLogin(credentials: ProfileLogin): void {
+    this.accountService.login(credentials).subscribe({
+      next: (token) => {
+        localStorage.setItem('jwt', token);
+        localStorage.setItem('userEmail', credentials.email);
+        localStorage.setItem('userRole', 'ROLE_ADMIN');
+        
+        this.router.navigate(['/organizer-dashboard']);
+      },
+      error: (error: Error) => {
+        console.error('❌ Erreur de connexion automatique:', error.message);
+        this.addToast('success', 'Inscription réussie ! Veuillez vous connecter 👇');
+        
+        setTimeout(() => this.switchToExistingOrganizer(), 2000);
       }
     });
   }
