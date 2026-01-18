@@ -17,7 +17,7 @@ export class ClientSignupPageComponent {
   // Variable pour contrôler le bouton connexion
   loginEnabled = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private readonly fb: FormBuilder, private readonly router: Router) {
     // Formulaire complet avec tous les champs de la maquette
     this.newClientForm = this.fb.group({
       lastName: ['', Validators.required],

@@ -29,25 +29,33 @@ main::before{
     bottom: 304px;
 }
 
-head{
-    display: block;
-    width: 35px;
-    height: 140px;
-    background: var(--color-font);
-    border-bottom: 10px solid var(--color-pink);
-    margin: auto;
-    transform-origin: 50% 100%;
-    -webkit-animation: 5s find linear infinite;
-    animation: 5s find linear infinite;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -5px;
+.lamp-head {
+  display: block;
+  width: 35px;
+  height: 140px;
+  background: var(--color-font);
+  border-bottom: 10px solid var(--color-pink);
+  margin: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  animation: find 5s linear infinite;
 }
 
-head::after{
+.lamp-meta {
+  display: block;
+  width: 250px;
+  height: 200px;
+  background: var(--color-yellow);
+  border-radius: 50%;
+  position: absolute;
+  left: -107px;
+  bottom: 270px;
+}
+
+
+.lamp-head::after{
     content: '';
     position: absolute;
     border-style: solid;
@@ -59,7 +67,7 @@ head::after{
     box-shadow: 0px -10px 0 var(--color-pink);
 }
 
-head::before{
+.lamp-head::before{
     content: '';
     position: absolute;
     width: 8px;
@@ -73,24 +81,7 @@ head::before{
     box-shadow: 0px 0 1px 2px rgb(68, 68, 68);
 }
 
-meta{
-    display: block;
-    width: 250px;
-    height: 200px;
-    background: var(--color-yellow);
-    border-radius: 50%;
-    position: absolute;
-    left: -107px;
-    bottom: 270px;
-    margin: auto;
-    text-align: center;
-    color: var(--color-yellow);
-    font-size: 90px;
-    line-height: 200px;
-    font-weight: 600;
-}
-
-meta::after{
+.lamp-meta::after{
     content: '';
     position: absolute;
     border-style: solid;

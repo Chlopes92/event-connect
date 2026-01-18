@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service métier pour la gestion des profils utilisateurs
@@ -107,12 +106,12 @@ public class ProfileService {
             logger.info("Profil créé avec succès pour : {}", inputs.email());
         } catch (Exception e) {
             // Gestion des contraintes SQL (unicité du téléphone)
-            if (e.getMessage().contains("phone")) {
+            if (e.getMessage().contains(FIELD_NAME_PHONE)) {
                 logger.warn("Tentative d'inscription avec téléphone existant : {}", inputs.phone());
-                throw new DuplicateResourceException("Profile", "phone", inputs.phone());
+                throw new DuplicateResourceException(RESOURCE_NAME_PROFILE, FIELD_NAME_PHONE, inputs.phone());
             }
             logger.error("Erreur lors de la création du profil : ", e);
-            throw new RuntimeException("Erreur lors de la création du profil", e);
+            throw new DuplicateResourceException(ERROR_PROFILE_CREATION);
         }
     }
 
@@ -189,7 +188,7 @@ public class ProfileService {
         Profile profile = profileRepository.findByEmail(email);
         if (profile == null) {
             logger.warn("Profil non trouvé : {}", email);
-            throw new ResourceNotFoundException("Profile", "email", email);
+            throw new ResourceNotFoundException(RESOURCE_NAME_PROFILE, FIELD_NAME_EMAIL, email);
         }
 
         return profile;

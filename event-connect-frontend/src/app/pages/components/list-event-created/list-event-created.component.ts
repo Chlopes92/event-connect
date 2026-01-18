@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EventService } from '../../../services/event/event.service';
@@ -20,14 +20,14 @@ interface Toast {
   templateUrl: './list-event-created.component.html',
   styleUrl: './list-event-created.component.css'
 })
-export class ListEventCreatedComponent {
+export class ListEventCreatedComponent implements OnInit {
   events: Event[] = [];
   isLoading: boolean = true;
   errorMessage: string = '';
   toasts: Toast[] = []; // Système de toasts
 
-  private eventService = inject(EventService);
-  private router = inject(Router);
+  readonly eventService = inject(EventService);
+  readonly router = inject(Router);
 
   ngOnInit(): void {
     this.loadEvents();

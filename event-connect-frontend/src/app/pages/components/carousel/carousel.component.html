@@ -7,13 +7,13 @@
             <p>{{ currentSlide.description }}</p>
           </div>
           <div class="carousel-cards">
-            <div 
+            <button 
               class="carousel-card"
               *ngFor="let slide of visibleSlides; let i = index"
               [ngStyle]="getCardStyle(i)"
               (click)="goToSlide(i)">
               <img [src]="slide.image" [alt]="slide.title">
-            </div>
+          </button>
             <div class="carousel-arrows">
               <button (click)="previousSlide()"><mat-icon>chevron_left</mat-icon></button>
               <button (click)="nextSlide()"><mat-icon>chevron_right</mat-icon></button>

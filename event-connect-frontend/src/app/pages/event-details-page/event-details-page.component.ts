@@ -26,15 +26,15 @@ export class EventDetailsPageComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute, 
-    private eventService: EventService,
-    private router: Router
+    readonly eventService: EventService,
+    readonly router: Router
   ) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       const id = Number(params['id']);
       
-      if (!id || isNaN(id)) {
+      if (!id || Number.isNaN(id) || id <= 0) {
         this.addToast('error', 'ID d\'événement invalide ⚠️');
         setTimeout(() => this.router.navigate(['/home']), 2000);
         return;
@@ -69,7 +69,7 @@ export class EventDetailsPageComponent implements OnInit {
    * ⬅️ Retour à la page précédente
    */
   goBack(): void {
-    window.history.back();
+    globalThis.history.back();
   }
 
   /**
