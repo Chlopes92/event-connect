@@ -119,7 +119,7 @@ export class EventService {
       // Si c'est une ErrorResponse structurée du backend
       const backendError = error.error as ErrorResponse;
       
-      if (backendError && backendError.message) {
+      if (backendError?.message) {
         errorMessage = backendError.message;
 
         // Si erreurs de validation

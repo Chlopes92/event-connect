@@ -7,7 +7,7 @@
   >
     <div class="event-overlay">
       <div class="event-header">
-        <div class="event-actions" (click)="$event.stopPropagation()">
+        <div class="event-actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
           <button class="action-btn share" (click)="shareEvent(event, $event)">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path
