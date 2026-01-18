@@ -1,4 +1,4 @@
-package co.simplon.cda.event_connect_backend.service;
+package co.simplon.cda.event_connect_backend.services;
 
 import co.simplon.cda.event_connect_backend.dtos.event.EventCreateDTO;
 import co.simplon.cda.event_connect_backend.dtos.event.EventUpdateDTO;
@@ -12,7 +12,6 @@ import co.simplon.cda.event_connect_backend.exceptions.UnauthorizedAccessExcepti
 import co.simplon.cda.event_connect_backend.repositories.CategoryRepository;
 import co.simplon.cda.event_connect_backend.repositories.EventRepository;
 import co.simplon.cda.event_connect_backend.repositories.ProfileRepository;
-import co.simplon.cda.event_connect_backend.services.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

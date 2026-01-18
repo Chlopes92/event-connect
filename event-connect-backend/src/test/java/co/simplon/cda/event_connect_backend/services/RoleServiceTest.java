@@ -1,9 +1,8 @@
-package co.simplon.cda.event_connect_backend.service;
+package co.simplon.cda.event_connect_backend.services;
 
 import co.simplon.cda.event_connect_backend.dtos.role.RoleDTO;
 import co.simplon.cda.event_connect_backend.entities.Role;
 import co.simplon.cda.event_connect_backend.repositories.RoleRepository;
-import co.simplon.cda.event_connect_backend.services.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

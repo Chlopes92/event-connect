@@ -1,9 +1,8 @@
-package co.simplon.cda.event_connect_backend.service;
+package co.simplon.cda.event_connect_backend.services;
 
 import co.simplon.cda.event_connect_backend.dtos.category.CategoryDTO;
 import co.simplon.cda.event_connect_backend.entities.Category;
 import co.simplon.cda.event_connect_backend.repositories.CategoryRepository;
-import co.simplon.cda.event_connect_backend.services.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

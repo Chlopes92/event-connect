@@ -1,4 +1,4 @@
-package co.simplon.cda.event_connect_backend.service;
+package co.simplon.cda.event_connect_backend.services;
 
 import co.simplon.cda.event_connect_backend.configuration.JwtProvider;
 import co.simplon.cda.event_connect_backend.dtos.profile.ProfileAuthenticateDTO;
@@ -10,7 +10,6 @@ import co.simplon.cda.event_connect_backend.exceptions.InvalidCredentialsExcepti
 import co.simplon.cda.event_connect_backend.exceptions.ResourceNotFoundException;
 import co.simplon.cda.event_connect_backend.repositories.ProfileRepository;
 import co.simplon.cda.event_connect_backend.repositories.RoleRepository;
-import co.simplon.cda.event_connect_backend.services.ProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
