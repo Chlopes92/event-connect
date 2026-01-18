@@ -30,9 +30,9 @@ export class OrganizerSignupPageComponent {
   isLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder, 
-    private router: Router, 
-    private accountService: AccountService
+    readonly fb: FormBuilder, 
+    readonly router: Router, 
+    readonly accountService: AccountService
   ) {
     this.newOrganizerForm = this.fb.group({
       lastName: ['', [

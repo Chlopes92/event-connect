@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Role } from '../../shared/models/Role';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { PROFILE_URL, ROLE_URL } from '../../shared/constants/urls';
@@ -11,7 +11,7 @@ import { ErrorResponse } from '../../shared/models/ErrorResponse';
 })
 export class AccountService {
 
-  constructor(private http: HttpClient) {}
+  readonly http = inject(HttpClient);
 
   /**
    * Récupère la liste des rôles disponibles

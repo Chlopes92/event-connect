@@ -10,7 +10,7 @@ import { ErrorResponse } from '../../shared/models/ErrorResponse';
 })
 export class EventService {
   
-  private http = inject(HttpClient);
+  readonly http = inject(HttpClient);
 
   /** 
    * Récupère tous les événements

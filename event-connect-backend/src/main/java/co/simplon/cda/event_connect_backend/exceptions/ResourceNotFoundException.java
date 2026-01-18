@@ -12,9 +12,9 @@ package co.simplon.cda.event_connect_backend.exceptions;
  */
 public class ResourceNotFoundException extends RuntimeException {
 
-    private final String resourceName;
-    private final String fieldName;
-    private final Object fieldValue;
+    private final transient String resourceName;
+    private final transient String fieldName;
+    private final transient Object fieldValue;
 
     /**
      * Constructeur avec détails de la ressource manquante
