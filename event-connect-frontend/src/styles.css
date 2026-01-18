@@ -39,7 +39,7 @@ h4 {
   font-size: 20px;
 }
 
-p {
+p, label, span, input, textarea {
   font-family: "Roboto", sans-serif;
 }
 
