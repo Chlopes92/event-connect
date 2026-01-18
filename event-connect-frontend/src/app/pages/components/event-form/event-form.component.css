@@ -133,6 +133,12 @@
     background: #EFF6FF;
   }
 
+  label.category-checkbox:focus {
+    outline: 2px solid var(--color-violet);
+    outline-offset: 2px;
+    border-color: var(--color-violet);
+  }
+
   label.category-checkbox.selected {
     border-color: var(--color-violet);
     background: var(--color-violet);
@@ -151,8 +157,7 @@
   }
 
   label.category-checkbox input[type="checkbox"]:focus {
-    outline: 2px solid var(--color-violet);
-    outline-offset: 2px;
+    outline: none;
   }
 
   .category-label {

@@ -179,15 +179,16 @@
             *ngFor="let category of categories" 
             class="category-checkbox"
             [class.selected]="isCategorySelected(category.id!)"
-            (click)="toggleCategory(category.id!)"
-            [for]="'category-' + category.id">
+            [for]="'category-' + category.id"
+            tabindex="0"
+            (keydown.enter)="toggleCategory(category.id!); $event.preventDefault()" 
+            (keydown.space)="toggleCategory(category.id!); $event.preventDefault()">
             <input 
               [id]="'category-' + category.id"
               type="checkbox" 
               [checked]="isCategorySelected(category.id!)"
-              (click)="$event.stopPropagation()"
               (change)="toggleCategory(category.id!)"
-              (keydown.space)="toggleCategory(category.id!); $event.preventDefault()">
+              tabindex="-1">
             <span class="category-label">{{ category.nameCategory }}</span>
         </label>
         </div>
