@@ -34,7 +34,7 @@ export class EventDetailsPageComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       const id = Number(params['id']);
       
-      if (!id || isNaN(id)) {
+      if (!id || Number.isNaN(id) || id <= 0) {
         this.addToast('error', 'ID d\'événement invalide ⚠️');
         setTimeout(() => this.router.navigate(['/home']), 2000);
         return;

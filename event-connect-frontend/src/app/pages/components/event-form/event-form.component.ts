@@ -218,7 +218,7 @@ export class EventFormComponent implements OnInit {
     this.isLoading = true;
     const formValue = this.eventForm.value;
 
-    // ✅ NOUVELLE APPROCHE : Envoyer directement les IDs
+    // Envoyer directement les IDs
     const categoryIds: number[] = formValue.categories || [];
     
     // Vérifier qu'au moins une catégorie est sélectionnée
@@ -244,7 +244,7 @@ export class EventFormComponent implements OnInit {
       price: formValue.price ? +formValue.price : 0,
       numberPlace: +formValue.participants,
       address: formValue.location,
-      categoryIds: categoryIds // ✅ Envoyer uniquement les IDs
+      categoryIds: categoryIds // Envoyer uniquement les IDs
     };
 
     if (this.isEditMode && this.eventId) {
