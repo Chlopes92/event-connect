@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { CarouselComponent } from './carousel.component';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('CarouselComponent', () => {
   let component: CarouselComponent;
@@ -7,97 +8,225 @@ describe('CarouselComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CarouselComponent]
+      imports: [CarouselComponent, MatIconModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CarouselComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  afterEach(() => {
-    component.stopAutoPlay();
-  });
+  afterEach(() => component.stopAutoPlay());
 
-  it('should create', () => {
+  // Création et initialisation
+  it('should create and initialize correctly', () => {
     expect(component).toBeTruthy();
+    expect(component.currentIndex).toBe(0);
+    expect(component.particles.length).toBe(80);
   });
 
-  it('should initialize slides from mock data', () => {
+  it('should load slides on init', () => {
+    fixture.detectChanges();
     expect(component.slides.length).toBeGreaterThan(0);
+    expect(component.slides[0].title).toBeDefined();
+    expect(component.slides[0].description).toBeDefined();
+    expect(component.slides[0].image).toBeDefined();
   });
 
-  it('should get current slide', () => {
-    expect(component.currentSlide).toBeDefined();
-    expect(component.currentSlide).toBe(component.slides[0]);
+  // Test getViewportWidth - branche window DÉFINI
+  it('should return window.innerWidth when window is defined', () => {
+    const width = component['getViewportWidth']();
+    expect(width).toBe(window.innerWidth);
   });
 
-  it('should get visible slides', () => {
-    const visible = component.visibleSlides;
-    expect(visible.length).toBe(4);
+  // Test getViewportHeight - branche window DÉFINI
+  it('should return window.innerHeight when window is defined', () => {
+    const height = component['getViewportHeight']();
+    expect(height).toBe(window.innerHeight);
   });
 
-  it('should navigate to next slide', fakeAsync(() => {
-    const initialIndex = component.currentIndex;
+  // Test getEventImage - image DÉFINIE
+  it('should return image when image is provided', () => {
+    const result = component['getEventImage']('test-image.jpg');
+    expect(result).toBe('test-image.jpg');
+  });
+
+  // Test getEventImage - image NULL
+  it('should return default image when image is null', () => {
+    const result = component['getEventImage'](null);
+    expect(result).toBe('assets/default-event.jpg');
+  });
+
+  // Test getEventImage - image UNDEFINED
+  it('should return default image when image is undefined', () => {
+    const result = component['getEventImage'](undefined);
+    expect(result).toBe('assets/default-event.jpg');
+  });
+
+  // Test getEventImage - chaîne VIDE
+  it('should return default image when image is empty string', () => {
+    const result = component['getEventImage']('');
+    expect(result).toBe('assets/default-event.jpg');
+  });
+
+  it('should initialize particles with valid properties', () => {
+    expect(component.particles.length).toBe(80);
+    component.particles.forEach((p: { x: number; y: number; delay: number }) => {
+      expect(p.x).toBeDefined();
+      expect(typeof p.x).toBe('number');
+      expect(p.y).toBeDefined();
+      expect(typeof p.y).toBe('number');
+      expect(p.delay).toBeGreaterThanOrEqual(0);
+      expect(p.delay).toBeLessThan(4);
+    });
+  });
+
+  it('should return current and visible slides', () => {
+    fixture.detectChanges();
+    expect(component.currentSlide).toEqual(component.slides[0]);
+    expect(component.visibleSlides.length).toBe(4);
+  });
+
+  it('should navigate to next and previous slides', fakeAsync(() => {
+    fixture.detectChanges();
     component.nextSlide();
     tick(600);
-    expect(component.currentIndex).toBe((initialIndex + 1) % component.slides.length);
-  }));
-
-  it('should navigate to previous slide', fakeAsync(() => {
-    component.currentIndex = 1;
+    expect(component.currentIndex).toBe(1);
+    
     component.previousSlide();
     tick(600);
     expect(component.currentIndex).toBe(0);
   }));
 
-  it('should go to specific slide', fakeAsync(() => {
+  it('should wrap to last slide when going previous from first slide', fakeAsync(() => {
+    fixture.detectChanges();
+    expect(component.currentIndex).toBe(0);
+    
+    component.previousSlide();
+    tick(600);
+    
+    expect(component.currentIndex).toBe(component.slides.length - 1);
+  }));
+
+  it('should decrement index when not at first slide', fakeAsync(() => {
+    fixture.detectChanges();
+    component.currentIndex = 2;
+    
+    component.previousSlide();
+    tick(600);
+    
+    expect(component.currentIndex).toBe(1);
+  }));
+
+  it('should test both branches of previousSlide ternary operator', fakeAsync(() => {
+    fixture.detectChanges();
+    
+    // Branche 1: currentIndex === 0
+    component.currentIndex = 0;
+    component.previousSlide();
+    tick(600);
+    expect(component.currentIndex).toBe(component.slides.length - 1);
+    
+    // Branche 2: currentIndex !== 0
+    component.currentIndex = 3;
+    component.previousSlide();
+    tick(600);
+    expect(component.currentIndex).toBe(2);
+  }));
+
+  it('should wrap slides at boundaries when going forward', fakeAsync(() => {
+    fixture.detectChanges();
+    component.currentIndex = component.slides.length - 1;
+    component.nextSlide();
+    tick(600);
+    expect(component.currentIndex).toBe(0);
+  }));
+
+  it('should block navigation when transitioning', fakeAsync(() => {
+    fixture.detectChanges();
+    component.isTransitioning = true;
+    const index = component.currentIndex;
+    
+    component.nextSlide();
+    expect(component.currentIndex).toBe(index);
+    
+    component.previousSlide();
+    expect(component.currentIndex).toBe(index);
+    
+    component.goToSlide(2);
+    tick(600);
+    expect(component.currentIndex).toBe(index);
+  }));
+
+  it('should execute navigation when not transitioning', fakeAsync(() => {
+    fixture.detectChanges();
+    component.isTransitioning = false;
+    
+    component.nextSlide();
+    tick(600);
+    expect(component.currentIndex).toBe(1);
+  }));
+
+  it('should jump to slide correctly', fakeAsync(() => {
+    fixture.detectChanges();
     component.goToSlide(2);
     tick(600);
     expect(component.currentIndex).toBe(2);
   }));
 
-  it('should not allow transition when already transitioning', fakeAsync(() => {
-    component.isTransitioning = true;
-    const initialIndex = component.currentIndex;
-    
-    component.nextSlide();
+  it('should not jump to slide 0', fakeAsync(() => {
+    fixture.detectChanges();
+    const index = component.currentIndex;
+    component.goToSlide(0);
     tick(600);
-    
-    expect(component.currentIndex).toBe(initialIndex);
+    expect(component.currentIndex).toBe(index);
   }));
 
-  it('should pause autoplay', () => {
-    component.pauseAutoPlay();
-    expect(component.isAutoPlayPaused).toBe(true);
-  });
-
-  it('should resume autoplay', () => {
-    component.isAutoPlayPaused = true;
-    component.resumeAutoPlay();
-    expect(component.isAutoPlayPaused).toBe(false);
-  });
-
-  it('should return card style with correct transform', () => {
-    const style = component.getCardStyle(0);
-    expect(style.transform).toContain('translateX');
-    expect(style.transform).toContain('scale');
-  });
-
-  it('should handle wrap around when going previous from first slide', fakeAsync(() => {
-    component.currentIndex = 0;
-    component.previousSlide();
-    tick(600);
-    expect(component.currentIndex).toBe(component.slides.length - 1);
-  }));
-
-  it('should start autoplay on init', () => {
+  it('should manage autoplay lifecycle', fakeAsync(() => {
+    fixture.detectChanges();
+    component.startAutoPlay();
     expect(component.autoPlayInterval).toBeDefined();
+    
+    tick(10000);
+    tick(600);
+    expect(component.currentIndex).toBeGreaterThan(0);
+    
+    component.stopAutoPlay();
+  }));
+
+  it('should pause and resume autoplay', fakeAsync(() => {
+    fixture.detectChanges();
+    const index = component.currentIndex;
+    
+    component.pauseAutoPlay();
+    component.startAutoPlay();
+    tick(10000);
+    tick(600);
+    expect(component.currentIndex).toBe(index);
+    
+    component.resumeAutoPlay();
+  }));
+
+  it('should handle stopAutoPlay safely', () => {
+    component.autoPlayInterval = undefined;
+    expect(() => component.stopAutoPlay()).not.toThrow();
   });
 
-  it('should cleanup autoplay on destroy', () => {
-    spyOn(window, 'clearInterval');
+  it('should calculate card styles correctly', () => {
+    const style0 = component.getCardStyle(0);
+    const style1 = component.getCardStyle(1);
+    
+    expect(style0.transform).toBe('translateX(0px) scale(1)');
+    expect(style0.zIndex).toBe(10);
+    expect(style0.boxShadow).toContain('0 8px 32px');
+    
+    expect(style1.transform).toBe('translateX(350px) scale(0.92)');
+    expect(style1.zIndex).toBe(9);
+    expect(style1.boxShadow).toContain('0 2px 8px');
+  });
+
+  it('should cleanup on destroy', () => {
+    spyOn(component, 'stopAutoPlay');
     component.ngOnDestroy();
-    expect(window.clearInterval).toHaveBeenCalled();
+    expect(component.stopAutoPlay).toHaveBeenCalled();
   });
 });
