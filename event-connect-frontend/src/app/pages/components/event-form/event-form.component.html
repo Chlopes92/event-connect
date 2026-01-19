@@ -53,8 +53,7 @@
             (click)="fileInput.click()"
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
-            (drop)="onDrop($event)"
-            aria-label="Cliquez ou glissez-déposez pour télécharger une image">
+            (drop)="onDrop($event)">
             
             @if(!imagePreview){
             <div class="upload-placeholder">

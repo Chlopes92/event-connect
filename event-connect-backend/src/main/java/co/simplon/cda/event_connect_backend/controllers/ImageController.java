@@ -24,7 +24,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/upload/images")
 public class ImageController {
-
     private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     private final FileStorageService fileStorageService;
 
@@ -55,7 +54,9 @@ public class ImageController {
                         .body(resource);
             }
 
-            logger.warn("Image non trouvée : {}", sanitizeForLogging(filename));
+            if (logger.isWarnEnabled()) {
+                logger.warn("Image non trouvée : {}", sanitizeForLogging(filename));
+            }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         } catch (IOException e) {

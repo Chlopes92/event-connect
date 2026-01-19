@@ -217,15 +217,4 @@ class ImageControllerTest {
 
         verify(fileStorageService, times(1)).getImagePath(filename);
     }
-
-    /**
-     * TEST 12 : sanitizeForLogging() avec null
-     * Teste indirectement via un filename null qui passe par sanitize
-     */
-    @Test
-    void sanitizeForLogging_WithNull_ShouldReturnNullString() {
-        // Ce test vérifie indirectement la méthode privée sanitizeForLogging
-        // via le test 8 qui passe null et déclenche le log
-        assertThat(true).isTrue(); // Placeholder pour la documentation
-    }
 }
