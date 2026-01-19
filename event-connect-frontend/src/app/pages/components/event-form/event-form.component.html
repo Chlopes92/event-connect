@@ -179,20 +179,13 @@
             *ngFor="let category of categories" 
             class="category-checkbox"
             [class.selected]="isCategorySelected(category.id!)"
-            role="checkbox"
-            [attr.aria-checked]="isCategorySelected(category.id!)"
-            [attr.aria-labelledby]="'category-label-' + category.id"
-            tabindex="0"
-            (click)="toggleCategory(category.id!)"
-            (keydown.enter)="toggleCategory(category.id!); $event.preventDefault()" 
-            (keydown.space)="toggleCategory(category.id!); $event.preventDefault()">
+            [for]="'category-' + category.id">
             <input 
               [id]="'category-' + category.id"
               type="checkbox" 
               [checked]="isCategorySelected(category.id!)"
               (change)="toggleCategory(category.id!)"
-              tabindex="-1"
-              aria-hidden="true">
+              [attr.aria-label]="category.nameCategory">
             <span class="category-label">{{ category.nameCategory }}</span>
         </label>
         </div>
