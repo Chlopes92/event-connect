@@ -506,7 +506,7 @@ class FileStorageServiceTest {
                 .isInstanceOf(InvalidFileException.class)
                 .hasMessageContaining("invalide");
     }
-    
+
     /**
      * Crée un mock de MultipartFile pour les tests
      */
