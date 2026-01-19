@@ -16,8 +16,8 @@ export class CarouselComponent implements OnInit, OnDestroy {
   isAutoPlayPaused = false;
   
   particles = Array.from({ length: 80 }, () => ({
-    x: Math.random() * (typeof globalThis.window !== 'undefined' ? window.innerWidth : 1200),
-    y: Math.random() * (typeof globalThis.window !== 'undefined' ? window.innerHeight : 800),
+    x: Math.random() * this.getViewportWidth(),
+    y: Math.random() * this.getViewportHeight(),
     delay: Math.random() * 4
   }));
 
@@ -28,7 +28,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
     this.slides = EVENTS_MOCK.map((event: EventCard) => ({
       title: event.title,
       description: event.description,
-      image: event.image ?? 'assets/default-event.jpg' // fallback si pas d’image
+      image: this.getEventImage(event.image)// fallback si pas d’image
     }));
 
     this.startAutoPlay();
@@ -37,6 +37,20 @@ export class CarouselComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.stopAutoPlay();
   }
+
+  // Méthodes extraites pour faciliter les tests
+  private getViewportWidth(): number {
+    return globalThis.window === undefined ? 1200 : window.innerWidth;;
+  }
+
+  private getViewportHeight(): number {
+    return globalThis.window === undefined ? 800 : window.innerHeight;
+  }
+
+  private getEventImage(image: string | null | undefined): string {
+    return image || 'assets/default-event.jpg';
+  }
+
 
   get currentSlide() {
     return this.slides[this.currentIndex];
