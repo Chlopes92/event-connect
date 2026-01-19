@@ -254,7 +254,6 @@ public class FileStorageService {
             return filename;
         } catch (IOException e) {
             // Pas de log du filename original (données utilisateur)
-            logger.error("Erreur lors de la sauvegarde du fichier", e);
             throw new InvalidFileException(ERROR_SAVING_FILE, e);
         }
     }
