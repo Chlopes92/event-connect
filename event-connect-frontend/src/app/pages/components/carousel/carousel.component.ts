@@ -40,11 +40,11 @@ export class CarouselComponent implements OnInit, OnDestroy {
 
   // Méthodes extraites pour faciliter les tests
   private getViewportWidth(): number {
-    return globalThis.window !== undefined ? window.innerWidth : 1200;
+    return globalThis.window === undefined ? 1200 : window.innerWidth;;
   }
 
   private getViewportHeight(): number {
-    return globalThis.window !== undefined ? window.innerHeight : 800;
+    return globalThis.window === undefined ? 800 : window.innerHeight;
   }
 
   private getEventImage(image: string | null | undefined): string {

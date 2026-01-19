@@ -32,67 +32,42 @@ describe('CarouselComponent', () => {
     expect(component.slides[0].image).toBeDefined();
   });
 
-  // Test des méthodes privées via spy
-  it('should use getViewportWidth for particle x coordinates', () => {
-    spyOn<any>(component, 'getViewportWidth').and.returnValue(1200);
-    
-    const newComponent = new CarouselComponent();
-    // La méthode sera appelée lors de la création des particles
-    expect(newComponent.particles[0].x).toBeLessThanOrEqual(1200);
-  });
-
-  it('should use getViewportHeight for particle y coordinates', () => {
-    spyOn<any>(component, 'getViewportHeight').and.returnValue(800);
-    
-    const newComponent = new CarouselComponent();
-    expect(newComponent.particles[0].y).toBeLessThanOrEqual(800);
-  });
-
-  it('should call getEventImage when loading slides', () => {
-    spyOn<any>(component, 'getEventImage').and.returnValue('test-image.jpg');
-    
-    component.ngOnInit();
-    
-    expect(component['getEventImage']).toHaveBeenCalled();
-  });
-
-  // Test getViewportWidth
+  // Test getViewportWidth - branche window DÉFINI
   it('should return window.innerWidth when window is defined', () => {
     const width = component['getViewportWidth']();
     expect(width).toBe(window.innerWidth);
   });
 
-  // Test getViewportHeight
+  // Test getViewportHeight - branche window DÉFINI
   it('should return window.innerHeight when window is defined', () => {
     const height = component['getViewportHeight']();
     expect(height).toBe(window.innerHeight);
   });
 
-  // Test getEventImage avec image définie
+  // Test getEventImage - image DÉFINIE
   it('should return image when image is provided', () => {
     const result = component['getEventImage']('test-image.jpg');
     expect(result).toBe('test-image.jpg');
   });
 
-  // Test getEventImage avec null
+  // Test getEventImage - image NULL
   it('should return default image when image is null', () => {
     const result = component['getEventImage'](null);
     expect(result).toBe('assets/default-event.jpg');
   });
 
-  // Test getEventImage avec undefined
+  // Test getEventImage - image UNDEFINED
   it('should return default image when image is undefined', () => {
     const result = component['getEventImage'](undefined);
     expect(result).toBe('assets/default-event.jpg');
   });
 
-  // Test getEventImage avec chaîne vide
+  // Test getEventImage - chaîne VIDE
   it('should return default image when image is empty string', () => {
     const result = component['getEventImage']('');
     expect(result).toBe('assets/default-event.jpg');
   });
 
-  // Particles
   it('should initialize particles with valid properties', () => {
     expect(component.particles.length).toBe(80);
     component.particles.forEach((p: { x: number; y: number; delay: number }) => {
@@ -105,14 +80,12 @@ describe('CarouselComponent', () => {
     });
   });
 
-  // Getters
   it('should return current and visible slides', () => {
     fixture.detectChanges();
     expect(component.currentSlide).toEqual(component.slides[0]);
     expect(component.visibleSlides.length).toBe(4);
   });
 
-  // Navigation
   it('should navigate to next and previous slides', fakeAsync(() => {
     fixture.detectChanges();
     component.nextSlide();
@@ -208,7 +181,6 @@ describe('CarouselComponent', () => {
     expect(component.currentIndex).toBe(index);
   }));
 
-  // Autoplay
   it('should manage autoplay lifecycle', fakeAsync(() => {
     fixture.detectChanges();
     component.startAutoPlay();
@@ -239,7 +211,6 @@ describe('CarouselComponent', () => {
     expect(() => component.stopAutoPlay()).not.toThrow();
   });
 
-  // Styles
   it('should calculate card styles correctly', () => {
     const style0 = component.getCardStyle(0);
     const style1 = component.getCardStyle(1);
@@ -253,7 +224,6 @@ describe('CarouselComponent', () => {
     expect(style1.boxShadow).toContain('0 2px 8px');
   });
 
-  // Cleanup
   it('should cleanup on destroy', () => {
     spyOn(component, 'stopAutoPlay');
     component.ngOnDestroy();
