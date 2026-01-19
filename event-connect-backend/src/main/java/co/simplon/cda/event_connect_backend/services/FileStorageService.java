@@ -38,11 +38,10 @@ import java.util.UUID;
  */
 @Service
 public class FileStorageService {
-
     private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
 
     // Configuration
-    private final Path uploadPath = Paths.get("uploads/events");
+    private final Path UPLOAD_PATH = Paths.get("uploads/events");
     private static final long MAX_FILE_SIZE = 5L * 1024 * 1024; // 5 MB
     private static final List<String> ALLOWED_EXTENSIONS = List.of("png", "jpg", "jpeg", "webp");
     private static final List<String> ALLOWED_MIME_TYPES = List.of("image/png", "image/jpeg", "image/jpg", "image/webp");
@@ -60,11 +59,12 @@ public class FileStorageService {
      */
     public FileStorageService() {
         try {
-            Files.createDirectories(uploadPath);
-            logger.info("Dossier de stockage initialisé : {}", uploadPath.toAbsolutePath());
+            Files.createDirectories(UPLOAD_PATH);
+            if (logger.isInfoEnabled()) {
+                logger.info("Dossier de stockage initialisé : {}", UPLOAD_PATH.toAbsolutePath());
+            }
         } catch (IOException e) {
-            logger.error("Erreur lors de la création du dossier uploads", e);
-            throw new InvalidFileException(ERROR_CREATING_DIRECTORY, e);
+            throw new InvalidFileException(ERROR_CREATING_DIRECTORY + " : " + UPLOAD_PATH.toAbsolutePath(), e);
         }
     }
 
@@ -80,31 +80,49 @@ public class FileStorageService {
     public String saveImage(MultipartFile file) {
         // Gestion du cas où aucune image n'est fournie
         if (file == null || file.isEmpty()) {
-            logger.warn("Tentative de sauvegarde d'un fichier vide ou null");
+            if (logger.isWarnEnabled()) {
+                logger.warn("Tentative de sauvegarde d'un fichier vide ou null");
+            }
             return null;
         }
 
-        logger.info("Tentative de sauvegarde de fichier : {} ({})",
-                file.getOriginalFilename(),
-                formatFileSize(file.getSize()));
+        if (logger.isInfoEnabled()) {
+            logger.info(
+                    "Tentative de sauvegarde de fichier : {} ({})",
+                    sanitizeForLogging(file.getOriginalFilename()),
+                    formatFileSize(file.getSize())
+            );
+        }
 
         // 1. Validation de la taille
         if (file.getSize() > MAX_FILE_SIZE) {
-            logger.warn("Fichier trop volumineux : {} ({} / {} max)",
-                    file.getOriginalFilename(),
-                    formatFileSize(file.getSize()),
-                    formatFileSize(MAX_FILE_SIZE));
+            if (logger.isWarnEnabled()) {
+                logger.warn(
+                        "Fichier trop volumineux : {} ({} / {} max)",
+                        sanitizeForLogging(file.getOriginalFilename()),
+                        formatFileSize(file.getSize()),
+                        formatFileSize(MAX_FILE_SIZE)
+                );
+            }
             throw new InvalidFileException(
-                    String.format(ERROR_FILE_TOO_LARGE,
+                    String.format(
+                            ERROR_FILE_TOO_LARGE,
                             formatFileSize(file.getSize()),
-                            formatFileSize(MAX_FILE_SIZE))
+                            formatFileSize(MAX_FILE_SIZE)
+                    )
             );
         }
 
         // 2. Validation du type MIME
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_MIME_TYPES.contains(contentType.toLowerCase())) {
-            logger.warn("Type MIME non autorisé : {} pour fichier {}", contentType, file.getOriginalFilename());
+            if (logger.isWarnEnabled()) {
+                logger.warn(
+                        "Type MIME non autorisé : {} pour fichier {}",
+                        sanitizeForLogging(contentType),
+                        sanitizeForLogging(file.getOriginalFilename())
+                );
+            }
             throw new InvalidFileException(ERROR_INVALID_FILE_TYPE);
         }
 
@@ -117,23 +135,35 @@ public class FileStorageService {
 
         String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
         if (!ALLOWED_EXTENSIONS.contains(extension)) {
-            String errorMessage = String.format(ERROR_INVALID_EXTENSION, extension, ALLOWED_EXTENSIONS);
-            logger.warn("Extension non autorisée : {} pour fichier {}", extension, originalFilename);
-            throw new InvalidFileException(errorMessage);
+            if (logger.isWarnEnabled()) {
+                logger.warn(
+                        "Extension non autorisée : {} pour fichier {}",
+                        extension,
+                        sanitizeForLogging(originalFilename)
+                );
+            }
+            throw new InvalidFileException(
+                    String.format(ERROR_INVALID_EXTENSION, extension, ALLOWED_EXTENSIONS)
+            );
         }
 
         // 4. Génération d'un nom unique
         String filename = UUID.randomUUID() + "." + extension;
-        Path targetPath = uploadPath.resolve(filename);
+        Path targetPath = UPLOAD_PATH.resolve(filename);
 
         // 5. Sauvegarde du fichier
         try {
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-            logger.info("Fichier sauvegardé avec succès : {} -> {}", originalFilename, filename);
+            if (logger.isInfoEnabled()) {
+                logger.info(
+                        "Fichier sauvegardé avec succès : {} -> {}",
+                        sanitizeForLogging(originalFilename),
+                        filename
+                );
+            }
             return filename;
         } catch (IOException e) {
-            logger.error("Erreur lors de la sauvegarde du fichier : {}", originalFilename, e);
-            throw new InvalidFileException(ERROR_SAVING_FILE, e);
+            throw new InvalidFileException(ERROR_SAVING_FILE + " : " + sanitizeForLogging(originalFilename), e);
         }
     }
 
@@ -146,12 +176,14 @@ public class FileStorageService {
      */
     public void deleteImage(String filename) {
         if (filename == null || filename.isBlank()) {
-            logger.debug("Tentative de suppression d'un nom de fichier vide");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Tentative de suppression d'un nom de fichier vide");
+            }
             return;
         }
 
         try {
-            Path filePath = uploadPath.resolve(filename);
+            Path filePath = UPLOAD_PATH.resolve(filename);
             boolean deleted = Files.deleteIfExists(filePath);
 
             if (deleted) {
@@ -160,7 +192,13 @@ public class FileStorageService {
                 logger.debug("Fichier déjà absent : {}", filename);
             }
         } catch (IOException e) {
-            logger.error("Erreur lors de la suppression du fichier : {}", filename, e);
+            if (logger.isErrorEnabled()) {
+                logger.error(
+                        "Erreur lors de la suppression du fichier : {}",
+                        sanitizeForLogging(filename),
+                        e
+                );
+            }
             // On ne lance pas d'exception pour ne pas bloquer l'opération principale
         }
     }
@@ -172,10 +210,22 @@ public class FileStorageService {
      */
     public Path getImagePath(String filename) {
         if (filename == null || filename.isBlank()) {
-            logger.warn("Tentative d'accès à un fichier avec nom vide");
+            if (logger.isWarnEnabled()) {
+                logger.warn("Tentative d'accès à un fichier avec nom vide");
+            }
             throw new InvalidFileException(ERROR_INVALID_FILENAME);
         }
-        return uploadPath.resolve(filename);
+        return UPLOAD_PATH.resolve(filename);
+    }
+
+    /**
+     * Nettoie les données utilisateur avant logging (log injection)
+     */
+    private String sanitizeForLogging(String input) {
+        if (input == null) {
+            return "null";
+        }
+        return input.replaceAll("[\\r\\n\\t]", " ");
     }
 
     /**
