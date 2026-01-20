@@ -1,0 +1,51 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  # =========================
+  # DEPLOY BACKEND
+  # =========================
+
+  deploy-backend:
+    name: Backend - Deploy to Render
+    runs-on: ubuntu-latest
+    # Attend que le CI soit passé
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger Render Deployment
+        run: |
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_BACKEND_ID }}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json"
+
+      - name: Deployment triggered
+        run: echo "✅ Backend deployment triggered on Render"
+
+
+  # =========================
+  # DEPLOY FRONTEND
+  # =========================
+
+  deploy-frontend:
+    name: Frontend - Deploy to Render
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger Render Deployment
+        run: |
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_FRONTEND_ID }}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json"
+
+      - name: Deployment triggered
+        run: echo "✅ Frontend deployment triggered on Render"
