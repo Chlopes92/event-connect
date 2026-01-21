@@ -4,6 +4,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { EVENT_URL, UPLOAD_IMAGE_URL } from '../../shared/constants/urls';
 import { Event } from '../../shared/models/Event';
 import { ErrorResponse } from '../../shared/models/ErrorResponse';
+import { environment } from '../../../environments/environment.production';
 
 @Injectable({
   providedIn: 'root'
@@ -99,8 +100,16 @@ export class EventService {
    */
   getImageUrl(filename: string | undefined): string {
     if(!filename) return '';
-    return `${UPLOAD_IMAGE_URL}/${filename}`;
+    
+    // En production (Render) : utilise assets
+  if (environment.production) {
+    return `assets/events/${filename}`;
   }
+
+  // En local (dev) : utilise le backend
+  return `${UPLOAD_IMAGE_URL}/${filename}`;
+}
+  
 
   /**
    * Gestion centralisée des erreurs HTTP
