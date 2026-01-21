@@ -32,6 +32,7 @@ public class SecurityConfig {
     private static final String UPLOAD_IMAGES_PATH = "/upload/images/**";
     private static final String PROFILES_BASE_PATH = "/profiles";
     private static final String PROFILES_AUTH_PATH = "/profiles/authenticate";
+    private static final String ACTUATOR_HEALTH_PATH = "/actuator/health";
 
     // Injection des propriétés depuis application.properties
     @Value("${eventconnect.jwt.secret}")
@@ -103,6 +104,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // Configuration des autorisations par endpoint
                 .authorizeHttpRequests(req -> req
+                        // Health check pour Render (DOIT ETRE PUBLIC)
+                        .requestMatchers(ACTUATOR_HEALTH_PATH).permitAll()
                         // Routes publiques (GET uniquement)
                         .requestMatchers(HttpMethod.GET, EVENTS_BASE_PATH, EVENTS_PATH, CATEGORIES_PATH, UPLOAD_IMAGES_PATH).permitAll()
                         // Routes d'inscription/connexion (anonymous only)
