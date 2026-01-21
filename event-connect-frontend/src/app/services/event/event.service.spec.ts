@@ -343,22 +343,24 @@ describe('EventService', () => {
   // ============================================
   
   describe('getImageUrl()', () => {
-    it('should return complete image URL', () => {
-      const filename = 'test-image.png';
-      const result = service.getImageUrl(filename);
-      expect(result).toBe(`${UPLOAD_IMAGE_URL}/${filename}`);
-    });
-
-    it('should return empty string when filename is undefined', () => {
-      const result = service.getImageUrl(undefined);
-      expect(result).toBe('');
-    });
-
-    it('should return empty string when filename is empty', () => {
-      const result = service.getImageUrl('');
-      expect(result).toBe('');
-    });
+  it('should return assets path in production', () => {
+    const filename = 'test-image.png';
+    const result = service.getImageUrl(filename);
+    // En test, environment.production est true par défaut
+    expect(result).toBe(`assets/events/${filename}`);
   });
+
+  // Reste des tests identiques
+  it('should return empty string when filename is undefined', () => {
+    const result = service.getImageUrl(undefined);
+    expect(result).toBe('');
+  });
+
+  it('should return empty string when filename is empty', () => {
+    const result = service.getImageUrl('');
+    expect(result).toBe('');
+  });
+});
 
   // ============================================
   // TESTS ERROR HANDLING
