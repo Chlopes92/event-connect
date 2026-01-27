@@ -1,10 +1,17 @@
+# Nom du pipeline CD
 name: CD Pipeline
 
+# Déclenchement du pipeline
 on:
-  push:
-    branches: [ main ]
+  # Se déclenche quand le workflow "CI Pipeline" est terminé
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+  # Permet de lancer le pipeline manuellement
   workflow_dispatch:
 
+# Contient toutes les actions de déploiement
 jobs:
   # =========================
   # DEPLOY BACKEND
@@ -12,14 +19,13 @@ jobs:
 
   deploy-backend:
     name: Backend - Deploy to Render
-    runs-on: ubuntu-latest
-    # Attend que le CI soit passé
-    if: github.event_name == 'push'
+    runs-on: ubuntu-latest # OS utilisé par GitHub Actions
+    # S’exécute uniquement si le CI est passé avec succès
+    if: github.event.workflow_run.conclusion == 'success'
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Trigger Render Deployment
+      - name: Trigger Render Backend
+        # Déclenchement du déploiement Render (backend)
         run: |
           curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_BACKEND_ID }}/deploys" \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
@@ -28,20 +34,19 @@ jobs:
       - name: Deployment triggered
         run: echo "✅ Backend deployment triggered on Render"
 
-
   # =========================
   # DEPLOY FRONTEND
   # =========================
 
   deploy-frontend:
     name: Frontend - Deploy to Render
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    runs-on: ubuntu-latest # OS utilisé par GitHub Actions
+    # S’exécute uniquement si le CI est passé avec succès
+    if: github.event.workflow_run.conclusion == 'success'
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Trigger Render Deployment
+      - name: Trigger Render Frontend
+        # Déclenchement du déploiement Render (frontend)
         run: |
           curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_FRONTEND_ID }}/deploys" \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
