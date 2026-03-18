@@ -1,29 +1,106 @@
-<header class="header" 
-        [class.scrolled]="isScrolled" 
+<header class="header"
+        [class.scrolled]="isScrolled"
         [class.hidden]="!isVisible"
         [class.transparent]="isHomePage && !isScrolled">
-    <div class="logo">
-      <img routerLink="/home" src="assets/logo/logo-header.png" alt="Retour à l'accueil">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <img routerLink="/home"
+         src="assets/logo/logo-header.png"
+         alt="Retour à l'accueil">
+  </div>
+
+  <!-- NAV DESKTOP -->
+  <nav class="nav desktop-nav">
+
+    <a routerLink="/home" class="nav-item">ACCUEIL</a>
+
+    <a href="#events-container"
+       (click)="scrollToEvents($event)"
+       class="nav-item">
+       EVENTS
+    </a>
+
+    <a [class.disabled]="!aboutEnabled"
+       class="nav-item">
+
+      A PROPOS
+
+      <span *ngIf="!aboutEnabled"
+            class="tooltip">
+            Bientôt disponible
+      </span>
+
+    </a>
+
+  </nav>
+
+
+  <!-- ACTIONS DESKTOP -->
+  <div class="header-actions desktop-nav">
+
+    <img class="icon-account"
+         routerLink="/client-signup"
+         src="assets/icons/account.png"
+         alt="Compte">
+
+    <div class="icon-wrapper"
+         [class.disabled]="!wishlistEnabled">
+
+      <img src="assets/icons/wishlist.png"
+           alt="Liste des souhaits">
+
+      <span *ngIf="!wishlistEnabled"
+            class="tooltip">
+            Bientôt disponible
+      </span>
+
     </div>
-    <nav class="nav">
-      <a href="#" class="nav-item">ACCUEIL</a>
-      <a href="#app-container" (click)="scrollToEvents($event)" class="nav-item">EVENTS</a>
-      <a [class.disabled]="!aboutEnabled" class="nav-item">
-        A PROPOS
-        <span *ngIf="!aboutEnabled" class="tooltip">Bientôt disponible</span>
-      </a>
-    </nav>
-    <div class="header-actions">
-        <img  class="icon-account" routerLink="/client-signup" src="assets/icons/account.png" alt="Compte">
-        
-        <div class="icon-wrapper" [class.disabled]="!wishlistEnabled">
-          <img src="assets/icons/wishlist.png" alt="Liste des souhaits">
-          <span *ngIf="!wishlistEnabled" class="tooltip">Bientôt disponible</span>
-        </div>
-        
-        <div class="icon-wrapper" [class.disabled]="!ticketEnabled">
-          <img src="assets/icons/ticket.png" alt="Billeterie">
-          <span *ngIf="!ticketEnabled" class="tooltip">Bientôt disponible</span>
-        </div>
+
+    <div class="icon-wrapper"
+         [class.disabled]="!ticketEnabled">
+
+      <img src="assets/icons/ticket.png"
+           alt="Billetterie">
+
+      <span *ngIf="!ticketEnabled"
+            class="tooltip">
+            Bientôt disponible
+      </span>
+
     </div>
+
+  </div>
+
+
+  <!-- BURGER -->
+  <div class="menu-toggle"
+       [class.open]="isMenuOpen"
+       (click)="toggleMenu()">
+       <span></span>
+  </div>
+
 </header>
+
+
+<!-- MENU MOBILE -->
+<div class="mobile-menu"
+     [class.show]="isMenuOpen">
+
+  <a routerLink="/home"
+     (click)="toggleMenu()">Accueil</a>
+
+  <a href="#events-container"
+     (click)="scrollToEvents($event); toggleMenu()">
+     Events
+  </a>
+
+  <a (click)="toggleMenu()">A propos</a>
+
+  <a routerLink="/client-signup"
+     (click)="toggleMenu()">Compte</a>
+  
+  <a routerLink="/client-signup"
+     (click)="toggleMenu()">Wishlist</a>
+
+</div>
