@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, provideRouter } from '@angular/router';
 import { Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 
@@ -25,7 +25,7 @@ describe('HeaderComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HeaderComponent],
       providers: [
-        { provide: Router, useValue: mockRouter },
+        provideRouter([]),
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
       ]
     }).compileComponents();
