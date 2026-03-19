@@ -4,11 +4,9 @@
         [class.transparent]="isHomePage && !isScrolled">
 
   <!-- LOGO -->
-  <div class="logo">
-    <img routerLink="/home"
-         src="assets/logo/logo-header.png"
-         alt="Retour à l'accueil">
-  </div>
+   <a routerLink="/home" class="logo">
+      <img src="assets/logo/logo-header.png" alt="Retour à l'accueil">
+   </a>
 
   <!-- NAV DESKTOP -->
   <nav class="nav desktop-nav">
@@ -34,7 +32,6 @@
     </a>
 
   </nav>
-
 
   <!-- ACTIONS DESKTOP -->
   <div class="header-actions desktop-nav">
@@ -72,19 +69,23 @@
 
   </div>
 
+  <!-- ✅ BURGER FIX -->
+  <button class="menu-toggle"
+          [class.open]="isMenuOpen"
+          (click)="toggleMenu()"
+          aria-label="Menu"
+          [attr.aria-expanded]="isMenuOpen"
+          aria-controls="mobile-menu">
 
-  <!-- BURGER -->
-  <div class="menu-toggle"
-       [class.open]="isMenuOpen"
-       (click)="toggleMenu()">
-       <span></span>
-  </div>
+    <span></span>
+
+  </button>
 
 </header>
 
-
 <!-- MENU MOBILE -->
-<div class="mobile-menu"
+<div id="mobile-menu"
+     class="mobile-menu"
      [class.show]="isMenuOpen">
 
   <a routerLink="/home"
@@ -95,7 +96,11 @@
      Events
   </a>
 
-  <a (click)="toggleMenu()">A propos</a>
+  <!-- ✅ FIX accessibilité -->
+  <button class="mobile-link"
+          (click)="toggleMenu()">
+    A propos
+  </button>
 
   <a routerLink="/client-signup"
      (click)="toggleMenu()">Compte</a>
