@@ -87,6 +87,7 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 form button {
@@ -100,7 +101,7 @@ form button {
     justify-content: center;
     border-radius: 0px 12px 12px 12px;
     position: absolute;
-    right: 5%;
+    right: 2%;
 }
 
 .disclaimer {
@@ -160,7 +161,6 @@ form button {
     justify-content: center;
     list-style: none;
     padding: 0;
-    margin-right: 15rem;
 }
 
 .nav-footer li {
@@ -241,4 +241,55 @@ form button {
 /* Afficher le tooltip au hover */
 .nav-footer li.disabled:hover .tooltip {
     opacity: 1;
+}
+
+@media (max-width: 1096px) {
+
+  .container-text {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .logo-footer {
+    width: 180px;
+    margin: 0 0 20px 0;
+  }
+
+  .newsletter-section {
+    width: 100%;
+  }
+
+  .newsletter-section-title {
+    margin-left: 0;
+  }
+
+  .newsletter-input {
+    width: 100%;
+  }
+
+  .disclaimer {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .container-nav-footer {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .nav-footer {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .nav-footer li {
+    border-right: none;
+  }
+
+  form button {
+    right: 0%;
+}
 }

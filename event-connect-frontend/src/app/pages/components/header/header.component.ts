@@ -10,12 +10,14 @@ import { filter } from 'rxjs';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
+
   isScrolled = false;
   isVisible = true;
   isHomePage = false;
   lastScrollPosition = 0;
 
-  // Variables pour les fonctionnalités non développées
+  isMenuOpen = false;
+
   wishlistEnabled = false;
   ticketEnabled = false;
   aboutEnabled = false;
@@ -23,60 +25,82 @@ export class HeaderComponent implements OnInit {
   constructor(private readonly router: Router) {}
 
   ngOnInit() {
-    // Vérifie si on est sur la home page au chargement
+
     this.checkIfHomePage(this.router.url);
 
-    // Écoute les changements de route
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.checkIfHomePage(event.url);
       });
+
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   checkIfHomePage(url: string) {
-    // Détecte si on est sur la home page
+
     this.isHomePage = url === '/' || url === '/home';
-    
-    if (this.isHomePage) {  // Condition positive
-    // Sur la home, on vérifie la position du scroll
-    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-    this.isScrolled = scrollPosition > 100;
-  } else {
-    // Si on n'est pas sur la home, le header est toujours solide
-    this.isScrolled = true;
-  }
+
+    if (this.isHomePage) {
+
+      const scrollPosition =
+        window.scrollY || document.documentElement.scrollTop;
+
+      this.isScrolled = scrollPosition > 100;
+
+    } else {
+
+      this.isScrolled = true;
+
+    }
+
   }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-    
-    // Ne change l'état transparent/solide que sur la home page
+
+    const scrollPosition =
+      window.scrollY || document.documentElement.scrollTop;
+
     if (this.isHomePage) {
       this.isScrolled = scrollPosition > 100;
     }
 
-    // Gestion de la visibilité du header (masquage au scroll down)
     if (scrollPosition > this.lastScrollPosition && scrollPosition > 100) {
-      // Scroll vers le bas
       this.isVisible = false;
     } else {
-      // Scroll vers le haut
       this.isVisible = true;
     }
-    
+
     this.lastScrollPosition = scrollPosition;
+
   }
 
   scrollToEvents(event?: Event) {
+
     if (event) {
       event.preventDefault();
     }
-    
+
     const element = document.getElementById('events-container');
+
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
+
   }
+
+  @HostListener('window:resize', [])
+  onResize() {
+  if (window.innerWidth > 776) {
+    this.isMenuOpen = false;
+  }
+}
+
 }

@@ -101,3 +101,9 @@ p {
     background: #fff;
     color: #222;
   }
+
+  @media (max-width: 910px) {
+    .carousel-cards {
+      display: none; /* Masquer les cartes sur mobile */
+    }
+  }
