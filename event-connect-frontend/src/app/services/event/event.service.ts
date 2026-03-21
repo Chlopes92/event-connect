@@ -98,18 +98,22 @@ export class EventService {
    /**
    * Construit l'URL complète d'une image
    */
-  getImageUrl(filename: string | undefined): string {
-    if(!filename) return '';
-    
-    // En production (Render) : utilise assets
-  if (environment.production) {
-    return `assets/events/${filename}`;
+  getImageUrl(filename?: string): string {
+  if (!filename) return 'assets/default-event.jpg';
+
+  // CAS 1 : image déjà une URL complète (backend)
+  if (filename.startsWith('http')) {
+    return filename;
   }
 
-  // En local (dev) : utilise le backend
-  return `${UPLOAD_IMAGE_URL}/${filename}`;
+  // CAS 2 : image uploadée backend (nom fichier)
+  if (filename.includes('uploads') || filename.includes('-')) {
+    return `${UPLOAD_IMAGE_URL}/${filename}`;
+  }
+
+  // CAS 3 : image locale (assets Angular)
+  return `assets/events/${filename}`;
 }
-  
 
   /**
    * Gestion centralisée des erreurs HTTP
