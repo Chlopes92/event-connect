@@ -108,49 +108,29 @@ Discover events and explore different categories.
 
 Access detailed information about an event.
 
-<p align="center">
-<img src="assets/event-details.png" width="80%" alt="Event details"/>
-</p>
+<img width="287" height="724" alt="Screenshot 2026-11-07 at 21 54 56" src="https://github.com/user-attachments/assets/d320a535-e591-4a3a-aa00-c4632feac90a" />
+
 
 ### 🎪 Organizer Dashboard
 
 View and manage created events.
 
-<p align="center">
-<img src="assets/organizer-dashboard.png" width="80%" alt="Organizer dashboard"/>
-</p>
+<img width="352" height="749" alt="Screenshot 2026-11-07 at 21 55 08" src="https://github.com/user-attachments/assets/62cb2a51-37f3-4bc8-a2df-786c8922d004" />
+
 
 ### ✨ Create an Event
 
 A dedicated form allows organizers to publish their events.
 
-<p align="center">
-<img src="assets/create-event.png" width="80%" alt="Create event"/>
-</p>
+<img width="350" height="754" alt="Screenshot 2026-11-07 at 21 55 12" src="https://github.com/user-attachments/assets/a6507ae6-bd36-4578-9479-cfbccfffb2a2" />
 
-### ❤️ Wishlist
-
-Keep track of favorite events.
-
-<p align="center">
-<img src="assets/wishlist.png" width="80%" alt="Wishlist"/>
-</p>
-
-### 🛒 Shopping Cart
-
-Review selected events before proceeding.
-
-<p align="center">
-<img src="assets/cart.png" width="80%" alt="Shopping cart"/>
-</p>
 
 ### 🔐 Authentication
 
 Registration interface for participants and organizers.
 
-<p align="center">
-<img src="assets/signup.png" width="80%" alt="Registration"/>
-</p>
+<img width="355" height="474" alt="Screenshot 2026-11-07 at 21 55 24" src="https://github.com/user-attachments/assets/0732034a-17bb-4a83-b194-c4fa30b2a1d2" />
+
 
 ---
 
@@ -189,6 +169,8 @@ Registration interface for participants and organizers.
 
 EventConnect follows a three-layer architecture.
 
+<div align="center">
+
 ```text
               FRONTEND
              Angular
@@ -208,6 +190,7 @@ EventConnect follows a three-layer architecture.
               DATABASE
              PostgreSQL
 ```
+</div>
 
 ### Frontend – Angular
 
@@ -330,11 +313,7 @@ EventConnect uses a modern and vibrant visual identity.
 
 <div align="center">
 
-## 💜 EventConnect
-
-**Discover. Connect. Experience.**
-
-Bringing events and people together.
+## EventConnect
 
 <br/>
 
