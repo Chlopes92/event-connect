@@ -22,6 +22,8 @@ A platform designed to make event discovery and event management easier for ever
 
 <br/>
 
+</div>
+
 ---
 
 ## 📌 Table of Contents
