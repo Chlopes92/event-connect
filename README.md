@@ -22,10 +22,6 @@ A platform designed to make event discovery and event management easier for ever
 
 <br/>
 
-<img src="assets/homepage.png" alt="EventConnect homepage" width="90%"/>
-
-</div>
-
 ---
 
 ## 📌 Table of Contents
