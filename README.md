@@ -101,9 +101,8 @@ Organizers can provide information such as:
 
 Discover events and explore different categories.
 
-<p align="center">
-<img src="assets/homepage.png" width="85%" alt="Homepage"/>
-</p>
+<img width="352" height="668" alt="Screenshot 2026-11-07 at 21 50 46" src="https://github.com/user-attachments/assets/e2b37b8a-6c28-498e-8cb7-3994ca4c9be9" />
+
 
 ### 🎟️ Event Details
 
