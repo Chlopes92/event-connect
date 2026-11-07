@@ -99,7 +99,7 @@ Organizers can provide information such as:
 
 ## 🖥️ Application Preview
 
-<div align="center">
+
 
 ### 🏠 Homepage
 
@@ -131,7 +131,6 @@ Registration interface for participants and organizers.
 
 <img width="220" src="https://github.com/user-attachments/assets/61c0d94c-86d1-47db-8e61-7cf8fae95493" alt="Authentication" />
 
-</div>
 
 
 
