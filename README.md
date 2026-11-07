@@ -95,41 +95,48 @@ Organizers can provide information such as:
 
 ---
 
+
 ## 🖥️ Application Preview
 
-### 🏠 Homepage
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <strong>🏠 Homepage</strong><br/><br/>
+      <img src="assets/homepage.png" width="200" height="250" alt="Homepage" />
+    </td>
+    <td align="center" width="50%">
+      <strong>🎟️ Event Details</strong><br/><br/>
+      <img src="assets/event-details.png" width="200" height="250" alt="Event details" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>🎪 Organizer Dashboard</strong><br/><br/>
+      <img src="assets/organizer-dashboard.png" width="200" height="250" alt="Organizer dashboard" />
+    </td>
+    <td align="center" width="50%">
+      <strong>✨ Create an Event</strong><br/><br/>
+      <img src="assets/create-event.png" width="200" height="250" alt="Create event" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>❤️ Wishlist</strong><br/><br/>
+      <img src="assets/wishlist.png" width="200" height="250" alt="Wishlist" />
+    </td>
+    <td align="center" width="50%">
+      <strong>🛒 Shopping Cart</strong><br/><br/>
+      <img src="assets/cart.png" width="200" height="250" alt="Shopping cart" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <strong>🔐 Authentication</strong><br/><br/>
+      <img src="assets/signup.png" width="200" height="250" alt="Registration" />
+    </td>
+  </tr>
+</table>
 
-Discover events and explore different categories.
-
-<img width="352" height="668" alt="Screenshot 2026-11-07 at 21 50 46" src="https://github.com/user-attachments/assets/e2b37b8a-6c28-498e-8cb7-3994ca4c9be9" />
-
-
-### 🎟️ Event Details
-
-Access detailed information about an event.
-
-<img width="287" height="724" alt="Screenshot 2026-11-07 at 21 54 56" src="https://github.com/user-attachments/assets/d320a535-e591-4a3a-aa00-c4632feac90a" />
-
-
-### 🎪 Organizer Dashboard
-
-View and manage created events.
-
-<img width="352" height="749" alt="Screenshot 2026-11-07 at 21 55 08" src="https://github.com/user-attachments/assets/62cb2a51-37f3-4bc8-a2df-786c8922d004" />
-
-
-### ✨ Create an Event
-
-A dedicated form allows organizers to publish their events.
-
-<img width="350" height="754" alt="Screenshot 2026-11-07 at 21 55 12" src="https://github.com/user-attachments/assets/a6507ae6-bd36-4578-9479-cfbccfffb2a2" />
-
-
-### 🔐 Authentication
-
-Registration interface for participants and organizers.
-
-<img width="355" height="474" alt="Screenshot 2026-11-07 at 21 55 24" src="https://github.com/user-attachments/assets/0732034a-17bb-4a83-b194-c4fa30b2a1d2" />
 
 
 ---
