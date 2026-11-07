@@ -169,7 +169,6 @@ Registration interface for participants and organizers.
 
 EventConnect follows a three-layer architecture.
 
-<div align="center">
 
 ```text
               FRONTEND
@@ -190,7 +189,6 @@ EventConnect follows a three-layer architecture.
               DATABASE
              PostgreSQL
 ```
-</div>
 
 ### Frontend – Angular
 
