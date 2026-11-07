@@ -96,46 +96,43 @@ Organizers can provide information such as:
 ---
 
 
+
 ## 🖥️ Application Preview
 
-<table align="center">
-  <tr>
-    <td align="center" width="50%">
-      <strong>🏠 Homepage</strong><br/><br/>
-      <img src="assets/homepage.png" width="200" height="250" alt="Homepage" />
-    </td>
-    <td align="center" width="50%">
-      <strong>🎟️ Event Details</strong><br/><br/>
-      <img src="assets/event-details.png" width="200" height="250" alt="Event details" />
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <strong>🎪 Organizer Dashboard</strong><br/><br/>
-      <img src="assets/organizer-dashboard.png" width="200" height="250" alt="Organizer dashboard" />
-    </td>
-    <td align="center" width="50%">
-      <strong>✨ Create an Event</strong><br/><br/>
-      <img src="assets/create-event.png" width="200" height="250" alt="Create event" />
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <strong>❤️ Wishlist</strong><br/><br/>
-      <img src="assets/wishlist.png" width="200" height="250" alt="Wishlist" />
-    </td>
-    <td align="center" width="50%">
-      <strong>🛒 Shopping Cart</strong><br/><br/>
-      <img src="assets/cart.png" width="200" height="250" alt="Shopping cart" />
-    </td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">
-      <strong>🔐 Authentication</strong><br/><br/>
-      <img src="assets/signup.png" width="200" height="250" alt="Registration" />
-    </td>
-  </tr>
-</table>
+<div align="center">
+
+### 🏠 Homepage
+
+Discover events and explore different categories.
+
+<img width="220" src="https://github.com/user-attachments/assets/393266f3-5eca-499c-a36d-2bd71bdeaab9" alt="Homepage" />
+
+### 🎟️ Event Details
+
+Access detailed information about an event.
+
+<img width="220" src="https://github.com/user-attachments/assets/e382f303-a837-4c8f-b0b2-ffff9d896162" alt="Event details" />
+
+### 🎪 Organizer Dashboard
+
+View and manage created events.
+
+<img width="220" src="https://github.com/user-attachments/assets/554dfaf7-e451-486f-8873-acfe061ea88f" alt="Organizer dashboard" />
+
+### ✨ Create an Event
+
+A dedicated form allows organizers to publish their events.
+
+<img width="220" src="https://github.com/user-attachments/assets/ce77cb97-c988-4342-ab43-295e614eb6be" alt="Create an event" />
+
+### 🔐 Authentication
+
+Registration interface for participants and organizers.
+
+<img width="220" src="https://github.com/user-attachments/assets/61c0d94c-86d1-47db-8e61-7cf8fae95493" alt="Authentication" />
+
+</div>
+
 
 
 
